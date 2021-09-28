@@ -14,31 +14,35 @@ export class SignUpController implements Controller {
             return serverError();
         }
 
-        const requiredFields: SignUpController.RequestBodyKey[] = [
-            "name",
-            "email",
-            "password",
-            "passwordConfirmation",
-        ];
+        try {
+            const requiredFields: SignUpController.RequestBodyKey[] = [
+                "name",
+                "email",
+                "password",
+                "passwordConfirmation",
+            ];
 
-        for (const requiredField of requiredFields) {
-            if (request.body[requiredField] === undefined) {
-                return badRequest(new MissingParameterError(requiredField));
+            for (const requiredField of requiredFields) {
+                if (request.body[requiredField] === undefined) {
+                    return badRequest(new MissingParameterError(requiredField));
+                }
             }
-        }
 
-        if (!this.emailValidator.isValid(request.body.email as string)) {
-            return badRequest(new InvalidParameterError("email"));
-        }
+            if (!this.emailValidator.isValid(request.body.email as string)) {
+                return badRequest(new InvalidParameterError("email"));
+            }
 
-        return {
-            statusCode: 200,
-            body: {
-                name: "any_name",
-                email: "any_email@email.com",
-                password: "any_password",
-            },
-        };
+            return {
+                statusCode: 200,
+                body: {
+                    name: "any_name",
+                    email: "any_email@email.com",
+                    password: "any_password",
+                },
+            };
+        } catch {
+            return serverError();
+        }
     }
 }
 
