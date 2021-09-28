@@ -1,15 +1,33 @@
 import faker from "faker";
+import sinon from "sinon";
 import { SignUpController } from "@app/authentication/presentation/controller/sign-up";
 import { MissingParameterError } from "@app/shared/presentation/error/missing-parameter";
 import { ServerError } from "@app/shared/presentation/error/server";
+import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter";
+import { EmailValidator } from "@app/authentication/presentation/protocol/email-validator";
 
-const makeSut = (): SignUpController => {
-    return new SignUpController();
+const makeSut = (): {
+    sut: SignUpController,
+    emailValidatorStub: EmailValidator
+} => {
+    class EmailValidatorStub implements EmailValidator {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        public isValid(_: string): boolean {
+            return true;
+        }
+    }
+
+    const emailValidatorStub = new EmailValidatorStub();
+    const sut = new SignUpController(emailValidatorStub);
+    return {
+        sut,
+        emailValidatorStub,
+    };
 };
 
 describe("SignUpController", () => {
     it("Should return a server error response if no body is provided", async () => {
-        const sut = makeSut();
+        const { sut } = makeSut();
         const response = await sut.handle({});
 
         expect(response.statusCode).to.be.equal(500);
@@ -21,7 +39,7 @@ describe("SignUpController", () => {
 
         for (const key of keys) {
             it(`Should return a bad request response when no ${key} is provided`, async () => {
-                const sut = makeSut();
+                const { sut } = makeSut();
                 const password = faker.internet.password();
                 const body: SignUpController.RequestBody = {
                     name: faker.name.firstName(),
@@ -38,5 +56,23 @@ describe("SignUpController", () => {
                     .that.includes({ paramName: key });
             });
         }
+    });
+
+    it("Should return a bad request if an invalid email is provided", async () => {
+        const { sut, emailValidatorStub } = makeSut();
+        const password = faker.internet.password();
+        const body: SignUpController.RequestBody = {
+            name: faker.name.firstName(),
+            email: "invalid_email",
+            password,
+            passwordConfirmation: password,
+        };
+        sinon.stub(emailValidatorStub, "isValid").returns(false);
+        const response = await sut.handle({ body });
+
+        expect(response.statusCode).to.be.equal(400);
+        expect(response.body)
+            .to.be.instanceOf(InvalidParameterError)
+            .that.includes({ paramName: "email" });
     });
 });
