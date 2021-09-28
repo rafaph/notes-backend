@@ -1,14 +1,12 @@
 import { HttpRequest, HttpResponse } from "@app/shared/presentation/protocol/http";
 import { MissingParameterError } from "@app/shared/presentation/error/missing-parameter";
 import { ServerError } from "@app/shared/presentation/error/server";
+import { badRequest, internalServerError } from "@app/shared/presentation/helper/http-helper";
 
 export class SignUpController {
     public async handle(request: HttpRequest<SignUpController.RequestBody>): Promise<HttpResponse<SignUpController.ResponseBody>> {
         if (request.body === undefined) {
-            return {
-                statusCode: 500,
-                body: new ServerError(),
-            };
+            return internalServerError(new ServerError());
         }
 
         const requiredFields: SignUpController.RequestBodyKey[] = [
@@ -20,10 +18,7 @@ export class SignUpController {
 
         for (const requiredField of requiredFields) {
             if (request.body[requiredField] === undefined) {
-                return {
-                    statusCode: 400,
-                    body: new MissingParameterError(requiredField),
-                };
+                return badRequest(new MissingParameterError(requiredField));
             }
         }
 
