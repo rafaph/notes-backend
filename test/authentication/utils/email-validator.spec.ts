@@ -4,19 +4,22 @@ import faker from "faker";
 import { EmailValidatorAdapter } from "@app/authentication/utils/email-validator";
 
 describe("EmailValidatorAdapter", () => {
-    const isEmailStub = sinon.stub(validator, "isEmail");
+    let isEmailStub: sinon.SinonStub<[
+        str: string,
+        options?: validator.IsEmailOptions | undefined
+    ], boolean>;
 
     beforeEach(() => {
-        isEmailStub.returns(true);
+        isEmailStub = sinon.stub(validator, "isEmail").returns(true);
     });
 
-    after(() => {
+    afterEach(() => {
         isEmailStub.restore();
     });
 
     it("Should return false if validator returns false", () => {
-        const sut = new EmailValidatorAdapter();
         isEmailStub.returns(false);
+        const sut = new EmailValidatorAdapter();
         const isValid = sut.isValid(faker.internet.email());
         expect(isValid).to.be.false;
     });
@@ -25,5 +28,13 @@ describe("EmailValidatorAdapter", () => {
         const sut = new EmailValidatorAdapter();
         const isValid = sut.isValid(faker.internet.email());
         expect(isValid).to.be.true;
+    });
+
+    it("Should calls validator with correct email", () => {
+        const sut = new EmailValidatorAdapter();
+        const email = faker.internet.email();
+        sut.isValid(email);
+        sinon.assert.callCount(isEmailStub, 1);
+        sinon.assert.calledOnceWithExactly(isEmailStub, email);
     });
 });
