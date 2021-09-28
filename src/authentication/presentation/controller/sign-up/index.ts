@@ -4,9 +4,13 @@ import { badRequest, serverError } from "@app/shared/presentation/helper/http-he
 import { Controller } from "@app/shared/presentation/protocol/controller";
 import { EmailValidator } from "@app/authentication/presentation/protocol/email-validator";
 import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter";
+import { AddAccount } from "@app/authentication/domain/use-case/add-account";
 
 export class SignUpController implements Controller {
-    public constructor(private readonly emailValidator: EmailValidator) {
+    public constructor(
+        private readonly emailValidator: EmailValidator,
+        private readonly addAccount: AddAccount,
+    ) {
     }
 
     public async handle(request: HttpRequest<SignUpController.RequestBody>): Promise<HttpResponse<SignUpController.ResponseBody>> {
@@ -28,7 +32,7 @@ export class SignUpController implements Controller {
                 }
             }
 
-            const { email, password, passwordConfirmation } = request.body;
+            const { name, email, password, passwordConfirmation } = request.body;
 
             if (password !== passwordConfirmation) {
                 return badRequest(new InvalidParameterError("passwordConfirmation"));
@@ -38,12 +42,18 @@ export class SignUpController implements Controller {
                 return badRequest(new InvalidParameterError("email"));
             }
 
+            const account = await this.addAccount.execute({
+                name: name as string,
+                email: email as string,
+                password: password as string,
+            });
+
             return {
                 statusCode: 200,
                 body: {
-                    name: "any_name",
-                    email: "any_email@email.com",
-                    password: "any_password",
+                    name: account.name,
+                    email: account.email,
+                    password: account.password,
                 },
             };
         } catch {
