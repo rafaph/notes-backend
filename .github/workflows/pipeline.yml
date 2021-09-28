@@ -53,7 +53,7 @@ jobs:
                     fi
                     npx patch-package
             -   name: Test
-                run: npm run test:cov
+                run: npm run test:ci
             -   name: Cleanup
                 if: ${{ always() }}
                 run: |
