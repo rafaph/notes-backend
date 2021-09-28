@@ -1,12 +1,12 @@
 import { HttpRequest, HttpResponse } from "@app/shared/presentation/protocol/http";
 import { MissingParameterError } from "@app/shared/presentation/error/missing-parameter";
-import { ServerError } from "@app/shared/presentation/error/server";
-import { badRequest, internalServerError } from "@app/shared/presentation/helper/http-helper";
+import { badRequest, serverError } from "@app/shared/presentation/helper/http-helper";
+import { Controller } from "@app/shared/presentation/protocol/controller";
 
-export class SignUpController {
+export class SignUpController implements Controller {
     public async handle(request: HttpRequest<SignUpController.RequestBody>): Promise<HttpResponse<SignUpController.ResponseBody>> {
         if (request.body === undefined) {
-            return internalServerError(new ServerError());
+            return serverError();
         }
 
         const requiredFields: SignUpController.RequestBodyKey[] = [
