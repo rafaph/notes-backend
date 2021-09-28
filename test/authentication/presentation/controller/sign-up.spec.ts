@@ -5,7 +5,6 @@ import { MissingParameterError } from "@app/shared/presentation/error/missing-pa
 import { ServerError } from "@app/shared/presentation/error/server";
 import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter";
 import { EmailValidator } from "@app/authentication/presentation/protocol/email-validator";
-import { expect } from "chai";
 
 const makeSut = (): {
     sut: SignUpController,
@@ -90,5 +89,21 @@ describe("SignUpController", () => {
         await sut.handle({ body });
 
         expect(isValidEmailSpy.calledOnceWith(body.email as string)).to.be.true;
+    });
+
+    it("Should return a server error if EmailValidator throws a error", async () => {
+        const { sut, emailValidatorStub } = makeSut();
+        const password = faker.internet.password();
+        const body: SignUpController.RequestBody = {
+            name: faker.name.firstName(),
+            email: faker.internet.email(),
+            password,
+            passwordConfirmation: password,
+        };
+        sinon.stub(emailValidatorStub, "isValid").throwsException();
+        const response = await sut.handle({ body });
+
+        expect(response.statusCode).to.be.equal(500);
+        expect(response.body).to.be.instanceOf(ServerError);
     });
 });
