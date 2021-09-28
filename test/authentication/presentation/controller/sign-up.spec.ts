@@ -1,8 +1,17 @@
 import faker from "faker";
 import { SignUpController } from "@app/authentication/presentation/controller/sign-up";
 import { MissingParameterError } from "@app/shared/presentation/error/missing-parameter";
+import { ServerError } from "@app/shared/presentation/error/server";
 
 describe("SignUpController", () => {
+    it("Should return a server error response if no body is provided", async () => {
+        const sut = new SignUpController();
+        const response = await sut.handle({});
+
+        expect(response.statusCode).to.be.equal(500);
+        expect(response.body).to.be.instanceOf(ServerError);
+    });
+
     context("When missing params", () => {
         const keys: SignUpController.RequestBodyKey[] = ["name", "email", "password", "passwordConfirmation"];
 
