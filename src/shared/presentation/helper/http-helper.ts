@@ -1,11 +1,12 @@
 import { HttpResponse } from "@app/shared/presentation/protocol/http";
+import { ServerError } from "@app/shared/presentation/error/server";
 
 export const badRequest = (error: Error): HttpResponse<Error> => ({
     statusCode: 400,
     body: error,
 });
 
-export const internalServerError = (error: Error): HttpResponse<Error> => ({
+export const serverError = (): HttpResponse<Error> => ({
     statusCode: 500,
-    body: error,
+    body: new ServerError(),
 });
