@@ -3,9 +3,13 @@ import { SignUpController } from "@app/authentication/presentation/controller/si
 import { MissingParameterError } from "@app/shared/presentation/error/missing-parameter";
 import { ServerError } from "@app/shared/presentation/error/server";
 
+const makeSut = (): SignUpController => {
+    return new SignUpController();
+};
+
 describe("SignUpController", () => {
     it("Should return a server error response if no body is provided", async () => {
-        const sut = new SignUpController();
+        const sut = makeSut();
         const response = await sut.handle({});
 
         expect(response.statusCode).to.be.equal(500);
@@ -17,7 +21,7 @@ describe("SignUpController", () => {
 
         for (const key of keys) {
             it(`Should return a bad request response when no ${key} is provided`, async () => {
-                const sut = new SignUpController();
+                const sut = makeSut();
                 const password = faker.internet.password();
                 const body: SignUpController.RequestBody = {
                     name: faker.name.firstName(),
