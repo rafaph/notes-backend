@@ -1,7 +1,7 @@
 import validator from "validator";
 import sinon from "sinon";
 import faker from "faker";
-import { EmailValidatorAdapter } from "@app/authentication/utils/email-validator";
+import { EmailValidatorAdapter } from "@app/authentication/utils/email-validator-adapter";
 
 const makeSut = (): EmailValidatorAdapter => new EmailValidatorAdapter();
 
@@ -12,7 +12,7 @@ describe("EmailValidatorAdapter", () => {
     ], boolean>;
 
     beforeEach(() => {
-        isEmailStub = sinon.stub(validator, "isEmail").returns(true);
+        isEmailStub = sinon.stub(validator, "isEmail").onFirstCall().returns(true);
     });
 
     afterEach(() => {
@@ -20,7 +20,7 @@ describe("EmailValidatorAdapter", () => {
     });
 
     it("Should return false if validator returns false", () => {
-        isEmailStub.returns(false);
+        isEmailStub.onFirstCall().returns(false);
 
         const sut = makeSut();
         const isValid = sut.isValid(faker.internet.email());
