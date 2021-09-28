@@ -23,7 +23,7 @@ const makeAddAccount = (): AddAccount => {
     class AddAccountStub implements AddAccount {
         public async execute(input: AddAccount.Input): Promise<AddAccount.Output> {
             return {
-                id: faker.datatype.uuid(),
+                id: "valid_id",
                 name: input.name,
                 email: input.email,
                 password: input.password,
@@ -154,9 +154,23 @@ describe("SignUpController", () => {
         const { sut, addAccountStub } = makeSut();
         const body = makeBody();
 
-        sinon.stub(addAccountStub, "execute").throwsException();
+        sinon.stub(addAccountStub, "execute").rejects();
         const response = await sut.handle({ body });
 
         expect(response.statusCode).to.be.equal(HttpStatusCodes.INTERNAL_SERVER_ERROR);
+    });
+
+    it("Should return a ok response if correct values is provided", async () => {
+        const { sut } = makeSut();
+        const body = makeBody();
+        const response = await sut.handle({ body });
+
+        expect(response.statusCode).to.be.equal(HttpStatusCodes.OK);
+        expect(response.body).to.be.deep.equal({
+            id: "valid_id",
+            name: body.name,
+            email: body.email,
+            password: body.password,
+        });
     });
 });
