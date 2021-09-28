@@ -106,4 +106,20 @@ describe("SignUpController", () => {
         expect(response.statusCode).to.be.equal(500);
         expect(response.body).to.be.instanceOf(ServerError);
     });
+
+    it("Should return a bad request if passwordConfirmation fails", async () => {
+        const { sut } = makeSut();
+        const body: SignUpController.RequestBody = {
+            name: faker.name.firstName(),
+            email: faker.internet.email(),
+            password: faker.internet.password(),
+            passwordConfirmation: faker.internet.password(),
+        };
+        const response = await sut.handle({ body });
+
+        expect(response.statusCode).to.be.equal(400);
+        expect(response.body)
+            .to.be.instanceOf(InvalidParameterError)
+            .that.includes({ paramName: "passwordConfirmation" });
+    });
 });
