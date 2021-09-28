@@ -4,72 +4,26 @@ import { MissingParameterError } from "@app/shared/presentation/error/missing-pa
 
 describe("SignUpController", () => {
     context("When missing params", () => {
-        it("Should return a bad request response when no name is provided", async () => {
-            const sut = new SignUpController();
-            const password = faker.internet.password();
-            const response = await sut.handle({
-                body: {
+        const keys: SignUpController.RequestBodyKey[] = ["name", "email", "password", "passwordConfirmation"];
+
+        for (const key of keys) {
+            it(`Should return a bad request response when no ${key} is provided`, async () => {
+                const sut = new SignUpController();
+                const password = faker.internet.password();
+                const body: SignUpController.RequestBody = {
+                    name: faker.name.firstName(),
                     email: faker.internet.email(),
                     password,
                     passwordConfirmation: password,
-                }
-            });
+                    [key]: undefined,
+                };
+                const response = await sut.handle({ body });
 
-            expect(response.statusCode).to.be.equal(400);
-            expect(response.body).to.be.instanceOf(MissingParameterError).that.includes({
-                paramName: "name"
+                expect(response.statusCode).to.be.equal(400);
+                expect(response.body)
+                    .to.be.instanceOf(MissingParameterError)
+                    .that.includes({ paramName: key });
             });
-        });
-
-        it("Should return a bad request response when no email is provided", async () => {
-            const sut = new SignUpController();
-            const password = faker.internet.password();
-            const response = await sut.handle({
-                body: {
-                    name: faker.name.firstName(),
-                    password,
-                    passwordConfirmation: password,
-                }
-            });
-
-            expect(response.statusCode).to.be.equals(400);
-            expect(response.body).to.be.instanceOf(MissingParameterError).that.includes({
-                paramName: "email"
-            });
-        });
-
-        it("Should return a bad request response when no password is provided", async () => {
-            const sut = new SignUpController();
-            const passwordConfirmation = faker.internet.password();
-            const response = await sut.handle({
-                body: {
-                    name: faker.name.firstName(),
-                    email: faker.internet.email(),
-                    passwordConfirmation,
-                }
-            });
-
-            expect(response.statusCode).to.be.equals(400);
-            expect(response.body).to.be.instanceOf(MissingParameterError).that.includes({
-                paramName: "password"
-            });
-        });
-
-        it("Should return a bad request response when no passwordConfirmation is provided", async () => {
-            const sut = new SignUpController();
-            const password = faker.internet.password();
-            const response = await sut.handle({
-                body: {
-                    name: faker.name.firstName(),
-                    email: faker.internet.email(),
-                    password,
-                }
-            });
-
-            expect(response.statusCode).to.be.equals(400);
-            expect(response.body).to.be.instanceOf(MissingParameterError).that.includes({
-                paramName: "passwordConfirmation"
-            });
-        });
+        }
     });
 });

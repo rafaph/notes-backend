@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-export interface HttpRequest<T> {
-    body?: T
+export interface HttpRequest<Body = never, QueryParams = never> {
+    body?: Body,
+    query?: QueryParams
 }
 
-export interface HttpResponse<T> {
+export interface HttpResponse<Body> {
     statusCode: number,
-    body?: T
+    body: Body
 }

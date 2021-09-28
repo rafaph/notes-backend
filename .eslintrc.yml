@@ -20,6 +20,7 @@ rules:
     "@typescript-eslint/sort-type-union-intersection-members": error
     "@typescript-eslint/type-annotation-spacing": error
     "@typescript-eslint/unified-signatures": error
+    "@typescript-eslint/no-namespace": off
     "no-console": warn
     "semi": off
     "@typescript-eslint/semi": error

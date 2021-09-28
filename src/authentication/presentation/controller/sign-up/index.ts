@@ -2,17 +2,8 @@ import { HttpRequest, HttpResponse } from "@app/shared/presentation/protocol/htt
 import { MissingParameterError } from "@app/shared/presentation/error/missing-parameter";
 import { ServerError } from "@app/shared/presentation/error/server";
 
-interface SignUpControllerRequestBody {
-    name?: string;
-    email?: string;
-    password?: string;
-    passwordConfirmation?: string;
-}
-
-type SignUpControllerResponseBody = Error | { name: string; email: string; password: string };
-
 export class SignUpController {
-    public async handle(request: HttpRequest<SignUpControllerRequestBody>): Promise<HttpResponse<SignUpControllerResponseBody>> {
+    public async handle(request: HttpRequest<SignUpController.RequestBody>): Promise<HttpResponse<SignUpController.ResponseBody>> {
         if (request.body === undefined) {
             return {
                 statusCode: 500,
@@ -20,7 +11,7 @@ export class SignUpController {
             };
         }
 
-        const requiredFields: Array<keyof SignUpControllerRequestBody> = [
+        const requiredFields: SignUpController.RequestBodyKey[] = [
             "name",
             "email",
             "password",
@@ -38,6 +29,24 @@ export class SignUpController {
 
         return {
             statusCode: 200,
+            body: {
+                name: "any_name",
+                email: "any_email@email.com",
+                password: "any_password"
+            }
         };
     }
+}
+
+export namespace SignUpController {
+    export interface RequestBody {
+        name?: string;
+        email?: string;
+        password?: string;
+        passwordConfirmation?: string;
+    }
+
+    export type RequestBodyKey = keyof RequestBody;
+
+    export type ResponseBody = Error | { name: string; email: string; password: string };
 }
