@@ -49,6 +49,7 @@ export class SignUpController implements Controller {
             });
 
             return ok({
+                id: account.id,
                 name: account.name,
                 email: account.email,
                 password: account.password,
@@ -69,5 +70,5 @@ export namespace SignUpController {
 
     export type RequestBodyKey = keyof RequestBody;
 
-    export type ResponseBody = Error | { name: string; email: string; password: string };
+    export type ResponseBody = Error | { id: string; name: string; email: string; password: string };
 }
