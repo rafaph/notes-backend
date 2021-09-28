@@ -1,6 +1,6 @@
 import { HttpRequest, HttpResponse } from "@app/shared/presentation/protocol/http";
 import { MissingParameterError } from "@app/shared/presentation/error/missing-parameter";
-import { badRequest, serverError } from "@app/shared/presentation/helper/http-helper";
+import { badRequest, ok, serverError } from "@app/shared/presentation/helper/http-helper";
 import { Controller } from "@app/shared/presentation/protocol/controller";
 import { EmailValidator } from "@app/authentication/presentation/protocol/email-validator";
 import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter";
@@ -48,14 +48,11 @@ export class SignUpController implements Controller {
                 password: password as string,
             });
 
-            return {
-                statusCode: 200,
-                body: {
-                    name: account.name,
-                    email: account.email,
-                    password: account.password,
-                },
-            };
+            return ok({
+                name: account.name,
+                email: account.email,
+                password: account.password,
+            });
         } catch {
             return serverError();
         }

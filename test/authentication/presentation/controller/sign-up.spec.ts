@@ -6,6 +6,7 @@ import { ServerError } from "@app/shared/presentation/error/server";
 import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter";
 import { EmailValidator } from "@app/authentication/presentation/protocol/email-validator";
 import { AddAccount } from "@app/authentication/domain/use-case/add-account";
+import { HttpStatusCodes } from "@app/shared/utils/http-status-codes";
 
 const makeEmailValidator = (): EmailValidator => {
     class EmailValidatorStub implements EmailValidator {
@@ -64,7 +65,7 @@ describe("SignUpController", () => {
         const { sut } = makeSut();
         const response = await sut.handle({});
 
-        expect(response.statusCode).to.be.equal(500);
+        expect(response.statusCode).to.be.equal(HttpStatusCodes.INTERNAL_SERVER_ERROR);
         expect(response.body).to.be.instanceOf(ServerError);
     });
 
@@ -80,7 +81,7 @@ describe("SignUpController", () => {
 
                 const response = await sut.handle({ body });
 
-                expect(response.statusCode).to.be.equal(400);
+                expect(response.statusCode).to.be.equal(HttpStatusCodes.BAD_REQUEST);
                 expect(response.body)
                     .to.be.instanceOf(MissingParameterError)
                     .that.includes({ paramName: key });
@@ -95,7 +96,7 @@ describe("SignUpController", () => {
         sinon.stub(emailValidatorStub, "isValid").returns(false);
         const response = await sut.handle({ body });
 
-        expect(response.statusCode).to.be.equal(400);
+        expect(response.statusCode).to.be.equal(HttpStatusCodes.BAD_REQUEST);
         expect(response.body)
             .to.be.instanceOf(InvalidParameterError)
             .that.includes({ paramName: "email" });
@@ -118,7 +119,7 @@ describe("SignUpController", () => {
         sinon.stub(emailValidatorStub, "isValid").throwsException();
         const response = await sut.handle({ body });
 
-        expect(response.statusCode).to.be.equal(500);
+        expect(response.statusCode).to.be.equal(HttpStatusCodes.INTERNAL_SERVER_ERROR);
         expect(response.body).to.be.instanceOf(ServerError);
     });
 
@@ -129,7 +130,7 @@ describe("SignUpController", () => {
         });
         const response = await sut.handle({ body });
 
-        expect(response.statusCode).to.be.equal(400);
+        expect(response.statusCode).to.be.equal(HttpStatusCodes.BAD_REQUEST);
         expect(response.body)
             .to.be.instanceOf(InvalidParameterError)
             .that.includes({ paramName: "passwordConfirmation" });
@@ -147,5 +148,15 @@ describe("SignUpController", () => {
             email: body.email as string,
             password: body.password as string,
         })).to.be.true;
+    });
+
+    it("Should return a server error response if AddAccount throws", async () => {
+        const { sut, addAccountStub } = makeSut();
+        const body = makeBody();
+
+        sinon.stub(addAccountStub, "execute").throwsException();
+        const response = await sut.handle({ body });
+
+        expect(response.statusCode).to.be.equal(HttpStatusCodes.INTERNAL_SERVER_ERROR);
     });
 });
