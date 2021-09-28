@@ -1,4 +1,4 @@
-# Notes App Backend
+# Notes Application Backend
 
 1) Start container:
 

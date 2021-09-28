@@ -1,6 +1,9 @@
-import { use } from "chai";
+import chai from "chai";
 import chaiAsPromise from "chai-as-promised";
 import chaiDateTime from "chai-datetime";
 
-use(chaiAsPromise);
-use(chaiDateTime);
+chai.config.truncateThreshold = 1;
+chai.config.showDiff = true;
+
+chai.use(chaiAsPromise);
+chai.use(chaiDateTime);
