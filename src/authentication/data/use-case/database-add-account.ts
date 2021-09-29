@@ -8,11 +8,13 @@ export class DatabaseAddAccount implements AddAccount {
     }
 
     public async execute(input: AddAccount.Input): Promise<AddAccount.Output> {
+        const encryptedPassword = await this.encrypter.encrypt(input.password);
+
         return {
             id: "valid_id",
             name: input.name,
             email: input.email,
-            password: await this.encrypter.encrypt(input.password),
+            password: encryptedPassword,
         };
     }
 }
