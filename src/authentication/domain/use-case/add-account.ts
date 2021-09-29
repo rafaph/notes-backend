@@ -1,4 +1,4 @@
-import { AccountModel } from "@app/authentication/domain/model/account";
+import { AccountModel } from "@app/authentication/domain/model/account-model";
 
 export interface AddAccount {
     execute(input: AddAccount.Input): Promise<AddAccount.Output>;

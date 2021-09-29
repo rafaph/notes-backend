@@ -52,7 +52,6 @@ export class SignUpController implements Controller {
                 id: account.id,
                 name: account.name,
                 email: account.email,
-                password: account.password,
             });
         } catch {
             return serverError();
@@ -70,5 +69,5 @@ export namespace SignUpController {
 
     export type RequestBodyKey = keyof RequestBody;
 
-    export type ResponseBody = Error | { id: string; name: string; email: string; password: string };
+    export type ResponseBody = Error | Omit<AddAccount.Output, "password">;
 }

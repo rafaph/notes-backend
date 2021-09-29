@@ -1,6 +1,6 @@
 import faker from "faker";
 import sinon from "sinon";
-import { SignUpController } from "@app/authentication/presentation/controller/sign-up";
+import { SignUpController } from "@app/authentication/presentation/controller/sign-up-controller";
 import { MissingParameterError } from "@app/shared/presentation/error/missing-parameter";
 import { ServerError } from "@app/shared/presentation/error/server";
 import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter";
@@ -170,7 +170,6 @@ describe("SignUpController", () => {
             id: "valid_id",
             name: body.name,
             email: body.email,
-            password: body.password,
         });
     });
 });
