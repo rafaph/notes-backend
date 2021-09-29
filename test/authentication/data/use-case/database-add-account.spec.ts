@@ -43,4 +43,12 @@ describe("DatabaseAddAccount", () => {
 
         sinon.assert.calledOnceWithExactly(encryptStub, input.password);
     });
+
+    it("Should throw if Encrypter throws", async () => {
+        const { sut, encrypter } = makeSut();
+        const input = makeInput();
+        sinon.stub(encrypter, "encrypt").rejects();
+
+        await expect(sut.execute(input)).to.be.eventually.rejected;
+    });
 });
