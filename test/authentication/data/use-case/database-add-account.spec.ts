@@ -85,4 +85,12 @@ describe("DatabaseAddAccount", () => {
             password: encryptedPassword,
         });
     });
+
+    it("Should throw if AddAccountRepository throws", async () => {
+        const { sut, addAccountRepositoryStub } = makeSut();
+        const input = makeInput();
+        sinon.stub(addAccountRepositoryStub, "execute").rejects();
+
+        await expect(sut.execute(input)).to.be.eventually.rejected;
+    });
 });
