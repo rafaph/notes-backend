@@ -3,7 +3,7 @@ import { EncrypterArgon2Adapter } from "@app/authentication/infrastructure/hashi
 import sinon from "sinon";
 import faker from "faker";
 
-const FAKE_ENCRYPTED_PASSWORD = faker.internet.password();
+const FAKE_ENCRYPTED_VALUE = faker.internet.password();
 
 describe("EncrypterArgon2Adapter", () => {
     let hashStub: sinon.SinonStub<[
@@ -12,7 +12,7 @@ describe("EncrypterArgon2Adapter", () => {
     ], Promise<string>>;
 
     beforeEach(() => {
-        hashStub = sinon.stub(argon2, "hash").onFirstCall().resolves(FAKE_ENCRYPTED_PASSWORD);
+        hashStub = sinon.stub(argon2, "hash").onFirstCall().resolves(FAKE_ENCRYPTED_VALUE);
     });
 
     afterEach(() => {
@@ -26,5 +26,12 @@ describe("EncrypterArgon2Adapter", () => {
         await sut.encrypt(password);
 
         sinon.assert.calledOnceWithExactly(hashStub, password, { type });
+    });
+
+    it("Should return a hash on success", async () => {
+        const sut = new EncrypterArgon2Adapter();
+        await expect(
+            sut.encrypt(faker.internet.password()),
+        ).to.eventually.be.equal(FAKE_ENCRYPTED_VALUE);
     });
 });
