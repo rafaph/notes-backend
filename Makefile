@@ -1,2 +1,9 @@
+up:
+	docker-compose up -d --build
+
+down:
+	docker-compose down --remove-orphans -t 30
+
 shell:
-	docker-compose run --rm server sh
+	docker-compose run server sh
+	$(MAKE) down
