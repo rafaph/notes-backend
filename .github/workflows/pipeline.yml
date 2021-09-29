@@ -36,6 +36,8 @@ jobs:
     test:
         container:
             image: node:lts
+            env:
+                npm_config_build_from_source: true
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v2
