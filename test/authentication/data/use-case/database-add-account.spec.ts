@@ -5,11 +5,14 @@ import { Encrypter } from "@app/authentication/data/protocol/encrypter";
 import { AddAccount } from "@app/authentication/domain/use-case/add-account";
 import { AddAccountRepository } from "@app/authentication/data/protocol/add-account-repository";
 
+const FAKE_ENCRYPTED_PASSWORD = faker.internet.password();
+const FAKE_ACCOUNT_MODEL_ID = faker.datatype.uuid();
+
 const makeEncrypter = (): Encrypter => {
     class EncryterStub implements Encrypter {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         public async encrypt(_value: string): Promise<string> {
-            return faker.internet.password();
+            return FAKE_ENCRYPTED_PASSWORD;
         }
     }
 
@@ -21,7 +24,7 @@ const makeAddAccountRepository = (): AddAccountRepository => {
         public async execute(input: AddAccountRepository.Input): Promise<AddAccountRepository.Output> {
             return {
                 ...input,
-                id: faker.datatype.uuid(),
+                id: FAKE_ACCOUNT_MODEL_ID,
             };
         }
     }
@@ -66,15 +69,13 @@ describe("DatabaseAddAccount", () => {
         const input = makeInput();
         sinon.stub(encrypterStub, "encrypt").rejects();
 
-        await expect(sut.execute(input)).to.be.eventually.rejected;
+        await expect(sut.execute(input)).to.eventually.be.rejected;
     });
 
     it("Should call AddAccountRepository with correct values", async () => {
-        const { sut, encrypterStub, addAccountRepositoryStub } = makeSut();
+        const { sut, addAccountRepositoryStub } = makeSut();
         const input = makeInput();
-        const encryptedPassword = faker.internet.password();
 
-        sinon.stub(encrypterStub, "encrypt").resolves(encryptedPassword);
         const addSpy = sinon.spy(addAccountRepositoryStub, "execute");
 
         await sut.execute(input);
@@ -82,7 +83,7 @@ describe("DatabaseAddAccount", () => {
         sinon.assert.calledOnceWithExactly(addSpy, {
             name: input.name,
             email: input.email,
-            password: encryptedPassword,
+            password: FAKE_ENCRYPTED_PASSWORD,
         });
     });
 
@@ -91,6 +92,17 @@ describe("DatabaseAddAccount", () => {
         const input = makeInput();
         sinon.stub(addAccountRepositoryStub, "execute").rejects();
 
-        await expect(sut.execute(input)).to.be.eventually.rejected;
+        await expect(sut.execute(input)).to.eventually.be.rejected;
+    });
+
+    it("Should return an account on success", async () => {
+        const { sut } = makeSut();
+        const input = makeInput();
+
+        await expect(sut.execute(input)).to.eventually.be.deep.equal({
+            ...input,
+            id: FAKE_ACCOUNT_MODEL_ID,
+            password: FAKE_ENCRYPTED_PASSWORD,
+        });
     });
 });
