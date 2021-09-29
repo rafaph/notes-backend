@@ -28,7 +28,11 @@ describe("EncrypterArgon2Adapter", () => {
 
         await sut.encrypt(password);
 
-        sinon.assert.calledOnceWithExactly(hashStub, password, { type: ARGON2_TYPE });
+        sinon.assert.calledOnceWithExactly(
+            hashStub,
+            password,
+            { type: ARGON2_TYPE },
+        );
     });
 
     it("Should return a hash on success", async () => {
@@ -36,5 +40,14 @@ describe("EncrypterArgon2Adapter", () => {
         await expect(
             sut.encrypt(faker.internet.password()),
         ).to.eventually.be.equal(FAKE_ENCRYPTED_VALUE);
+    });
+
+    it("Should throw if argon2 throws", async () => {
+        hashStub.onFirstCall().rejects();
+        const sut = makeSut();
+
+        await expect(
+            sut.encrypt(faker.internet.password()),
+        ).to.eventually.be.rejected;
     });
 });
