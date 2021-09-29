@@ -15,6 +15,6 @@ export const serverError = (): HttpResponse<Error> => ({
 export function ok<Body>(body: Body): HttpResponse<Body> {
     return {
         statusCode: HttpStatusCodes.OK,
-        body
+        body,
     };
 }
