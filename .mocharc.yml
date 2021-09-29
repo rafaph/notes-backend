@@ -1,4 +1,5 @@
 timeout: 15000
+reporter: dot
 extension:
     - ts
 spec:

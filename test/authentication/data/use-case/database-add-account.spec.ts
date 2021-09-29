@@ -2,6 +2,7 @@ import faker from "faker";
 import sinon from "sinon";
 import { DatabaseAddAccount } from "@app/authentication/data/use-case/database-add-account";
 import { Encrypter } from "@app/authentication/data/protocol/encrypter";
+import { AddAccount } from "@app/authentication/domain/use-case/add-account";
 
 const makeEncrypter = (): Encrypter => {
     class EncryterStub implements Encrypter {
@@ -14,22 +15,28 @@ const makeEncrypter = (): Encrypter => {
     return new EncryterStub();
 };
 
-const makeSut = (): { encrypter: Encrypter, sut: DatabaseAddAccount } => {
+const makeInput = (input: Partial<AddAccount.Input> = {}): AddAccount.Input => ({
+    name: faker.name.firstName(),
+    email: faker.internet.email(),
+    password: faker.internet.password(),
+    ...input,
+});
+
+const makeSut = (): {
+    encrypter: Encrypter,
+    sut: DatabaseAddAccount
+} => {
     const encrypter = makeEncrypter();
     return {
         encrypter,
-        sut: new DatabaseAddAccount(encrypter)
+        sut: new DatabaseAddAccount(encrypter),
     };
 };
 
-describe.only("DatabaseAddAccount", () => {
+describe("DatabaseAddAccount", () => {
     it("Should call Encrypter with correct password", async () => {
         const { sut, encrypter } = makeSut();
-        const input = {
-            name: faker.name.firstName(),
-            email: faker.internet.email(),
-            password: faker.internet.password()
-        };
+        const input = makeInput();
         const encryptStub = sinon.stub(encrypter, "encrypt");
 
         await sut.execute(input);
