@@ -3,19 +3,19 @@ import sinon from "sinon";
 import faker from "faker";
 import { HasherArgon2Adapter } from "@app/authentication/infrastructure/hashing/hasher-argon2-adapter";
 
-const FAKE_ENCRYPTED_VALUE = faker.internet.password();
+const FAKE_HASHED_VALUE = faker.internet.password();
 const ARGON2_TYPE = argon2.argon2id;
 
 const makeSut = (): HasherArgon2Adapter => new HasherArgon2Adapter(ARGON2_TYPE);
 
-describe("EncrypterArgon2Adapter", () => {
+describe("HasherArgon2Adapter", () => {
     let hashStub: sinon.SinonStub<[
         plain: Buffer | string,
         options?: (argon2.Options & { raw?: false | undefined; }) | undefined
     ], Promise<string>>;
 
     beforeEach(() => {
-        hashStub = sinon.stub(argon2, "hash").onFirstCall().resolves(FAKE_ENCRYPTED_VALUE);
+        hashStub = sinon.stub(argon2, "hash").onFirstCall().resolves(FAKE_HASHED_VALUE);
     });
 
     afterEach(() => {
@@ -39,7 +39,7 @@ describe("EncrypterArgon2Adapter", () => {
         const sut = makeSut();
         await expect(
             sut.hash(faker.internet.password()),
-        ).to.eventually.be.equal(FAKE_ENCRYPTED_VALUE);
+        ).to.eventually.be.equal(FAKE_HASHED_VALUE);
     });
 
     it("Should throw if argon2 throws", async () => {
