@@ -1,9 +1,9 @@
 import { Client } from "pg";
 import { Sequelize } from "sequelize";
 import Umzug, { Umzug as UmzugType } from "umzug";
-import { v4 } from "uuid";
 import { parse } from "pg-connection-string";
 import path from "path";
+import faker from "faker";
 
 export class TestDatabase {
     public readonly databaseName: string;
@@ -14,7 +14,8 @@ export class TestDatabase {
     public constructor() {
         const connectionString = process.env.DATABASE_URL as string;
         const { host, port, user, password, database } = parse(connectionString);
-        this.databaseName = `${database}_${v4().replace(/-/g, "_")}`;
+        const uuid = faker.datatype.uuid().replace(/-/g, "_");
+        this.databaseName = `${database}_${uuid}`;
         this.sequelize = new Sequelize(this.databaseName, user as string, password, {
             host: host as string,
             port: parseInt((port as string), 10),
@@ -42,6 +43,10 @@ export class TestDatabase {
         await this.client.connect();
         await this.client.query(`CREATE DATABASE ${this.databaseName};`);
         await this.umzug.up();
+    }
+
+    public async truncate(): Promise<void> {
+        await this.sequelize.truncate();
     }
 
     public async cleanUp(): Promise<void> {

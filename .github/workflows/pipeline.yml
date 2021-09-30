@@ -38,6 +38,14 @@ jobs:
             image: node:lts
             env:
                 npm_config_build_from_source: true
+                NODE_ENV: development
+                DATABASE_URL: "postgresql://postgres@database:5432/notes_backend"
+        services:
+            database:
+                env:
+                    POSTGRES_HOST_AUTH_METHOD: trust
+                    POSTGRES_DB: notes_backend
+                image: postgres:13-alpine
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v2
