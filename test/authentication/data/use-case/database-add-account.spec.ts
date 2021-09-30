@@ -1,22 +1,22 @@
 import faker from "faker";
 import sinon from "sinon";
 import { DatabaseAddAccount } from "@app/authentication/data/use-case/database-add-account";
-import { Encrypter } from "@app/authentication/data/protocol/encrypter";
+import { Hasher } from "@app/authentication/data/protocol/hasher";
 import { AddAccount } from "@app/authentication/domain/use-case/add-account";
 import { AddAccountRepository } from "@app/authentication/data/protocol/add-account-repository";
 
-const FAKE_ENCRYPTED_PASSWORD = faker.internet.password();
+const FAKE_HASHED_PASSWORD = faker.internet.password();
 const FAKE_ACCOUNT_MODEL_ID = faker.datatype.uuid();
 
-const makeEncrypter = (): Encrypter => {
-    class EncryterStub implements Encrypter {
+const makeHasher = (): Hasher => {
+    class HasherStub implements Hasher {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        public async encrypt(_value: string): Promise<string> {
-            return FAKE_ENCRYPTED_PASSWORD;
+        public async hash(_value: string): Promise<string> {
+            return FAKE_HASHED_PASSWORD;
         }
     }
 
-    return new EncryterStub();
+    return new HasherStub();
 };
 
 const makeAddAccountRepository = (): AddAccountRepository => {
@@ -40,34 +40,34 @@ const makeInput = (input: Partial<AddAccount.Input> = {}): AddAccount.Input => (
 });
 
 const makeSut = (): {
-    encrypterStub: Encrypter,
+    hasherStub: Hasher,
     sut: DatabaseAddAccount
     addAccountRepositoryStub: AddAccountRepository,
 } => {
-    const encrypterStub = makeEncrypter();
+    const hasherStub = makeHasher();
     const addAccountRepositoryStub = makeAddAccountRepository();
     return {
-        encrypterStub,
+        hasherStub,
         addAccountRepositoryStub,
-        sut: new DatabaseAddAccount(encrypterStub, addAccountRepositoryStub),
+        sut: new DatabaseAddAccount(hasherStub, addAccountRepositoryStub),
     };
 };
 
 describe("DatabaseAddAccount", () => {
-    it("Should call Encrypter with correct password", async () => {
-        const { sut, encrypterStub } = makeSut();
+    it("Should call Hasher with correct password", async () => {
+        const { sut, hasherStub } = makeSut();
         const input = makeInput();
-        const encryptStub = sinon.spy(encrypterStub, "encrypt");
+        const hashStub = sinon.spy(hasherStub, "hash");
 
         await sut.execute(input);
 
-        sinon.assert.calledOnceWithExactly(encryptStub, input.password);
+        sinon.assert.calledOnceWithExactly(hashStub, input.password);
     });
 
-    it("Should throw if Encrypter throws", async () => {
-        const { sut, encrypterStub } = makeSut();
+    it("Should throw if Hasher throws", async () => {
+        const { sut, hasherStub } = makeSut();
         const input = makeInput();
-        sinon.stub(encrypterStub, "encrypt").rejects();
+        sinon.stub(hasherStub, "hash").rejects();
 
         await expect(sut.execute(input)).to.eventually.be.rejected;
     });
@@ -83,7 +83,7 @@ describe("DatabaseAddAccount", () => {
         sinon.assert.calledOnceWithExactly(addSpy, {
             name: input.name,
             email: input.email,
-            password: FAKE_ENCRYPTED_PASSWORD,
+            password: FAKE_HASHED_PASSWORD,
         });
     });
 
@@ -102,7 +102,7 @@ describe("DatabaseAddAccount", () => {
         await expect(sut.execute(input)).to.eventually.be.deep.equal({
             ...input,
             id: FAKE_ACCOUNT_MODEL_ID,
-            password: FAKE_ENCRYPTED_PASSWORD,
+            password: FAKE_HASHED_PASSWORD,
         });
     });
 });
