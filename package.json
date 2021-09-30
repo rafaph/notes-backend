@@ -30,7 +30,6 @@
         "@types/pg": "^8.6.1",
         "@types/sinon": "^10.0.4",
         "@types/umzug": "^2.3.2",
-        "@types/uuid": "^8.3.1",
         "@types/validator": "^13.6.3",
         "@typescript-eslint/eslint-plugin": "^4.32.0",
         "@typescript-eslint/parser": "^4.32.0",
@@ -47,7 +46,6 @@
         "pg-connection-string": "^2.5.0",
         "sequelize-cli": "^6.2.0",
         "sinon": "^11.1.2",
-        "sqlite3": "^5.0.2",
         "ts-node": "^10.2.1",
         "tsconfig-paths": "^3.11.0",
         "typescript": "~4.4.3"
@@ -60,7 +58,6 @@
         "pg-hstore": "^2.3.4",
         "sequelize": "^6.6.5",
         "umzug": "^2.3.0",
-        "uuid": "^8.3.2",
         "validator": "^13.6.0"
     }
 }
