@@ -1,28 +1,32 @@
 import { Sequelize } from "sequelize";
+import faker from "faker";
+import { SequelizeAddAccountRepository } from "@app/authentication/infrastructure/database/sequelize/sequelize-add-account-repository";
+import { TestDatabase } from "@test/helper/test-database";
 import { AddAccountRepository } from "@app/authentication/data/protocol/add-account-repository";
-import { AccountFactory, SequelizeAccount } from "@app/authentication/infrastructure/database/sequelize/models/account";
 
-export class SequelizeAddAccountRepository implements AddAccountRepository {
-    private readonly account: SequelizeAccount;
+const makeSut = (sequelize: Sequelize): SequelizeAddAccountRepository => (
+    new SequelizeAddAccountRepository(sequelize)
+);
 
-    public constructor(sequelize: Sequelize) {
-        this.account = AccountFactory(sequelize);
-    }
+const makeInput = (input: Partial<AddAccountRepository.Input> = {}): AddAccountRepository.Input => ({
+    name: faker.name.firstName(),
+    email: faker.internet.email(),
+    password: faker.internet.password(),
+    ...input,
+});
 
+describe.skip("SequelizeAddAccountRepository", () => {
+    it("Should return an account on success", async () => {
+        await new TestDatabase().run(async (sequelize) => {
+            const sut = makeSut(sequelize);
+            const input = makeInput();
 
-    public async execute(input: AddAccountRepository.Input): Promise<AddAccountRepository.Output> {
-        const account = await this.account.create({
-            name: input.name,
-            email: input.email,
-            password: input.password,
+            const account = await sut.execute(input);
+
+            expect(account.id).to.not.be.undefined;
+            expect(account.name).to.be.equal(input.name);
+            expect(account.email).to.be.equal(input.email);
+            expect(account.password).to.be.equal(input.password);
         });
-
-        return {
-            id: account.id,
-            name: account.name,
-            email: account.email,
-            password: account.password,
-        };
-    }
-
-}
+    });
+});
