@@ -15,7 +15,7 @@ const makeInput = (input: Partial<AddAccountRepository.Input> = {}): AddAccountR
     ...input,
 });
 
-describe("@integration SequelizeAddAccountRepository", () => {
+describe("SequelizeAddAccountRepository", () => {
     const testDatabase = new TestDatabase();
     const sequelize = testDatabase.sequelize;
 
