@@ -1,9 +1,9 @@
 import faker from "faker";
 import sinon from "sinon";
 import { SignUpController } from "@app/authentication/presentation/controller/sign-up-controller";
-import { MissingParameterError } from "@app/shared/presentation/error/missing-parameter";
-import { ServerError } from "@app/shared/presentation/error/server";
-import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter";
+import { MissingParameterError } from "@app/shared/presentation/error/missing-parameter-error";
+import { ServerError } from "@app/shared/presentation/error/server-error";
+import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter-error";
 import { EmailValidator } from "@app/authentication/presentation/protocol/email-validator";
 import { AddAccount } from "@app/authentication/domain/use-case/add-account";
 import { HttpStatusCodes } from "@app/shared/utils/http-status-codes";
