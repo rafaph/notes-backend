@@ -1,8 +1,8 @@
-FROM node:lts-alpine
-
-RUN apk add -U entr ruby python make gcc g++
+FROM node:lts
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+
+ENV npm_config_build_from_source=true
 
 RUN ["chmod", "+x", "/usr/local/bin/entrypoint.sh"]
 
