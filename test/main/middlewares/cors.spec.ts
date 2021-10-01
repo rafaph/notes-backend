@@ -6,7 +6,7 @@ describe("@integration CORS Middleware", () => {
     it("Should enable CORS", async () => {
         const fakeRoute = "/test-cors";
 
-        app.options(fakeRoute, (_, response) => {
+        app.get(fakeRoute, (_, response) => {
             response.send();
         });
 
