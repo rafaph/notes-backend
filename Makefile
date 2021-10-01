@@ -5,5 +5,5 @@ down:
 	docker-compose down --remove-orphans -t 30
 
 shell:
-	docker-compose run server bash
+	docker-compose run -p 127.0.0.1:3000:3000 server bash
 	$(MAKE) down
