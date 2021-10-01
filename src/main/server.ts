@@ -1,4 +1,4 @@
-import app from "@app/main/config/app";
+import { app } from "@app/main/config/app";
 
 app.listen(3000, () => {
     // eslint-disable-next-line no-console
