@@ -10,17 +10,17 @@ export class TestDatabase {
     private readonly umzug: UmzugType;
     public readonly sequelize: Sequelize;
     private readonly client: Client;
+    public readonly connectionString: string;
 
     public constructor() {
         const connectionString = process.env.DATABASE_URL as string;
         const { host, port, user, password, database } = parse(connectionString);
         const uuid = faker.datatype.uuid().replace(/-/g, "_");
         this.databaseName = `${database}_${uuid}`;
-        this.sequelize = new Sequelize(this.databaseName, user as string, password, {
-            host: host as string,
-            port: parseInt((port as string), 10),
-            dialect: "postgres",
-            logging: false,
+        this.connectionString = `postgresql://${user}:${password}@${host}:${port}/${this.databaseName}`;
+
+        this.sequelize = new Sequelize(this.connectionString, {
+            logging: false
         });
 
         this.client = new Client({ connectionString });

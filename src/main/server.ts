@@ -1,6 +1,11 @@
-import { app } from "@app/main/config/app";
+import { createApp } from "@app/main/config/create-app";
+import { env } from "@app/main/config/env";
 
-app.listen(3000, () => {
-    // eslint-disable-next-line no-console
-    console.log("Server running at http://localhost:3000");
-});
+(async (): Promise<void> => {
+    const app = await createApp();
+
+    app.listen(env.PORT, () => {
+        // eslint-disable-next-line no-console
+        console.log(`Server running at http://localhost:${env.PORT}`);
+    });
+})();

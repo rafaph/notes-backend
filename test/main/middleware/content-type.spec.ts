@@ -1,9 +1,15 @@
 import request from "supertest";
-import { app } from "@app/main/config/app";
-import { Request, Response } from "express";
+import { createApp } from "@app/main/config/create-app";
+import { Express, Request, Response } from "express";
 
 
 describe("@integration Content Type Middleware", () => {
+    let app: Express;
+
+    before(async () => {
+        app = await createApp();
+    });
+
     it("Should return default content type as json", async () => {
         const fakeRoute = "/test-content-type";
 

@@ -1,13 +1,16 @@
 import { Express, Router } from "express";
 import glob from "glob";
 
-export function setupRoutes(app: Express): void {
-    const router = Router();
-    app.use("/api", router);
+const files = glob.sync("**/src/main/route/*.ts");
 
-    glob.sync("**/src/main/route/*.ts").map(file => {
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const { route } = require(`@app${file.slice(3)}`);
+export async function setupRoutes(app: Express): Promise<void> {
+    const router = Router();
+
+    for (const file of files) {
+        const { route } = await import(`@app${file.slice(3)}`);
+
         route(router);
-    });
+    }
+
+    app.use("/api", router);
 }
