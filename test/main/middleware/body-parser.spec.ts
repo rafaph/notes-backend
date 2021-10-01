@@ -1,10 +1,16 @@
-import { Request, Response } from "express";
+import { Express, Request, Response } from "express";
 import request from "supertest";
 import faker from "faker";
-import { app } from "@app/main/config/app";
+import { createApp } from "@app/main/config/create-app";
 
 
 describe("@integration Body Parser Middleware", () => {
+    let app: Express;
+
+    before(async () => {
+        app = await createApp();
+    });
+
     it("Should parse body as json", async () => {
         const fakeRoute = "/test-body-parser";
 

@@ -1,14 +1,31 @@
 import request from "supertest";
-import { app } from "@app/main/config/app";
 import faker from "faker";
+import { TestApplication } from "@test/helper/test-application";
 
 
-describe("@integration SignUp Routes", () => {
+describe.skip("@integration SignUp Routes", () => {
+
+    let testApplication: TestApplication;
+
+    before(async () => {
+        testApplication = new TestApplication();
+
+        await testApplication.setUp();
+    });
+
+    beforeEach(async () => {
+        await testApplication.truncateDatabase();
+    });
+
+    after(async () => {
+        await testApplication.cleanUp();
+    });
+
     it("Should return an account on success", async () => {
         const route = "/api/sign-up";
         const password = faker.internet.password();
 
-        await request(app)
+        await request(testApplication.baseUrl)
             .post(route)
             .send({
                 name: faker.name.firstName(),

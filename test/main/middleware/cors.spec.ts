@@ -1,9 +1,15 @@
 import request from "supertest";
-import { app } from "@app/main/config/app";
-import { Request, Response } from "express";
+import { Express, Request, Response } from "express";
+import { createApp } from "@app/main/config/create-app";
 
 
 describe("@integration CORS Middleware", () => {
+    let app: Express;
+
+    before(async () => {
+        app = await createApp();
+    });
+
     it("Should enable CORS", async () => {
         const fakeRoute = "/test-cors";
 
