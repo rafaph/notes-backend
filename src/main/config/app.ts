@@ -1,5 +1,5 @@
 import express from "express";
-import { setupMiddlewares } from "@app/main/config/middlewares";
+import { setupMiddlewares } from "@app/main/config/setup-middlewares";
 
 const app = express();
 
