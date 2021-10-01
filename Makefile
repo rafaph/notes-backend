@@ -5,5 +5,5 @@ down:
 	docker-compose down --remove-orphans -t 30
 
 shell:
-	docker-compose run server sh
+	docker-compose run server bash
 	$(MAKE) down
