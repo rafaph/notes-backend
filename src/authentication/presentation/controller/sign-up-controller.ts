@@ -1,9 +1,9 @@
 import { HttpRequest, HttpResponse } from "@app/shared/presentation/protocol/http";
-import { MissingParameterError } from "@app/shared/presentation/error/missing-parameter";
+import { MissingParameterError } from "@app/shared/presentation/error/missing-parameter-error";
 import { badRequest, ok, serverError } from "@app/shared/presentation/helper/http-helper";
 import { Controller } from "@app/shared/presentation/protocol/controller";
 import { EmailValidator } from "@app/authentication/presentation/protocol/email-validator";
-import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter";
+import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter-error";
 import { AddAccount } from "@app/authentication/domain/use-case/add-account";
 
 export class SignUpController implements Controller {
