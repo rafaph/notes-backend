@@ -1,6 +1,4 @@
-import express from "express";
-
-const app = express();
+import app from "@app/main/config/app";
 
 app.listen(3000, () => {
     // eslint-disable-next-line no-console
