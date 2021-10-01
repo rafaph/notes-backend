@@ -1,12 +1,13 @@
 import request from "supertest";
-import app from "@app/main/config/app";
+import { app } from "@app/main/config/app";
+import { Request, Response } from "express";
 
 
 describe("@integration CORS Middleware", () => {
     it("Should enable CORS", async () => {
         const fakeRoute = "/test-cors";
 
-        app.get(fakeRoute, (_, response) => {
+        app.get(fakeRoute, (_: Request, response: Response) => {
             response.send();
         });
 
