@@ -59,6 +59,10 @@ export class TestDatabase {
         await this.query(`DROP DATABASE ${this.database.name};`);
     }
 
+    public async truncate(): Promise<void> {
+        await SequelizeClient.getClient().truncate();
+    }
+
     private async query(query: string): Promise<void> {
         const pgClient = new Client({
             connectionString: this.oldConnectionString,
@@ -66,9 +70,5 @@ export class TestDatabase {
         await pgClient.connect();
         await pgClient.query(query);
         await pgClient.end();
-    }
-
-    public async truncate(): Promise<void> {
-        await SequelizeClient.getClient().truncate();
     }
 }

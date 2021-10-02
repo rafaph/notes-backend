@@ -6,7 +6,7 @@ import { HasherArgon2Adapter } from "@app/authentication/infrastructure/hashing/
 const FAKE_HASHED_VALUE = faker.internet.password();
 const ARGON2_TYPE = argon2.argon2id;
 
-const makeSut = (): HasherArgon2Adapter => new HasherArgon2Adapter(ARGON2_TYPE);
+const makeSut = (): HasherArgon2Adapter => new HasherArgon2Adapter();
 
 describe("HasherArgon2Adapter", () => {
     let hashStub: sinon.SinonStub<[

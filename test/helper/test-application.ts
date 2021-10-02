@@ -6,6 +6,10 @@ export class TestApplication {
     private static application?: Express;
     private static testDatabase = new TestDatabase();
 
+    public static get app(): Express {
+        return this.application as Express;
+    }
+
     public static async setup(): Promise<void> {
         await this.testDatabase.setup();
         this.application = await createApp();
@@ -13,10 +17,6 @@ export class TestApplication {
 
     public static async tearDown(): Promise<void> {
         await this.testDatabase.tearDown();
-    }
-
-    public static get app(): Express {
-        return this.application as Express;
     }
 
     public static async truncateDatabase(): Promise<void> {
