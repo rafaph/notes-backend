@@ -53,8 +53,8 @@ export class SignUpController implements Controller {
                 name: account.name,
                 email: account.email,
             });
-        } catch {
-            return serverError();
+        } catch (error) {
+            return serverError(error as Error);
         }
     }
 }

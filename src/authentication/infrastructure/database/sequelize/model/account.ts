@@ -20,7 +20,7 @@ export const AccountFactory = (sequelize: Sequelize): SequelizeAccount => {
             allowNull: false,
             primaryKey: true,
             type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4
+            defaultValue: DataTypes.UUIDV4,
         },
         name: {
             type: DataTypes.STRING,

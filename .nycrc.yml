@@ -1,3 +1,3 @@
 reporter: [ lcov, text ]
-exclude: [ "src/main/**/*.ts" ]
+exclude: [ "src/main/**/*.ts", "src/shared/utils/**/*.ts" ]
 include: [ "src/**/*.ts" ]

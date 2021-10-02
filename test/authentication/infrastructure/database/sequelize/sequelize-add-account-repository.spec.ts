@@ -18,7 +18,7 @@ const makeInput = (input: Partial<AddAccountRepository.Input> = {}): AddAccountR
 describe("SequelizeAddAccountRepository", () => {
     let sequelize: Sequelize;
 
-    before(async () => {
+    before(() => {
         sequelize = SequelizeClient.getClient();
     });
 

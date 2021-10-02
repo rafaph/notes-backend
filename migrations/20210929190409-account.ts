@@ -1,4 +1,4 @@
-import { QueryInterface, DataTypes } from "sequelize";
+import { DataTypes, QueryInterface } from "sequelize";
 
 const TABLE_NAME = "Accounts";
 
@@ -10,7 +10,7 @@ export function up(queryInterface: QueryInterface): Promise<void> {
                 allowNull: false,
                 primaryKey: true,
                 type: DataTypes.UUID,
-                defaultValue: DataTypes.UUIDV4
+                defaultValue: DataTypes.UUIDV4,
             },
             name: {
                 type: DataTypes.STRING,

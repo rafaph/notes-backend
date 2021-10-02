@@ -69,6 +69,7 @@
         "pg-hstore": "^2.3.4",
         "sequelize": "^6.6.5",
         "sequelize-cli": "^6.2.0",
-        "validator": "^13.6.0"
+        "validator": "^13.6.0",
+        "winston": "^3.3.3"
     }
 }
