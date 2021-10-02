@@ -1,6 +1,5 @@
 timeout: 15000
 reporter: dot
-exit: true
 extension:
     - ts
 spec:

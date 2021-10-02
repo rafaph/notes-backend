@@ -6,12 +6,8 @@ export class SequelizeClient {
 
     public static getClient(connectionString: string = env.DATABASE_URL): Sequelize {
         if (this.sequelize === undefined) {
-            this.sequelize = new Sequelize(connectionString);
+            this.sequelize = new Sequelize(connectionString, { logging: false });
         }
         return this.sequelize;
-    }
-
-    public static async close(): Promise<void>{
-        await this.sequelize?.close();
     }
 }
