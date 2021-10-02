@@ -1,14 +1,14 @@
 import { Express, Request, Response } from "express";
 import request from "supertest";
 import faker from "faker";
-import { createApp } from "@app/main/config/create-app";
+import { TestApplication } from "@test/helper/test-application";
 
 
 describe("@integration Body Parser Middleware", () => {
     let app: Express;
 
-    before(async () => {
-        app = await createApp();
+    before(() => {
+        app = TestApplication.app;
     });
 
     it("Should parse body as json", async () => {

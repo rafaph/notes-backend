@@ -1,13 +1,13 @@
 import request from "supertest";
-import { createApp } from "@app/main/config/create-app";
 import { Express, Request, Response } from "express";
+import { TestApplication } from "@test/helper/test-application";
 
 
 describe("@integration Content Type Middleware", () => {
     let app: Express;
 
-    before(async () => {
-        app = await createApp();
+    before(() => {
+        app = TestApplication.app;
     });
 
     it("Should return default content type as json", async () => {
