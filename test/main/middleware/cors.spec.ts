@@ -1,13 +1,13 @@
 import request from "supertest";
 import { Express, Request, Response } from "express";
-import { createApp } from "@app/main/config/create-app";
+import { TestApplication } from "@test/helper/test-application";
 
 
 describe("@integration CORS Middleware", () => {
     let app: Express;
 
-    before(async () => {
-        app = await createApp();
+    before(() => {
+        app = TestApplication.app;
     });
 
     it("Should enable CORS", async () => {

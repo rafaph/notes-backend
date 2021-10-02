@@ -1,24 +1,14 @@
 import request from "supertest";
 import faker from "faker";
-import { createApp } from "@app/main/config/create-app";
 import { Express } from "express";
-import { SequelizeClient } from "@app/shared/infrastructure/sequelize-client";
+import { TestApplication } from "@test/helper/test-application";
 
 
 describe("@integration SignUp Routes", () => {
-
     let app: Express;
 
-    before(async () => {
-        app = await createApp();
-    });
-
-    beforeEach(async () => {
-        await SequelizeClient.getClient().truncate();
-    });
-
-    after(async () => {
-        await SequelizeClient.getClient().close();
+    before(() => {
+        app = TestApplication.app;
     });
 
     it("Should return an account on success", async () => {
@@ -31,7 +21,7 @@ describe("@integration SignUp Routes", () => {
                 name: faker.name.firstName(),
                 email: faker.internet.email(),
                 password,
-                passwordConfirmation: password
+                passwordConfirmation: password,
             })
             .expect(200);
     });
