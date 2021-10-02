@@ -1,8 +1,8 @@
 import { Sequelize } from "sequelize";
 import faker from "faker";
-import { TestDatabase } from "@test/helper/test-database";
 import { SequelizeAddAccountRepository } from "@app/authentication/infrastructure/database/sequelize/sequelize-add-account-repository";
 import { AddAccountRepository } from "@app/authentication/data/protocol/add-account-repository";
+import { env } from "@app/main/config/env";
 
 const makeSut = (sequelize: Sequelize): SequelizeAddAccountRepository => (
     new SequelizeAddAccountRepository(sequelize)
@@ -16,19 +16,18 @@ const makeInput = (input: Partial<AddAccountRepository.Input> = {}): AddAccountR
 });
 
 describe("SequelizeAddAccountRepository", () => {
-    const testDatabase = new TestDatabase();
-    const sequelize = testDatabase.sequelize;
+    let sequelize: Sequelize;
 
     before(async () => {
-        await testDatabase.setUp();
+        sequelize = new Sequelize(env.DATABASE_URL, { logging: false });
     });
 
     beforeEach(async () => {
-        await testDatabase.truncate();
+        await sequelize.truncate();
     });
 
     after(async () => {
-        await testDatabase.cleanUp();
+        await sequelize.close();
     });
 
     it("Should return an account on success", async () => {
