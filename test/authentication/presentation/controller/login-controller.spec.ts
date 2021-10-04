@@ -10,7 +10,7 @@ import { InvalidParameterError } from "@app/shared/presentation/error/invalid-pa
 
 const makeEmailValidator = (): EmailValidator => {
     class EmailValidatorStub implements EmailValidator {
-        public isValid(_email: string): boolean {
+        public isValid(): boolean {
             return true;
         }
     }
