@@ -1,6 +1,6 @@
 import { Controller } from "@app/shared/presentation/protocol/controller";
 import { HttpRequest, HttpResponse } from "@app/shared/presentation/protocol/http";
-import { badRequest, serverError } from "@app/shared/presentation/helper/http-helper";
+import { badRequest, serverError, unauthorized } from "@app/shared/presentation/helper/http-helper";
 import { MissingParameterError } from "@app/shared/presentation/error/missing-parameter-error";
 import { EmailValidator } from "@app/authentication/presentation/protocol/email-validator";
 import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter-error";
@@ -37,10 +37,14 @@ export class LoginController implements Controller {
                 return badRequest(new InvalidParameterError("email"));
             }
 
-            await this.authenticate.execute({
+            const accessToken = await this.authenticate.execute({
                 email: email as string,
                 password: password as string,
             });
+
+            if(!accessToken) {
+                return unauthorized();
+            }
 
             return {
                 statusCode: 200,
