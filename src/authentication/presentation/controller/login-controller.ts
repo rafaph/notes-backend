@@ -3,6 +3,7 @@ import { HttpRequest, HttpResponse } from "@app/shared/presentation/protocol/htt
 import { badRequest, serverError } from "@app/shared/presentation/helper/http-helper";
 import { MissingParameterError } from "@app/shared/presentation/error/missing-parameter-error";
 import { EmailValidator } from "@app/authentication/presentation/protocol/email-validator";
+import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter-error";
 
 export interface RequestBody {
     email?: string;
@@ -28,7 +29,10 @@ export class LoginController implements Controller {
             return badRequest(new MissingParameterError("password"));
         }
 
-        this.emailValidator.isValid(request.body.email);
+        const isValid = this.emailValidator.isValid(request.body.email);
+        if (!isValid) {
+            return badRequest(new InvalidParameterError("email"));
+        }
 
         return {
             statusCode: 200
