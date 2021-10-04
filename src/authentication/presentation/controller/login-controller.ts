@@ -1,6 +1,6 @@
 import { Controller } from "@app/shared/presentation/protocol/controller";
 import { HttpRequest, HttpResponse } from "@app/shared/presentation/protocol/http";
-import { badRequest, serverError, unauthorized } from "@app/shared/presentation/helper/http-helper";
+import { badRequest, ok, serverError, unauthorized } from "@app/shared/presentation/helper/http-helper";
 import { MissingParameterError } from "@app/shared/presentation/error/missing-parameter-error";
 import { EmailValidator } from "@app/authentication/presentation/protocol/email-validator";
 import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter-error";
@@ -37,18 +37,16 @@ export class LoginController implements Controller {
                 return badRequest(new InvalidParameterError("email"));
             }
 
-            const accessToken = await this.authenticate.execute({
+            const token = await this.authenticate.execute({
                 email: email as string,
                 password: password as string,
             });
 
-            if(!accessToken) {
+            if (!token) {
                 return unauthorized();
             }
 
-            return {
-                statusCode: 200,
-            };
+            return ok({ token });
         } catch (error) {
             return serverError(error as Error);
         }
@@ -63,5 +61,5 @@ export namespace LoginController {
 
     export type RequestBodyKey = keyof RequestBody;
 
-    export type ResponseBody = Error;
+    export type ResponseBody = Error | { token: string };
 }
