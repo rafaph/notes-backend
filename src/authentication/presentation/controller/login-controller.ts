@@ -4,6 +4,7 @@ import { badRequest, serverError } from "@app/shared/presentation/helper/http-he
 import { MissingParameterError } from "@app/shared/presentation/error/missing-parameter-error";
 import { EmailValidator } from "@app/authentication/presentation/protocol/email-validator";
 import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter-error";
+import { Authenticate } from "@app/authentication/domain/use-case/authenticate";
 
 export interface RequestBody {
     email?: string;
@@ -13,7 +14,10 @@ export interface RequestBody {
 export type ResponseBody = Error;
 
 export class LoginController implements Controller {
-    public constructor(private readonly emailValidator: EmailValidator) {
+    public constructor(
+        private readonly emailValidator: EmailValidator,
+        private readonly authenticate: Authenticate,
+    ) {
     }
 
     public async handle(request: HttpRequest<RequestBody>): Promise<HttpResponse<ResponseBody>> {
@@ -37,10 +41,12 @@ export class LoginController implements Controller {
                 return badRequest(new InvalidParameterError("email"));
             }
 
+            await this.authenticate.execute({ email, password });
+
             return {
-                statusCode: 200
+                statusCode: 200,
             };
-        } catch(error) {
+        } catch (error) {
             return serverError(error as Error);
         }
     }
