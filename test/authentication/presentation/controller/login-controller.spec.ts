@@ -1,7 +1,7 @@
 import sinon from "sinon";
 import faker from "faker";
 import { LoginController } from "@app/authentication/presentation/controller/login-controller";
-import { badRequest, serverError, unauthorized } from "@app/shared/presentation/helper/http-helper";
+import { badRequest, ok, serverError, unauthorized } from "@app/shared/presentation/helper/http-helper";
 import { MissingParameterError } from "@app/shared/presentation/error/missing-parameter-error";
 import { ServerError } from "@app/shared/presentation/error/server-error";
 import { HttpRequest } from "@app/shared/presentation/protocol/http";
@@ -76,7 +76,7 @@ describe.only("LoginController", () => {
 
         expect(response.statusCode).to.be.equal(expectedResponse.statusCode);
         expect(response.body).to.be.instanceOf(MissingParameterError);
-        expect(response.body?.message).to.be.equal(expectedResponse.body?.message);
+        expect((response.body as MissingParameterError).message).to.be.equal(expectedResponse.body?.message);
     });
 
     it("Should return a bad request if no password is provided", async () => {
@@ -89,7 +89,7 @@ describe.only("LoginController", () => {
 
         expect(response.statusCode).to.be.equal(expectedResponse.statusCode);
         expect(response.body).to.be.instanceOf(MissingParameterError);
-        expect(response.body?.message).to.be.equal(expectedResponse.body?.message);
+        expect((response.body as MissingParameterError).message).to.be.equal(expectedResponse.body?.message);
     });
 
     it("Should call EmailValidator with correct value", async () => {
@@ -112,7 +112,7 @@ describe.only("LoginController", () => {
 
         expect(response.statusCode).to.be.equal(expectedResponse.statusCode);
         expect(response.body).to.be.instanceOf(InvalidParameterError);
-        expect(response.body?.message).to.be.equal(expectedResponse.body?.message);
+        expect((response.body as MissingParameterError).message).to.be.equal(expectedResponse.body?.message);
     });
 
     it("Should return a server error if email validator throws", async () => {
@@ -159,5 +159,16 @@ describe.only("LoginController", () => {
 
         expect(response.statusCode).to.be.equal(expectedResponse.statusCode);
         expect(response.body).to.be.instanceOf(ServerError);
+    });
+
+    it("Should return a ok response if valid credentials are provided", async () => {
+        const { sut } = makeSut();
+        const request = makeRequest();
+        const response = await sut.handle(request);
+        const expectedResponse = ok({
+            token: FAKE_TOKEN,
+        });
+
+        expect(response).to.be.deep.equal(expectedResponse);
     });
 });
