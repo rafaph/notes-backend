@@ -1,6 +1,6 @@
 import sinon from "sinon";
 import faker from "faker";
-import { LoginController, RequestBody } from "@app/authentication/presentation/controller/login-controller";
+import { LoginController } from "@app/authentication/presentation/controller/login-controller";
 import { badRequest, serverError } from "@app/shared/presentation/helper/http-helper";
 import { MissingParameterError } from "@app/shared/presentation/error/missing-parameter-error";
 import { ServerError } from "@app/shared/presentation/error/server-error";
@@ -46,7 +46,7 @@ const makeSut = (): {
     };
 };
 
-const makeRequest = (body: RequestBody = {}): HttpRequest<RequestBody> => ({
+const makeRequest = (body: LoginController.RequestBody = {}): HttpRequest<LoginController.RequestBody> => ({
     body: {
         email: faker.internet.email(),
         password: faker.internet.password(),

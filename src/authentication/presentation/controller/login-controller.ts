@@ -6,13 +6,6 @@ import { EmailValidator } from "@app/authentication/presentation/protocol/email-
 import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter-error";
 import { Authenticate } from "@app/authentication/domain/use-case/authenticate";
 
-export interface RequestBody {
-    email?: string;
-    password?: string;
-}
-
-export type ResponseBody = Error;
-
 export class LoginController implements Controller {
     public constructor(
         private readonly emailValidator: EmailValidator,
@@ -20,28 +13,34 @@ export class LoginController implements Controller {
     ) {
     }
 
-    public async handle(request: HttpRequest<RequestBody>): Promise<HttpResponse<ResponseBody>> {
+    public async handle(request: HttpRequest<LoginController.RequestBody>): Promise<HttpResponse<LoginController.ResponseBody>> {
         if (request.body === undefined) {
             return serverError();
         }
 
         try {
+            const requiredFields: LoginController.RequestBodyKey[] = [
+                "email",
+                "password",
+            ];
+
+            for (const requiredField of requiredFields) {
+                if (!request.body[requiredField]) {
+                    return badRequest(new MissingParameterError(requiredField));
+                }
+            }
+
             const { email, password } = request.body;
 
-            if (!email) {
-                return badRequest(new MissingParameterError("email"));
-            }
-
-            if (!password) {
-                return badRequest(new MissingParameterError("password"));
-            }
-
-            const isValid = this.emailValidator.isValid(email);
+            const isValid = this.emailValidator.isValid(email as string);
             if (!isValid) {
                 return badRequest(new InvalidParameterError("email"));
             }
 
-            await this.authenticate.execute({ email, password });
+            await this.authenticate.execute({
+                email: email as string,
+                password: password as string,
+            });
 
             return {
                 statusCode: 200,
@@ -50,4 +49,15 @@ export class LoginController implements Controller {
             return serverError(error as Error);
         }
     }
+}
+
+export namespace LoginController {
+    export interface RequestBody {
+        email?: string;
+        password?: string;
+    }
+
+    export type RequestBodyKey = keyof RequestBody;
+
+    export type ResponseBody = Error;
 }
