@@ -6,6 +6,7 @@ import { ServerError } from "@app/shared/presentation/error/server-error";
 import { HttpRequest } from "@app/shared/presentation/protocol/http";
 import sinon from "sinon";
 import { EmailValidator } from "@app/authentication/presentation/protocol/email-validator";
+import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter-error";
 
 const makeEmailValidator = (): EmailValidator => {
     class EmailValidatorStub implements EmailValidator {
@@ -83,5 +84,17 @@ describe.only("LoginController", () => {
         await sut.handle(request);
 
         sinon.assert.calledOnceWithExactly(isValidStub, email);
+    });
+
+    it("Should return a bad request if a invalid email is provided", async () => {
+        const { sut, emailValidatorStub } = makeSut();
+        const request = makeRequest();
+        sinon.stub(emailValidatorStub, "isValid").onFirstCall().returns(false);
+        const response = await sut.handle(request);
+        const expectedResponse = badRequest(new InvalidParameterError("email"));
+
+        expect(response.statusCode).to.be.equal(expectedResponse.statusCode);
+        expect(response.body).to.be.instanceOf(InvalidParameterError);
+        expect(response.body?.message).to.be.equal(expectedResponse.body?.message);
     });
 });
