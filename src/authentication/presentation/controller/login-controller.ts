@@ -21,23 +21,27 @@ export class LoginController implements Controller {
             return serverError();
         }
 
-        const { email, password } = request.body;
+        try {
+            const { email, password } = request.body;
 
-        if (!email) {
-            return badRequest(new MissingParameterError("email"));
+            if (!email) {
+                return badRequest(new MissingParameterError("email"));
+            }
+
+            if (!password) {
+                return badRequest(new MissingParameterError("password"));
+            }
+
+            const isValid = this.emailValidator.isValid(email);
+            if (!isValid) {
+                return badRequest(new InvalidParameterError("email"));
+            }
+
+            return {
+                statusCode: 200
+            };
+        } catch(error) {
+            return serverError(error as Error);
         }
-
-        if (!password) {
-            return badRequest(new MissingParameterError("password"));
-        }
-
-        const isValid = this.emailValidator.isValid(email);
-        if (!isValid) {
-            return badRequest(new InvalidParameterError("email"));
-        }
-
-        return {
-            statusCode: 200
-        };
     }
 }
