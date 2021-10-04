@@ -1,12 +1,13 @@
+import sinon from "sinon";
 import faker from "faker";
 import { LoginController, RequestBody } from "@app/authentication/presentation/controller/login-controller";
 import { badRequest, serverError } from "@app/shared/presentation/helper/http-helper";
 import { MissingParameterError } from "@app/shared/presentation/error/missing-parameter-error";
 import { ServerError } from "@app/shared/presentation/error/server-error";
 import { HttpRequest } from "@app/shared/presentation/protocol/http";
-import sinon from "sinon";
 import { EmailValidator } from "@app/authentication/presentation/protocol/email-validator";
 import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter-error";
+import { Authenticate } from "@app/authentication/domain/use-case/authenticate";
 
 const makeEmailValidator = (): EmailValidator => {
     class EmailValidatorStub implements EmailValidator {
@@ -18,15 +19,30 @@ const makeEmailValidator = (): EmailValidator => {
     return new EmailValidatorStub();
 };
 
+const FAKE_TOKEN = faker.datatype.uuid();
+const makeAuthenticate = (): Authenticate => {
+    class AuthenticateStub implements Authenticate {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        public async execute(_input: Authenticate.Input): Promise<Authenticate.Output> {
+            return FAKE_TOKEN;
+        }
+    }
+
+    return new AuthenticateStub();
+};
+
 const makeSut = (): {
     sut: LoginController;
     emailValidatorStub: EmailValidator;
+    authenticateStub: Authenticate;
 } => {
     const emailValidatorStub = makeEmailValidator();
-    const sut = new LoginController(emailValidatorStub);
+    const authenticateStub = makeAuthenticate();
+    const sut = new LoginController(emailValidatorStub, authenticateStub);
     return {
         sut,
         emailValidatorStub,
+        authenticateStub,
     };
 };
 
@@ -107,5 +123,18 @@ describe.only("LoginController", () => {
 
         expect(response.statusCode).to.be.equal(expectedResponse.statusCode);
         expect(response.body).to.be.instanceOf(ServerError);
+    });
+
+    it("Should call Authenticate with correct values", async () => {
+       const { sut, authenticateStub } = makeSut();
+       const executeStub = sinon.stub(authenticateStub, "execute");
+       const email = faker.internet.email();
+       const password = faker.internet.password();
+       const body = { email, password };
+       const request = makeRequest(body);
+
+       await sut.handle(request);
+
+       sinon.assert.calledOnceWithExactly(executeStub, body);
     });
 });
