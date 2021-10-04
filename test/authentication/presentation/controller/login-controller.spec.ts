@@ -77,7 +77,7 @@ describe.only("LoginController", () => {
 
     it("Should call EmailValidator with correct value", async () => {
         const { sut, emailValidatorStub } = makeSut();
-        const isValidStub = sinon.stub(emailValidatorStub, "isValid").onFirstCall().returns(true);
+        const isValidStub = sinon.stub(emailValidatorStub, "isValid");
         const email = faker.internet.email();
         const request = makeRequest({ email });
 
@@ -89,12 +89,23 @@ describe.only("LoginController", () => {
     it("Should return a bad request if a invalid email is provided", async () => {
         const { sut, emailValidatorStub } = makeSut();
         const request = makeRequest();
-        sinon.stub(emailValidatorStub, "isValid").onFirstCall().returns(false);
+        sinon.stub(emailValidatorStub, "isValid").returns(false);
         const response = await sut.handle(request);
         const expectedResponse = badRequest(new InvalidParameterError("email"));
 
         expect(response.statusCode).to.be.equal(expectedResponse.statusCode);
         expect(response.body).to.be.instanceOf(InvalidParameterError);
         expect(response.body?.message).to.be.equal(expectedResponse.body?.message);
+    });
+
+    it("Should return a server error if email validator throws", async () => {
+        const { sut, emailValidatorStub } = makeSut();
+        sinon.stub(emailValidatorStub, "isValid").throwsException();
+        const request = makeRequest();
+        const response = await sut.handle(request);
+        const expectedResponse = serverError();
+
+        expect(response.statusCode).to.be.equal(expectedResponse.statusCode);
+        expect(response.body).to.be.instanceOf(ServerError);
     });
 });
