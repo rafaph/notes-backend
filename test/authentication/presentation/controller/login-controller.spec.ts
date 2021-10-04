@@ -127,16 +127,16 @@ describe.only("LoginController", () => {
     });
 
     it("Should call Authenticate with correct values", async () => {
-       const { sut, authenticateStub } = makeSut();
-       const executeStub = sinon.stub(authenticateStub, "execute");
-       const email = faker.internet.email();
-       const password = faker.internet.password();
-       const body = { email, password };
-       const request = makeRequest(body);
+        const { sut, authenticateStub } = makeSut();
+        const executeStub = sinon.stub(authenticateStub, "execute");
+        const email = faker.internet.email();
+        const password = faker.internet.password();
+        const body = { email, password };
+        const request = makeRequest(body);
 
-       await sut.handle(request);
+        await sut.handle(request);
 
-       sinon.assert.calledOnceWithExactly(executeStub, body);
+        sinon.assert.calledOnceWithExactly(executeStub, body);
     });
 
     it("Should return a unauthorized response if invalid credentials are provided", async () => {
@@ -148,5 +148,16 @@ describe.only("LoginController", () => {
 
         expect(response.statusCode).to.be.equal(expectedResponse.statusCode);
         expect(response.body).to.be.instanceOf(UnauthorizedError);
+    });
+
+    it("Should return a server error response if Authenticate throws", async () => {
+        const { sut, authenticateStub } = makeSut();
+        sinon.stub(authenticateStub, "execute").throwsException();
+        const request = makeRequest();
+        const response = await sut.handle(request);
+        const expectedResponse = serverError();
+
+        expect(response.statusCode).to.be.equal(expectedResponse.statusCode);
+        expect(response.body).to.be.instanceOf(ServerError);
     });
 });
