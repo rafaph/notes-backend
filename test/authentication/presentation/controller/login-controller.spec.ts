@@ -4,13 +4,28 @@ import { badRequest, serverError } from "@app/shared/presentation/helper/http-he
 import { MissingParameterError } from "@app/shared/presentation/error/missing-parameter-error";
 import { ServerError } from "@app/shared/presentation/error/server-error";
 import { HttpRequest } from "@app/shared/presentation/protocol/http";
+import sinon from "sinon";
+import { EmailValidator } from "@app/authentication/presentation/protocol/email-validator";
+
+const makeEmailValidator = (): EmailValidator => {
+    class EmailValidatorStub implements EmailValidator {
+        public isValid(_email: string): boolean {
+            return true;
+        }
+    }
+
+    return new EmailValidatorStub();
+};
 
 const makeSut = (): {
     sut: LoginController;
+    emailValidatorStub: EmailValidator;
 } => {
-    const sut = new LoginController();
+    const emailValidatorStub = makeEmailValidator();
+    const sut = new LoginController(emailValidatorStub);
     return {
         sut,
+        emailValidatorStub,
     };
 };
 
@@ -57,5 +72,16 @@ describe.only("LoginController", () => {
         expect(response.statusCode).to.be.equal(expectedResponse.statusCode);
         expect(response.body).to.be.instanceOf(MissingParameterError);
         expect(response.body?.message).to.be.equal(expectedResponse.body?.message);
+    });
+
+    it("Should call EmailValidator with correct value", async () => {
+        const { sut, emailValidatorStub } = makeSut();
+        const isValidStub = sinon.stub(emailValidatorStub, "isValid").onFirstCall().returns(true);
+        const email = faker.internet.email();
+        const request = makeRequest({ email });
+
+        await sut.handle(request);
+
+        sinon.assert.calledOnceWithExactly(isValidStub, email);
     });
 });
