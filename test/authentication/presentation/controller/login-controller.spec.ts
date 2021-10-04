@@ -1,13 +1,14 @@
 import sinon from "sinon";
 import faker from "faker";
 import { LoginController } from "@app/authentication/presentation/controller/login-controller";
-import { badRequest, serverError } from "@app/shared/presentation/helper/http-helper";
+import { badRequest, serverError, unauthorized } from "@app/shared/presentation/helper/http-helper";
 import { MissingParameterError } from "@app/shared/presentation/error/missing-parameter-error";
 import { ServerError } from "@app/shared/presentation/error/server-error";
 import { HttpRequest } from "@app/shared/presentation/protocol/http";
 import { EmailValidator } from "@app/authentication/presentation/protocol/email-validator";
 import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter-error";
 import { Authenticate } from "@app/authentication/domain/use-case/authenticate";
+import { UnauthorizedError } from "@app/shared/presentation/error/unauthorized-error";
 
 const makeEmailValidator = (): EmailValidator => {
     class EmailValidatorStub implements EmailValidator {
@@ -136,5 +137,16 @@ describe.only("LoginController", () => {
        await sut.handle(request);
 
        sinon.assert.calledOnceWithExactly(executeStub, body);
+    });
+
+    it("Should return a unauthorized response if invalid credentials are provided", async () => {
+        const { sut, authenticateStub } = makeSut();
+        sinon.stub(authenticateStub, "execute").resolves(undefined);
+        const request = makeRequest();
+        const response = await sut.handle(request);
+        const expectedResponse = unauthorized();
+
+        expect(response.statusCode).to.be.equal(expectedResponse.statusCode);
+        expect(response.body).to.be.instanceOf(UnauthorizedError);
     });
 });
