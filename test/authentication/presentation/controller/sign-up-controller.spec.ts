@@ -1,12 +1,13 @@
 import faker from "faker";
 import sinon from "sinon";
 import { SignUpController } from "@app/authentication/presentation/controller/sign-up-controller";
-import { MissingParameterError } from "@app/shared/presentation/error/missing-parameter-error";
 import { ServerError } from "@app/shared/presentation/error/server-error";
 import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter-error";
 import { EmailValidator } from "@app/authentication/presentation/protocol/email-validator";
 import { AddAccount } from "@app/authentication/domain/use-case/add-account";
 import { HttpStatusCodes } from "@app/shared/utils/http-status-codes";
+import { Validator } from "@app/shared/presentation/protocol/validator";
+import { badRequest } from "@app/shared/presentation/helper/http-helper";
 
 const makeEmailValidator = (): EmailValidator => {
     class EmailValidatorStub implements EmailValidator {
@@ -34,18 +35,31 @@ const makeAddAccount = (): AddAccount => {
     return new AddAccountStub();
 };
 
+const makeValidator = (): Validator => {
+    class ValidatorStub implements Validator {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        public async validate(_input: unknown): Promise<Error | undefined> {
+            return undefined;
+        }
+    }
+    return new ValidatorStub();
+};
+
 const makeSut = (): {
     sut: SignUpController,
     emailValidatorStub: EmailValidator,
     addAccountStub: AddAccount,
+    validatorStub: Validator,
 } => {
     const emailValidatorStub = makeEmailValidator();
     const addAccountStub = makeAddAccount();
-    const sut = new SignUpController(emailValidatorStub, addAccountStub);
+    const validatorStub = makeValidator();
+    const sut = new SignUpController(emailValidatorStub, addAccountStub, validatorStub);
     return {
         sut,
         emailValidatorStub,
         addAccountStub,
+        validatorStub,
     };
 };
 
@@ -67,26 +81,6 @@ describe("SignUpController", () => {
 
         expect(response.statusCode).to.be.equal(HttpStatusCodes.INTERNAL_SERVER_ERROR);
         expect(response.body).to.be.instanceOf(ServerError);
-    });
-
-    context("When missing params", () => {
-        const keys: SignUpController.RequestBodyKey[] = ["name", "email", "password", "passwordConfirmation"];
-
-        for (const key of keys) {
-            it(`Should return a bad request response when no ${key} is provided`, async () => {
-                const { sut } = makeSut();
-                const body = makeBody({
-                    [key]: undefined,
-                });
-
-                const response = await sut.handle({ body });
-
-                expect(response.statusCode).to.be.equal(HttpStatusCodes.BAD_REQUEST);
-                expect(response.body)
-                    .to.be.instanceOf(MissingParameterError)
-                    .that.includes({ paramName: key });
-            });
-        }
     });
 
     it("Should return a bad request if an invalid email is provided", async () => {
@@ -171,5 +165,26 @@ describe("SignUpController", () => {
             name: body.name,
             email: body.email,
         });
+    });
+
+    it("Should call Validation with correct value", async () => {
+        const { sut, validatorStub } = makeSut();
+        const body = makeBody();
+
+        const isValidSpy = sinon.spy(validatorStub, "validate");
+        await sut.handle({ body });
+
+        sinon.assert.calledOnceWithExactly(isValidSpy, body);
+    });
+
+    it("Should return a bad request if Validation returns a error", async () => {
+        const { sut, validatorStub } = makeSut();
+        const body = makeBody();
+        const error = new Error();
+
+        sinon.stub(validatorStub, "validate").resolves(error);
+        const response = await sut.handle({ body });
+
+        expect(response).to.be.deep.equal(badRequest(error));
     });
 });

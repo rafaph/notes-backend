@@ -55,7 +55,7 @@ const makeRequest = (body: LoginController.RequestBody = {}): HttpRequest<LoginC
     },
 });
 
-describe.only("LoginController", () => {
+describe("LoginController", () => {
     it("Should return a server error if no body is provided", async () => {
         const { sut } = makeSut();
         const request = {};
