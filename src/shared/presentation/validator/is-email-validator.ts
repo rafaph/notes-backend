@@ -6,7 +6,7 @@ import { InvalidParameterError } from "@app/shared/presentation/error/invalid-pa
 export class IsEmailValidator implements Validator {
     public constructor(
         private readonly fieldName: string,
-        private readonly emailValidator: EmailValidator
+        private readonly emailValidator: EmailValidator,
     ) {
     }
 
