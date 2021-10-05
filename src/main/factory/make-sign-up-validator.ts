@@ -2,6 +2,8 @@ import { Validator } from "@app/shared/presentation/protocol/validator";
 import { CompositeValidator } from "@app/shared/presentation/validator/composite-validator";
 import { RequiredFieldValidator } from "@app/shared/presentation/validator/required-field-validator";
 import { AreFieldsDifferentValidator } from "@app/shared/presentation/validator/are-fields-different-validator";
+import { IsEmailValidator } from "@app/shared/presentation/validator/is-email-validator";
+import { EmailValidatorAdapter } from "@app/authentication/utils/email-validator-adapter";
 
 export function makeSignUpValidator(): Validator {
     const validators = [];
@@ -12,6 +14,7 @@ export function makeSignUpValidator(): Validator {
     }
 
     validators.push(new AreFieldsDifferentValidator("password", "passwordConfirmation"));
+    validators.push(new IsEmailValidator("email", new EmailValidatorAdapter()));
 
     return new CompositeValidator(validators);
 }

@@ -3,6 +3,9 @@ import { makeSignUpValidator } from "@app/main/factory/make-sign-up-validator";
 import * as compositeModule from "@app/shared/presentation/validator/composite-validator";
 import { RequiredFieldValidator } from "@app/shared/presentation/validator/required-field-validator";
 import { AreFieldsDifferentValidator } from "@app/shared/presentation/validator/are-fields-different-validator";
+import { IsEmailValidator } from "@app/shared/presentation/validator/is-email-validator";
+import { EmailValidatorAdapter } from "@app/authentication/utils/email-validator-adapter";
+
 
 describe("makeSignUpValidator", () => {
     it("Should call CompositeValidator with correct validator", () => {
@@ -19,6 +22,7 @@ describe("makeSignUpValidator", () => {
         }
 
         validators.push(new AreFieldsDifferentValidator("password", "passwordConfirmation"));
+        validators.push(new IsEmailValidator("email", new EmailValidatorAdapter()));
 
         sinon.assert.calledOnceWithExactly(constructorStub, validators);
     });
