@@ -1,38 +1,27 @@
 import { HttpRequest, HttpResponse } from "@app/shared/presentation/protocol/http";
-import { MissingParameterError } from "@app/shared/presentation/error/missing-parameter-error";
 import { badRequest, ok, serverError } from "@app/shared/presentation/helper/http-helper";
 import { Controller } from "@app/shared/presentation/protocol/controller";
 import { EmailValidator } from "@app/authentication/presentation/protocol/email-validator";
 import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter-error";
 import { AddAccount } from "@app/authentication/domain/use-case/add-account";
+import { Validator } from "@app/shared/presentation/protocol/validator";
 
 export class SignUpController implements Controller {
     public constructor(
         private readonly emailValidator: EmailValidator,
         private readonly addAccount: AddAccount,
+        private readonly validator: Validator,
     ) {
     }
 
     public async handle(request: HttpRequest<SignUpController.RequestBody>): Promise<HttpResponse<SignUpController.ResponseBody>> {
-        if (request.body === undefined) {
-            return serverError();
-        }
-
         try {
-            const requiredFields: SignUpController.RequestBodyKey[] = [
-                "name",
-                "email",
-                "password",
-                "passwordConfirmation",
-            ];
-
-            for (const requiredField of requiredFields) {
-                if (request.body[requiredField] === undefined) {
-                    return badRequest(new MissingParameterError(requiredField));
-                }
+            const error = await this.validator.validate(request.body);
+            if (error) {
+                return badRequest(error);
             }
 
-            const { name, email, password, passwordConfirmation } = request.body;
+            const { name, email, password, passwordConfirmation } = request.body as SignUpController.RequestBody;
 
             if (password !== passwordConfirmation) {
                 return badRequest(new InvalidParameterError("passwordConfirmation"));
@@ -66,8 +55,6 @@ export namespace SignUpController {
         password?: string;
         passwordConfirmation?: string;
     }
-
-    export type RequestBodyKey = keyof RequestBody;
 
     export type ResponseBody = Error | Omit<AddAccount.Output, "password">;
 }

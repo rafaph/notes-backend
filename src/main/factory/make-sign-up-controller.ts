@@ -6,6 +6,7 @@ import { HasherArgon2Adapter } from "@app/authentication/infrastructure/hashing/
 import { SequelizeAddAccountRepository } from "@app/authentication/infrastructure/database/sequelize/sequelize-add-account-repository";
 import { SequelizeClient } from "@app/shared/infrastructure/sequelize-client";
 import { LogControllerDecorator } from "@app/main/decorator/log-controller-decorator";
+import { makeSignUpValidator } from "@app/main/factory/make-sign-up-validator";
 
 export function makeSignUpController(): Controller {
     const emailValidator = new EmailValidatorAdapter();
@@ -13,6 +14,7 @@ export function makeSignUpController(): Controller {
     const sequelize = SequelizeClient.getClient();
     const databaseAddAccountRepository = new SequelizeAddAccountRepository(sequelize);
     const databaseAddAccount = new DatabaseAddAccount(argon2Hasher, databaseAddAccountRepository);
-    const controller = new SignUpController(emailValidator, databaseAddAccount);
+    const validator = makeSignUpValidator();
+    const controller = new SignUpController(emailValidator, databaseAddAccount, validator);
     return new LogControllerDecorator(controller);
 }
