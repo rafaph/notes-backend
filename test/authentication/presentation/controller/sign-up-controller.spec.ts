@@ -28,6 +28,7 @@ const makeValidator = (): Validator => {
             return undefined;
         }
     }
+
     return new ValidatorStub();
 };
 
