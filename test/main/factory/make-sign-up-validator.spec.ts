@@ -8,6 +8,10 @@ import { EmailValidatorAdapter } from "@app/authentication/utils/email-validator
 
 
 describe("makeSignUpValidator", () => {
+    afterEach(() => {
+        sinon.restore();
+    });
+
     it("Should call CompositeValidator with correct validator", () => {
         const compositeValidatorStub = sinon.createStubInstance(compositeModule.CompositeValidator);
         const constructorStub = sinon.stub(compositeModule, "CompositeValidator").onFirstCall().returns(compositeValidatorStub);
