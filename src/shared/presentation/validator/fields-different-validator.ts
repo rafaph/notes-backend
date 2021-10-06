@@ -2,7 +2,7 @@ import _ from "lodash";
 import { Validator } from "@app/shared/presentation/protocol/validator";
 import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter-error";
 
-export class AreFieldsDifferentValidator implements Validator {
+export class FieldsDifferentValidator implements Validator {
     public constructor(
         private readonly fieldName: string,
         private readonly fieldNameToCompare: string,
