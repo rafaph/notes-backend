@@ -1,5 +1,5 @@
 import { Authenticate } from "@app/authentication/domain/use-case/authenticate";
-import { LoadAccountByEmailRepository } from "@app/authentication/data/protocol/load-account-by-email-repository";
+import { LoadAccountByEmailRepository } from "@app/authentication/data/protocol/persistence/load-account-by-email-repository";
 
 export class DatabaseAuthenticate implements Authenticate {
     public constructor(

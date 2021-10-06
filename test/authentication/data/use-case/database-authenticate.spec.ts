@@ -1,7 +1,7 @@
 import faker from "faker";
 import sinon from "sinon";
 import { DatabaseAuthenticate } from "@app/authentication/data/use-case/database-authenticate";
-import { LoadAccountByEmailRepository } from "@app/authentication/data/protocol/load-account-by-email-repository";
+import { LoadAccountByEmailRepository } from "@app/authentication/data/protocol/persistence/load-account-by-email-repository";
 import { Authenticate } from "@app/authentication/domain/use-case/authenticate";
 
 const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {

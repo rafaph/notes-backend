@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
 import faker from "faker";
 import { SequelizeAddAccountRepository } from "@app/authentication/infrastructure/database/sequelize/sequelize-add-account-repository";
-import { AddAccountRepository } from "@app/authentication/data/protocol/add-account-repository";
+import { AddAccountRepository } from "@app/authentication/data/protocol/persistence/add-account-repository";
 import { SequelizeClient } from "@app/shared/infrastructure/sequelize-client";
 
 const makeSut = (sequelize: Sequelize): SequelizeAddAccountRepository => (
