@@ -2,6 +2,7 @@ import faker from "faker";
 import sinon from "sinon";
 import { DatabaseAuthenticate } from "@app/authentication/data/use-case/database-authenticate";
 import { LoadAccountByEmailRepository } from "@app/authentication/data/protocol/load-account-by-email-repository";
+import { Authenticate } from "@app/authentication/domain/use-case/authenticate";
 
 const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
     class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
@@ -17,6 +18,12 @@ const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
 
     return new LoadAccountByEmailRepositoryStub();
 };
+
+const makeSutInput = (input: Partial<Authenticate.Input> = {}): Authenticate.Input => ({
+    email: faker.internet.email(),
+    password: faker.internet.password(),
+    ...input,
+});
 
 const makeSut = (): {
     sut: DatabaseAuthenticate
@@ -34,11 +41,15 @@ describe.only("DatabaseAuthenticate", () => {
         const { sut, loadAccountByEmailRepositoryStub } = makeSut();
         const executeSpy = sinon.spy(loadAccountByEmailRepositoryStub, "execute");
         const email = faker.internet.email();
-        await sut.execute({
-            email,
-            password: faker.internet.password(),
-        });
+        await sut.execute(makeSutInput({ email }));
 
         sinon.assert.calledOnceWithExactly(executeSpy, { email });
+    });
+
+    it("Should throw if LoadAccountByEmailRepository throws", async () => {
+        const { sut, loadAccountByEmailRepositoryStub } = makeSut();
+        sinon.stub(loadAccountByEmailRepositoryStub, "execute").rejects();
+
+        await expect(sut.execute(makeSutInput())).to.eventually.be.rejected;
     });
 });
