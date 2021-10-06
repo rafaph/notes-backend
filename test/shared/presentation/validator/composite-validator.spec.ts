@@ -13,17 +13,18 @@ const makeValidator = (): Validator => {
 };
 
 const makeSut = (): {
-    sut: CompositeValidator;
+    sut: Validator;
     validatorStubs: Validator[];
 } => {
     const validatorStubs = [makeValidator(), makeValidator()];
+    const sut = new CompositeValidator(validatorStubs);
     return {
-        sut: new CompositeValidator(validatorStubs),
+        sut,
         validatorStubs,
     };
 };
 
-describe.only("CompositeValidator", () => {
+describe("CompositeValidator", () => {
     it("Should return an error if any validator fails", async () => {
         const { sut, validatorStubs } = makeSut();
         const error = new Error();
