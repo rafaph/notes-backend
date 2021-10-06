@@ -1,7 +1,7 @@
 import sinon from "sinon";
 import faker from "faker";
 import { LoginController } from "@app/authentication/presentation/controller/login-controller";
-import { badRequest, ok, serverError, unauthorized } from "@app/shared/presentation/helper/http-helper";
+import { badRequest, ok, serverError, unauthorized } from "@app/shared/presentation/helper/http/http-helper";
 import { ServerError } from "@app/shared/presentation/error/server-error";
 import { HttpRequest } from "@app/shared/presentation/protocol/http";
 import { Authenticate } from "@app/authentication/domain/use-case/authenticate";

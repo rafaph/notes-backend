@@ -4,7 +4,7 @@ import { SignUpController } from "@app/authentication/presentation/controller/si
 import { AddAccount } from "@app/authentication/domain/use-case/add-account";
 import { HttpStatusCodes } from "@app/shared/utils/http-status-codes";
 import { Validator } from "@app/shared/presentation/protocol/validator";
-import { badRequest } from "@app/shared/presentation/helper/http-helper";
+import { badRequest } from "@app/shared/presentation/helper/http/http-helper";
 
 const makeAddAccount = (): AddAccount => {
     class AddAccountStub implements AddAccount {
