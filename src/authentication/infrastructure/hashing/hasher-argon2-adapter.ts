@@ -1,5 +1,5 @@
 import argon2 from "argon2";
-import { Hasher } from "@app/authentication/data/protocol/hasher";
+import { Hasher } from "@app/authentication/data/protocol/cryptography/hasher";
 
 export class HasherArgon2Adapter implements Hasher {
     public constructor(private readonly type: argon2.Options["type"] = argon2.argon2id) {
