@@ -1,12 +1,12 @@
 import faker from "faker";
-import { AreFieldsDifferentValidator } from "@app/shared/presentation/validator/are-fields-different-validator";
+import { FieldsDifferentValidator } from "@app/shared/presentation/validator/fields-different-validator";
 import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter-error";
 
 const makeSut = (
     field = faker.random.word(),
     fieldToCompare = faker.random.word(),
-): AreFieldsDifferentValidator => (
-    new AreFieldsDifferentValidator(field, fieldToCompare)
+): FieldsDifferentValidator => (
+    new FieldsDifferentValidator(field, fieldToCompare)
 );
 
 describe("AreFieldsDifferentValidator", () => {
