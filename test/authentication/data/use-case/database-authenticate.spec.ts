@@ -36,7 +36,7 @@ const makeSut = (): {
     };
 };
 
-describe.only("DatabaseAuthenticate", () => {
+describe("DatabaseAuthenticate", () => {
     it("Should call LoadAccountByEmailRepository with correct email", async () => {
         const { sut, loadAccountByEmailRepositoryStub } = makeSut();
         const executeSpy = sinon.spy(loadAccountByEmailRepositoryStub, "execute");
