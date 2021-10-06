@@ -1,5 +1,5 @@
 import { HttpRequest, HttpResponse } from "@app/shared/presentation/protocol/http";
-import { badRequest, ok, serverError } from "@app/shared/presentation/helper/http-helper";
+import { badRequest, ok, serverError } from "@app/shared/presentation/helper/http/http-helper";
 import { Controller } from "@app/shared/presentation/protocol/controller";
 import { AddAccount } from "@app/authentication/domain/use-case/add-account";
 import { Validator } from "@app/shared/presentation/protocol/validator";

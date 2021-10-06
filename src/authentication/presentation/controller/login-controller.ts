@@ -1,6 +1,6 @@
 import { Controller } from "@app/shared/presentation/protocol/controller";
 import { HttpRequest, HttpResponse } from "@app/shared/presentation/protocol/http";
-import { badRequest, ok, serverError, unauthorized } from "@app/shared/presentation/helper/http-helper";
+import { badRequest, ok, serverError, unauthorized } from "@app/shared/presentation/helper/http/http-helper";
 import { Authenticate } from "@app/authentication/domain/use-case/authenticate";
 import { Validator } from "@app/shared/presentation/protocol/validator";
 
