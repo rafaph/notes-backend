@@ -1,36 +1,35 @@
 import faker from "faker";
 import sinon from "sinon";
-import { IsEmailValidator } from "@app/shared/presentation/validator/is-email-validator";
-import { EmailValidator } from "@app/authentication/presentation/protocol/email-validator";
+import { EmailValidator } from "@app/shared/presentation/validator/email-validator";
+import { IsEmailValidator } from "@app/shared/presentation/protocol/is-email-validator";
 import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter-error";
 
 
-const makeEmailValidator = (): EmailValidator => {
-    class EmailValidatorStub implements EmailValidator {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        public isValid(_email: string): boolean {
+const makeIsEmailValidator = (): IsEmailValidator => {
+    class IsEmailValidatorStub implements IsEmailValidator {
+        public isValid(): boolean {
             return true;
         }
     }
 
-    return new EmailValidatorStub();
+    return new IsEmailValidatorStub();
 };
 
 const makeSut = (): {
-    sut: IsEmailValidator,
-    emailValidatorStub: EmailValidator,
+    sut: EmailValidator,
+    isEmailValidatorStub: IsEmailValidator,
 } => {
-    const emailValidatorStub = makeEmailValidator();
+    const isEmailValidatorStub = makeIsEmailValidator();
     return {
-        sut: new IsEmailValidator("email", emailValidatorStub),
-        emailValidatorStub,
+        sut: new EmailValidator("email", isEmailValidatorStub),
+        isEmailValidatorStub,
     };
 };
 
-describe("IsEmailValidator", () => {
+describe("EmailValidator", () => {
     it("Should call EmailValidator with correct email", async () => {
-        const { sut, emailValidatorStub } = makeSut();
-        const isValidSpy = sinon.spy(emailValidatorStub, "isValid");
+        const { sut, isEmailValidatorStub } = makeSut();
+        const isValidSpy = sinon.spy(isEmailValidatorStub, "isValid");
         const email = faker.internet.email();
 
         await sut.validate({ email });
@@ -39,16 +38,16 @@ describe("IsEmailValidator", () => {
     });
 
     it("Should throw if EmailValidator throws", async () => {
-        const { sut, emailValidatorStub } = makeSut();
-        sinon.stub(emailValidatorStub, "isValid").throwsException();
+        const { sut, isEmailValidatorStub } = makeSut();
+        sinon.stub(isEmailValidatorStub, "isValid").throwsException();
         const email = faker.internet.email();
 
         await expect(sut.validate({ email })).to.eventually.be.rejected;
     });
 
     it("Should return an InvalidParameterError if isValid returns false", async () => {
-        const { sut, emailValidatorStub } = makeSut();
-        sinon.stub(emailValidatorStub, "isValid").returns(false);
+        const { sut, isEmailValidatorStub } = makeSut();
+        sinon.stub(isEmailValidatorStub, "isValid").returns(false);
         const email = faker.internet.email();
         const result = (await sut.validate({ email })) as InvalidParameterError;
         const expectedError = new InvalidParameterError("email");

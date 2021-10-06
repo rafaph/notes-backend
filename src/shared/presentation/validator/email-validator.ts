@@ -1,12 +1,12 @@
 import _ from "lodash";
 import { Validator } from "@app/shared/presentation/protocol/validator";
-import { EmailValidator } from "@app/authentication/presentation/protocol/email-validator";
+import { IsEmailValidator } from "@app/shared/presentation/protocol/is-email-validator";
 import { InvalidParameterError } from "@app/shared/presentation/error/invalid-parameter-error";
 
-export class IsEmailValidator implements Validator {
+export class EmailValidator implements Validator {
     public constructor(
         private readonly fieldName: string,
-        private readonly emailValidator: EmailValidator,
+        private readonly emailValidator: IsEmailValidator,
     ) {
     }
 
