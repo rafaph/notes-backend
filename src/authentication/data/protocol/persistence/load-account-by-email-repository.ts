@@ -8,5 +8,5 @@ export namespace LoadAccountByEmailRepository {
     export interface Input {
         email: string;
     }
-    export type Output = AccountModel;
+    export type Output = AccountModel | undefined;
 }

@@ -36,7 +36,7 @@ const makeSut = (): {
     };
 };
 
-describe("DatabaseAuthenticate", () => {
+describe.only("DatabaseAuthenticate", () => {
     it("Should call LoadAccountByEmailRepository with correct email", async () => {
         const { sut, loadAccountByEmailRepositoryStub } = makeSut();
         const executeSpy = sinon.spy(loadAccountByEmailRepositoryStub, "execute");
@@ -51,5 +51,14 @@ describe("DatabaseAuthenticate", () => {
         sinon.stub(loadAccountByEmailRepositoryStub, "execute").rejects();
 
         await expect(sut.execute(makeSutInput())).to.eventually.be.rejected;
+    });
+
+    it("Should return undefined if LoadAccountByEmailRepository returns undefined", async () => {
+        const { sut, loadAccountByEmailRepositoryStub } = makeSut();
+        sinon.stub(loadAccountByEmailRepositoryStub, "execute").resolves();
+
+        const token = await sut.execute(makeSutInput());
+
+        expect(token).to.be.undefined;
     });
 });
