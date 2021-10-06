@@ -1,8 +1,8 @@
 import sinon from "sinon";
 import * as compositeModule from "@app/shared/presentation/validator/composite-validator";
 import { RequiredFieldValidator } from "@app/shared/presentation/validator/required-field-validator";
-import { IsEmailValidator } from "@app/shared/presentation/validator/is-email-validator";
-import { EmailValidatorAdapter } from "@app/authentication/utils/email-validator-adapter";
+import { EmailValidator } from "@app/shared/presentation/validator/email-validator";
+import { IsEmailValidatorAdapter } from "@app/authentication/utils/is-email-validator-adapter";
 import { makeLoginValidator } from "@app/main/factory/login/make-login-validator";
 
 
@@ -24,7 +24,7 @@ describe("makeLoginValidator", () => {
             validators.push(new RequiredFieldValidator(field));
         }
 
-        validators.push(new IsEmailValidator("email", new EmailValidatorAdapter()));
+        validators.push(new EmailValidator("email", new IsEmailValidatorAdapter()));
 
         sinon.assert.calledOnceWithExactly(constructorStub, validators);
     });
