@@ -4,7 +4,7 @@ import { DatabaseAuthenticate } from "@app/authentication/data/use-case/database
 import { LoadAccountByEmailRepository } from "@app/authentication/data/protocol/persistence/load-account-by-email-repository";
 import { Authenticate } from "@app/authentication/domain/use-case/authenticate";
 import { Hasher } from "@app/authentication/data/protocol/cryptography/hasher";
-import { TokenGenerator } from "@app/authentication/data/protocol/cryptography/token-generator";
+import { Encrypter } from "@app/authentication/data/protocol/cryptography/encrypter";
 import { UpdateAccessTokenRepository } from "@app/authentication/data/protocol/persistence/update-access-token-repository";
 
 const FAKE_PASSWORD = faker.internet.password();
@@ -41,14 +41,14 @@ const makeHasher = (): Hasher => {
 
 const FAKE_TOKEN = faker.datatype.uuid();
 
-const makeTokenGenerator = (): TokenGenerator => {
-    class TokenGeneratorStub implements TokenGenerator {
-        public async generate(): Promise<string> {
+const makeEncrypter = (): Encrypter => {
+    class EncrypterStub implements Encrypter {
+        public async encrypt(): Promise<string> {
             return FAKE_TOKEN;
         }
     }
 
-    return new TokenGeneratorStub();
+    return new EncrypterStub();
 };
 
 const makeUpdateAccessTokenRepository = (): UpdateAccessTokenRepository => {
@@ -71,18 +71,18 @@ const makeSut = (): {
     sut: DatabaseAuthenticate
     loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
     hasherStub: Hasher,
-    tokenGeneratorStub: TokenGenerator,
+    encrypter: Encrypter,
     updateAccessTokenRepositoryStub: UpdateAccessTokenRepository
 } => {
     const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository();
     const hasherStub = makeHasher();
-    const tokenGeneratorStub = makeTokenGenerator();
+    const encrypter = makeEncrypter();
     const updateAccessTokenRepositoryStub = makeUpdateAccessTokenRepository();
     return {
-        sut: new DatabaseAuthenticate(loadAccountByEmailRepositoryStub, hasherStub, tokenGeneratorStub, updateAccessTokenRepositoryStub),
+        sut: new DatabaseAuthenticate(loadAccountByEmailRepositoryStub, hasherStub, encrypter, updateAccessTokenRepositoryStub),
         loadAccountByEmailRepositoryStub,
         hasherStub,
-        tokenGeneratorStub,
+        encrypter,
         updateAccessTokenRepositoryStub,
     };
 };
@@ -139,18 +139,18 @@ describe("DatabaseAuthenticate", () => {
         expect(token).to.be.undefined;
     });
 
-    it("Should call TokenGenerator with correct id", async () => {
-        const { sut, tokenGeneratorStub } = makeSut();
-        const generateSpy = sinon.spy(tokenGeneratorStub, "generate");
+    it("Should call Encrypter with correct id", async () => {
+        const { sut, encrypter } = makeSut();
+        const encryptSpy = sinon.spy(encrypter, "encrypt");
 
         await sut.execute(makeSutInput());
 
-        sinon.assert.calledOnceWithExactly(generateSpy, FAKE_ID);
+        sinon.assert.calledOnceWithExactly(encryptSpy, FAKE_ID);
     });
 
-    it("Should throw if TokenGenerator throws", async () => {
-        const { sut, tokenGeneratorStub } = makeSut();
-        sinon.stub(tokenGeneratorStub, "generate").rejects();
+    it("Should throw if Encrypter throws", async () => {
+        const { sut, encrypter } = makeSut();
+        sinon.stub(encrypter, "encrypt").rejects();
 
         await expect(sut.execute(makeSutInput())).to.eventually.be.rejected;
     });
