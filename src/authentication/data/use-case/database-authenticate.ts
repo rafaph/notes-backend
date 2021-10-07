@@ -1,11 +1,13 @@
 import { Authenticate } from "@app/authentication/domain/use-case/authenticate";
 import { LoadAccountByEmailRepository } from "@app/authentication/data/protocol/persistence/load-account-by-email-repository";
 import { Hasher } from "@app/authentication/data/protocol/cryptography/hasher";
+import { TokenGenerator } from "@app/authentication/data/protocol/cryptography/token-generator";
 
 export class DatabaseAuthenticate implements Authenticate {
     public constructor(
         private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository,
         private readonly hasher: Hasher,
+        private readonly tokenGenerator: TokenGenerator,
     ) {
     }
 
@@ -16,9 +18,12 @@ export class DatabaseAuthenticate implements Authenticate {
             return undefined;
         }
 
-        await this.hasher.verify(account.password, password);
+        const isValidPassword = await this.hasher.verify(account.password, password);
 
-        return undefined;
+        if (!isValidPassword) {
+            return undefined;
+        }
 
+        return this.tokenGenerator.generate(account.id);
     }
 }
