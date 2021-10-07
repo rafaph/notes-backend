@@ -1,7 +1,7 @@
 import argon2 from "argon2";
 import sinon from "sinon";
 import faker from "faker";
-import { HasherArgon2Adapter } from "@app/authentication/infrastructure/hashing/hasher-argon2-adapter";
+import { HasherArgon2Adapter } from "@app/authentication/infrastructure/cryptography/hasher-argon2-adapter";
 
 const FAKE_HASHED_VALUE = faker.internet.password();
 const ARGON2_TYPE = argon2.argon2id;
