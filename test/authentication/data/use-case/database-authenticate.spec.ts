@@ -98,4 +98,13 @@ describe.only("DatabaseAuthenticate", () => {
 
         await expect(sut.execute(makeSutInput())).to.eventually.be.rejected;
     });
+
+    it("Should return undefined if Hasher verify returns false", async () => {
+        const { sut, hasherStub } = makeSut();
+        sinon.stub(hasherStub, "verify").resolves(false);
+
+        const token = await sut.execute(makeSutInput());
+
+        expect(token).to.be.undefined;
+    });
 });
