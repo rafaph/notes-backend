@@ -3,9 +3,9 @@ import sinon from "sinon";
 import { DatabaseAuthenticate } from "@app/authentication/data/use-case/database-authenticate";
 import { LoadAccountByEmailRepository } from "@app/authentication/data/protocol/persistence/load-account-by-email-repository";
 import { Authenticate } from "@app/authentication/domain/use-case/authenticate";
-import { Hasher } from "@app/authentication/data/protocol/cryptography/hasher";
 import { Encrypter } from "@app/authentication/data/protocol/cryptography/encrypter";
 import { UpdateAccessTokenRepository } from "@app/authentication/data/protocol/persistence/update-access-token-repository";
+import { HashVerifier } from "@app/authentication/data/protocol/cryptography/hash-verifier";
 
 const FAKE_PASSWORD = faker.internet.password();
 const FAKE_ID = faker.datatype.uuid();
@@ -25,8 +25,8 @@ const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
     return new LoadAccountByEmailRepositoryStub();
 };
 
-const makeHasher = (): Hasher => {
-    class HasherStub implements Hasher {
+const makeHashVerifier = (): HashVerifier => {
+    class HashVerifierStub implements HashVerifier {
         public hash(): Promise<string> {
             throw new Error("Not implemented.");
         }
@@ -36,7 +36,7 @@ const makeHasher = (): Hasher => {
         }
     }
 
-    return new HasherStub();
+    return new HashVerifierStub();
 };
 
 const FAKE_TOKEN = faker.datatype.uuid();
@@ -70,18 +70,18 @@ const makeSutInput = (input: Partial<Authenticate.Input> = {}): Authenticate.Inp
 const makeSut = (): {
     sut: DatabaseAuthenticate
     loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
-    hasherStub: Hasher,
+    hashVerifierStub: HashVerifier,
     encrypter: Encrypter,
     updateAccessTokenRepositoryStub: UpdateAccessTokenRepository
 } => {
     const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository();
-    const hasherStub = makeHasher();
+    const hashVerifierStub = makeHashVerifier();
     const encrypter = makeEncrypter();
     const updateAccessTokenRepositoryStub = makeUpdateAccessTokenRepository();
     return {
-        sut: new DatabaseAuthenticate(loadAccountByEmailRepositoryStub, hasherStub, encrypter, updateAccessTokenRepositoryStub),
+        sut: new DatabaseAuthenticate(loadAccountByEmailRepositoryStub, hashVerifierStub, encrypter, updateAccessTokenRepositoryStub),
         loadAccountByEmailRepositoryStub,
-        hasherStub,
+        hashVerifierStub,
         encrypter,
         updateAccessTokenRepositoryStub,
     };
@@ -113,9 +113,9 @@ describe("DatabaseAuthenticate", () => {
         expect(token).to.be.undefined;
     });
 
-    it("Should call Hasher verify with correct password", async () => {
-        const { sut, hasherStub } = makeSut();
-        const verifySpy = sinon.spy(hasherStub, "verify");
+    it("Should call HasherVerifier with correct password", async () => {
+        const { sut, hashVerifierStub } = makeSut();
+        const verifySpy = sinon.spy(hashVerifierStub, "verify");
         const input = makeSutInput();
 
         await sut.execute(input);
@@ -123,16 +123,16 @@ describe("DatabaseAuthenticate", () => {
         sinon.assert.calledOnceWithExactly(verifySpy, FAKE_PASSWORD, input.password);
     });
 
-    it("Should throw if Hasher verify throws", async () => {
-        const { sut, hasherStub } = makeSut();
-        sinon.stub(hasherStub, "verify").rejects();
+    it("Should throw if HasherVerifier throws", async () => {
+        const { sut, hashVerifierStub } = makeSut();
+        sinon.stub(hashVerifierStub, "verify").rejects();
 
         await expect(sut.execute(makeSutInput())).to.eventually.be.rejected;
     });
 
-    it("Should return undefined if Hasher verify returns false", async () => {
-        const { sut, hasherStub } = makeSut();
-        sinon.stub(hasherStub, "verify").resolves(false);
+    it("Should return undefined if HasherVerifier returns false", async () => {
+        const { sut, hashVerifierStub } = makeSut();
+        sinon.stub(hashVerifierStub, "verify").resolves(false);
 
         const token = await sut.execute(makeSutInput());
 
