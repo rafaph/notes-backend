@@ -10,8 +10,11 @@ const FAKE_ACCOUNT_MODEL_ID = faker.datatype.uuid();
 
 const makeHasher = (): Hasher => {
     class HasherStub implements Hasher {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        public async hash(_value: string): Promise<string> {
+        public verify(): Promise<boolean> {
+            throw new Error("Not implemented.");
+        }
+
+        public async hash(): Promise<string> {
             return FAKE_HASHED_PASSWORD;
         }
     }
