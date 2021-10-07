@@ -4,8 +4,10 @@ import { DatabaseAuthenticate } from "@app/authentication/data/use-case/database
 import { LoadAccountByEmailRepository } from "@app/authentication/data/protocol/persistence/load-account-by-email-repository";
 import { Authenticate } from "@app/authentication/domain/use-case/authenticate";
 import { Hasher } from "@app/authentication/data/protocol/cryptography/hasher";
+import { TokenGenerator } from "@app/authentication/data/protocol/cryptography/token-generator";
 
 const FAKE_PASSWORD = faker.internet.password();
+const FAKE_ID = faker.datatype.uuid();
 
 const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
     class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
@@ -14,7 +16,7 @@ const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
                 email: input.email,
                 password: FAKE_PASSWORD,
                 name: faker.name.findName(),
-                id: faker.datatype.uuid(),
+                id: FAKE_ID,
             };
         }
     }
@@ -36,6 +38,18 @@ const makeHasher = (): Hasher => {
     return new HasherStub();
 };
 
+const FAKE_TOKEN = faker.datatype.uuid();
+
+const makeTokenGenerator = (): TokenGenerator => {
+    class TokenGeneratorStub implements TokenGenerator {
+        public async generate(): Promise<string> {
+            return FAKE_TOKEN;
+        }
+    }
+
+    return new TokenGeneratorStub();
+};
+
 const makeSutInput = (input: Partial<Authenticate.Input> = {}): Authenticate.Input => ({
     email: faker.internet.email(),
     password: faker.internet.password(),
@@ -46,13 +60,16 @@ const makeSut = (): {
     sut: DatabaseAuthenticate
     loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
     hasherStub: Hasher,
+    tokenGeneratorStub: TokenGenerator
 } => {
     const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository();
     const hasherStub = makeHasher();
+    const tokenGeneratorStub = makeTokenGenerator();
     return {
-        sut: new DatabaseAuthenticate(loadAccountByEmailRepositoryStub, hasherStub),
+        sut: new DatabaseAuthenticate(loadAccountByEmailRepositoryStub, hasherStub, tokenGeneratorStub),
         loadAccountByEmailRepositoryStub,
         hasherStub,
+        tokenGeneratorStub,
     };
 };
 
@@ -106,5 +123,14 @@ describe.only("DatabaseAuthenticate", () => {
         const token = await sut.execute(makeSutInput());
 
         expect(token).to.be.undefined;
+    });
+
+    it("Should call TokenGenerator with correct id", async () => {
+        const { sut, tokenGeneratorStub } = makeSut();
+        const generateSpy = sinon.spy(tokenGeneratorStub, "generate");
+
+        await sut.execute(makeSutInput());
+
+        sinon.assert.calledOnceWithExactly(generateSpy, FAKE_ID);
     });
 });
