@@ -73,7 +73,7 @@ const makeSut = (): {
     };
 };
 
-describe.only("DatabaseAuthenticate", () => {
+describe("DatabaseAuthenticate", () => {
     it("Should call LoadAccountByEmailRepository with correct email", async () => {
         const { sut, loadAccountByEmailRepositoryStub } = makeSut();
         const executeSpy = sinon.spy(loadAccountByEmailRepositoryStub, "execute");
@@ -139,5 +139,11 @@ describe.only("DatabaseAuthenticate", () => {
         sinon.stub(tokenGeneratorStub, "generate").rejects();
 
         await expect(sut.execute(makeSutInput())).to.eventually.be.rejected;
+    });
+
+    it("Should return a valid token when authenticate", async () => {
+        const { sut } = makeSut();
+
+        await expect(sut.execute(makeSutInput())).to.eventually.be.equal(FAKE_TOKEN);
     });
 });
