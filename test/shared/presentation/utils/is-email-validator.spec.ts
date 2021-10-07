@@ -1,11 +1,11 @@
 import validator from "validator";
 import sinon from "sinon";
 import faker from "faker";
-import { IsEmailValidatorAdapter } from "@app/authentication/utils/is-email-validator-adapter";
+import { IsEmailValidatorAdapter } from "@app/shared/presentation/utils/is-email-validator-adapter";
 
 const makeSut = (): IsEmailValidatorAdapter => new IsEmailValidatorAdapter();
 
-describe("EmailValidatorAdapter", () => {
+describe("IsEmailValidatorAdapter", () => {
     let isEmailStub: sinon.SinonStub<[
         str: string,
         options?: validator.IsEmailOptions | undefined

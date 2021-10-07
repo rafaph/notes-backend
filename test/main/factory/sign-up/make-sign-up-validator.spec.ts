@@ -4,7 +4,7 @@ import * as compositeModule from "@app/shared/presentation/validator/composite-v
 import { RequiredFieldValidator } from "@app/shared/presentation/validator/required-field-validator";
 import { FieldsDifferentValidator } from "@app/shared/presentation/validator/fields-different-validator";
 import { EmailValidator } from "@app/shared/presentation/validator/email-validator";
-import { IsEmailValidatorAdapter } from "@app/authentication/utils/is-email-validator-adapter";
+import { IsEmailValidatorAdapter } from "@app/shared/presentation/utils/is-email-validator-adapter";
 
 
 describe("makeSignUpValidator", () => {

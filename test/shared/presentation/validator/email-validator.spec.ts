@@ -27,7 +27,7 @@ const makeSut = (): {
 };
 
 describe("EmailValidator", () => {
-    it("Should call EmailValidator with correct email", async () => {
+    it("Should call IsEmailValidator with correct email", async () => {
         const { sut, isEmailValidatorStub } = makeSut();
         const isValidSpy = sinon.spy(isEmailValidatorStub, "isValid");
         const email = faker.internet.email();
@@ -37,7 +37,7 @@ describe("EmailValidator", () => {
         sinon.assert.calledOnceWithExactly(isValidSpy, email);
     });
 
-    it("Should throw if EmailValidator throws", async () => {
+    it("Should throw if IsEmailValidator throws", async () => {
         const { sut, isEmailValidatorStub } = makeSut();
         sinon.stub(isEmailValidatorStub, "isValid").throwsException();
         const email = faker.internet.email();
