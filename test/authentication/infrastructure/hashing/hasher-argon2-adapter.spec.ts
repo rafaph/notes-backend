@@ -75,6 +75,17 @@ describe("HasherArgon2Adapter", () => {
         expect(result).to.be.true;
     });
 
+    it("Should return false for verify on fail", async () => {
+        verifyStub.onFirstCall().resolves(false);
+        const sut = makeSut();
+        const hash = faker.internet.password();
+        const plain = faker.internet.password();
+
+        const result = await sut.verify(hash, plain);
+
+        expect(result).to.be.false;
+    });
+
     it("Should throw if argon2 hash throws", async () => {
         hashStub.onFirstCall().rejects();
         const sut = makeSut();
