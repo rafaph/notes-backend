@@ -133,4 +133,11 @@ describe.only("DatabaseAuthenticate", () => {
 
         sinon.assert.calledOnceWithExactly(generateSpy, FAKE_ID);
     });
+
+    it("Should throw if TokenGenerator throws", async () => {
+        const { sut, tokenGeneratorStub } = makeSut();
+        sinon.stub(tokenGeneratorStub, "generate").rejects();
+
+        await expect(sut.execute(makeSutInput())).to.eventually.be.rejected;
+    });
 });
