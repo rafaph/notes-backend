@@ -82,7 +82,7 @@ describe.only("DatabaseAuthenticate", () => {
         expect(token).to.be.undefined;
     });
 
-    it("Should call Hasher with correct password", async () => {
+    it("Should call Hasher verify with correct password", async () => {
         const { sut, hasherStub } = makeSut();
         const verifySpy = sinon.spy(hasherStub, "verify");
         const input = makeSutInput();
@@ -90,5 +90,12 @@ describe.only("DatabaseAuthenticate", () => {
         await sut.execute(input);
 
         sinon.assert.calledOnceWithExactly(verifySpy, FAKE_PASSWORD, input.password);
+    });
+
+    it("Should throw if Hasher verify throws", async () => {
+        const { sut, hasherStub } = makeSut();
+        sinon.stub(hasherStub, "verify").rejects();
+
+        await expect(sut.execute(makeSutInput())).to.eventually.be.rejected;
     });
 });
