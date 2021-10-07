@@ -3,13 +3,16 @@ import sinon from "sinon";
 import { DatabaseAuthenticate } from "@app/authentication/data/use-case/database-authenticate";
 import { LoadAccountByEmailRepository } from "@app/authentication/data/protocol/persistence/load-account-by-email-repository";
 import { Authenticate } from "@app/authentication/domain/use-case/authenticate";
+import { Hasher } from "@app/authentication/data/protocol/cryptography/hasher";
+
+const FAKE_PASSWORD = faker.internet.password();
 
 const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
     class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
         public async execute(input: LoadAccountByEmailRepository.Input): Promise<LoadAccountByEmailRepository.Output> {
             return {
                 email: input.email,
-                password: faker.internet.password(),
+                password: FAKE_PASSWORD,
                 name: faker.name.findName(),
                 id: faker.datatype.uuid(),
             };
@@ -17,6 +20,20 @@ const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
     }
 
     return new LoadAccountByEmailRepositoryStub();
+};
+
+const makeHasher = (): Hasher => {
+    class HasherStub implements Hasher {
+        public hash(): Promise<string> {
+            throw new Error("Not implemented.");
+        }
+
+        public async verify(): Promise<boolean> {
+            return true;
+        }
+    }
+
+    return new HasherStub();
 };
 
 const makeSutInput = (input: Partial<Authenticate.Input> = {}): Authenticate.Input => ({
@@ -28,11 +45,14 @@ const makeSutInput = (input: Partial<Authenticate.Input> = {}): Authenticate.Inp
 const makeSut = (): {
     sut: DatabaseAuthenticate
     loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository
+    hasherStub: Hasher,
 } => {
     const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository();
+    const hasherStub = makeHasher();
     return {
-        sut: new DatabaseAuthenticate(loadAccountByEmailRepositoryStub),
+        sut: new DatabaseAuthenticate(loadAccountByEmailRepositoryStub, hasherStub),
         loadAccountByEmailRepositoryStub,
+        hasherStub,
     };
 };
 
@@ -60,5 +80,15 @@ describe.only("DatabaseAuthenticate", () => {
         const token = await sut.execute(makeSutInput());
 
         expect(token).to.be.undefined;
+    });
+
+    it("Should call Hasher with correct password", async () => {
+        const { sut, hasherStub } = makeSut();
+        const verifySpy = sinon.spy(hasherStub, "verify");
+        const input = makeSutInput();
+
+        await sut.execute(input);
+
+        sinon.assert.calledOnceWithExactly(verifySpy, FAKE_PASSWORD, input.password);
     });
 });
