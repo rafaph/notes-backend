@@ -12,4 +12,10 @@ export class HasherArgon2Adapter implements Hasher {
         });
     }
 
+    public verify(hash: string, plain: string): Promise<boolean> {
+        return argon2.verify(hash, plain, {
+            type: this.type,
+        });
+    }
+
 }
