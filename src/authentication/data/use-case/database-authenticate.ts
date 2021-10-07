@@ -16,20 +16,17 @@ export class DatabaseAuthenticate implements Authenticate {
     public async execute({ email, password }: Authenticate.Input): Promise<Authenticate.Output> {
         const account = await this.loadAccountByEmailRepository.execute({ email });
 
-        if (!account) {
-            return undefined;
+        if (account) {
+            const isValidPassword = await this.hasher.verify(account.password, password);
+
+            if (isValidPassword) {
+                const token = await this.tokenGenerator.generate(account.id);
+
+                await this.updateAccessTokenRepository.execute(account.id, token);
+                return token;
+            }
         }
 
-        const isValidPassword = await this.hasher.verify(account.password, password);
-
-        if (!isValidPassword) {
-            return undefined;
-        }
-
-        const token = await this.tokenGenerator.generate(account.id);
-
-        await this.updateAccessTokenRepository.execute(account.id, token);
-
-        return token;
+        return undefined;
     }
 }
