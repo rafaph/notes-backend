@@ -87,7 +87,7 @@ const makeSut = (): {
     };
 };
 
-describe.only("DatabaseAuthenticate", () => {
+describe("DatabaseAuthenticate", () => {
     it("Should call LoadAccountByEmailRepository with correct email", async () => {
         const { sut, loadAccountByEmailRepositoryStub } = makeSut();
         const executeSpy = sinon.spy(loadAccountByEmailRepositoryStub, "execute");
@@ -168,5 +168,12 @@ describe.only("DatabaseAuthenticate", () => {
         await sut.execute(makeSutInput());
 
         sinon.assert.calledOnceWithExactly(updateSpy, FAKE_ID, FAKE_TOKEN);
+    });
+
+    it("Should throw if UpdateAccessTokenRepository throws", async () => {
+        const { sut, updateAccessTokenRepositoryStub } = makeSut();
+        sinon.stub(updateAccessTokenRepositoryStub, "execute").rejects();
+
+        await expect(sut.execute(makeSutInput())).to.eventually.be.rejected;
     });
 });
