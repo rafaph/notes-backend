@@ -12,7 +12,7 @@ const FAKE_ID = faker.datatype.uuid();
 
 const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
     class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
-        public async execute(input: LoadAccountByEmailRepository.Input): Promise<LoadAccountByEmailRepository.Output> {
+        public async loadByEmail(input: LoadAccountByEmailRepository.Input): Promise<LoadAccountByEmailRepository.Output> {
             return {
                 email: input.email,
                 password: FAKE_PASSWORD,
@@ -90,7 +90,7 @@ const makeSut = (): {
 describe("DatabaseAuthenticate", () => {
     it("Should call LoadAccountByEmailRepository with correct email", async () => {
         const { sut, loadAccountByEmailRepositoryStub } = makeSut();
-        const executeSpy = sinon.spy(loadAccountByEmailRepositoryStub, "execute");
+        const executeSpy = sinon.spy(loadAccountByEmailRepositoryStub, "loadByEmail");
         const email = faker.internet.email();
         await sut.execute(makeSutInput({ email }));
 
@@ -99,14 +99,14 @@ describe("DatabaseAuthenticate", () => {
 
     it("Should throw if LoadAccountByEmailRepository throws", async () => {
         const { sut, loadAccountByEmailRepositoryStub } = makeSut();
-        sinon.stub(loadAccountByEmailRepositoryStub, "execute").rejects();
+        sinon.stub(loadAccountByEmailRepositoryStub, "loadByEmail").rejects();
 
         await expect(sut.execute(makeSutInput())).to.eventually.be.rejected;
     });
 
     it("Should return undefined if LoadAccountByEmailRepository returns undefined", async () => {
         const { sut, loadAccountByEmailRepositoryStub } = makeSut();
-        sinon.stub(loadAccountByEmailRepositoryStub, "execute").resolves();
+        sinon.stub(loadAccountByEmailRepositoryStub, "loadByEmail").resolves();
 
         const token = await sut.execute(makeSutInput());
 
