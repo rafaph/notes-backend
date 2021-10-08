@@ -1,9 +1,10 @@
 import jwt from "jsonwebtoken";
 import { Encrypter } from "@app/authentication/data/protocol/cryptography/encrypter";
+import { env } from "@app/main/config/env";
 
 export class JWTAdapter implements Encrypter {
     public constructor(
-        private readonly secret: string,
+        private readonly secret: string = env.JWT_SECRET,
     ) {
     }
 
