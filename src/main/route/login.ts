@@ -1,5 +1,5 @@
 import { IRouter } from "express";
-import { ExpressRouteAdapter } from "@app/main/adapter/express-route-adapter";
+import { ExpressRouteAdapter } from "@app/main/adapter/express/express-route-adapter";
 import { makeLoginController } from "@app/main/factory/login/make-login-controller";
 
 

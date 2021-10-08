@@ -2,7 +2,7 @@ import sinon from "sinon";
 import * as compositeModule from "@app/shared/presentation/validator/composite-validator";
 import { RequiredFieldValidator } from "@app/shared/presentation/validator/required-field-validator";
 import { EmailValidator } from "@app/shared/presentation/validator/email-validator";
-import { IsEmailValidatorAdapter } from "@app/shared/presentation/utils/is-email-validator-adapter";
+import { IsEmailValidatorAdapter } from "@app/main/adapter/validator/is-email-validator-adapter";
 import { makeLoginValidator } from "@app/main/factory/login/make-login-validator";
 
 describe("makeLoginValidator", () => {
