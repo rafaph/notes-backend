@@ -1,3 +1,12 @@
 export interface UpdateAccessTokenRepository {
-    updateToken(id: string, token: string): Promise<void>;
+    updateAccessToken(input: UpdateAccessTokenRepository.Input): Promise<UpdateAccessTokenRepository.Output>;
+}
+
+export namespace UpdateAccessTokenRepository {
+    export interface Input {
+        id: string;
+        accessToken: string;
+    }
+
+    export type Output = void;
 }

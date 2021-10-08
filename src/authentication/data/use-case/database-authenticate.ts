@@ -20,10 +20,14 @@ export class DatabaseAuthenticate implements Authenticate {
             const isValidPassword = await this.hashVerifier.verify(account.password, password);
 
             if (isValidPassword) {
-                const token = await this.encrypter.encrypt(account.id);
+                const accessToken = await this.encrypter.encrypt(account.id);
 
-                await this.updateAccessTokenRepository.updateToken(account.id, token);
-                return token;
+                await this.updateAccessTokenRepository.updateAccessToken({
+                    id: account.id,
+                    accessToken,
+                });
+
+                return accessToken;
             }
         }
 
