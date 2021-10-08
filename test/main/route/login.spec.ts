@@ -11,17 +11,18 @@ import { Argon2Adapter } from "@app/authentication/infrastructure/cryptography/a
 describe("@integration Login Routes", () => {
     let app: Express;
     let sequelize: Sequelize;
+    let argon2: Argon2Adapter;
 
     before(() => {
         app = TestApplication.app;
         sequelize = SequelizeClient.getClient();
+        argon2 = new Argon2Adapter();
     });
 
     it("Should login on success", async () => {
         const route = "/api/login";
         const email = faker.internet.email();
         const password = faker.internet.password();
-        const argon2 = new Argon2Adapter();
         await new SequelizeAccountRepository(sequelize).add({
             name: faker.name.firstName(),
             email,
