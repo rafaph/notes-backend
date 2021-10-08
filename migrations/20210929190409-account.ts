@@ -21,6 +21,11 @@ export function up(queryInterface: QueryInterface): Promise<void> {
             password: {
                 type: DataTypes.STRING,
             },
+            accessToken: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                defaultValue: null,
+            },
             createdAt: {
                 allowNull: false,
                 type: DataTypes.DATE,
