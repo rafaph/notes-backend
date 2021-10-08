@@ -3,7 +3,7 @@ import sinon from "sinon";
 import { DatabaseAddAccount } from "@app/authentication/data/use-case/database-add-account";
 import { Hasher } from "@app/authentication/data/protocol/cryptography/hasher";
 import { AddAccount } from "@app/authentication/domain/use-case/add-account";
-import { AddAccountRepository } from "@app/authentication/data/protocol/persistence/add-account-repository";
+import { AddAccountRepository } from "@app/authentication/data/protocol/persistence/account/add-account-repository";
 
 const FAKE_HASHED_PASSWORD = faker.internet.password();
 const FAKE_ACCOUNT_MODEL_ID = faker.datatype.uuid();

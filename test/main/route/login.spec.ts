@@ -2,7 +2,7 @@ import request from "supertest";
 import faker from "faker";
 import { Express } from "express";
 import { TestApplication } from "@test/helper/test-application";
-import { SequelizeAccountRepository } from "@app/authentication/infrastructure/database/sequelize/sequelize-account-repository";
+import { SequelizeAccountRepository } from "@app/authentication/infrastructure/database/sequelize/account/sequelize-account-repository";
 import { Sequelize } from "sequelize";
 import { SequelizeClient } from "@app/shared/infrastructure/sequelize-client";
 import { Argon2Adapter } from "@app/authentication/infrastructure/cryptography/argon2-adapter";
