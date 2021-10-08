@@ -10,7 +10,7 @@ const makeSut = (): JWTAdapter => {
     return new JWTAdapter(FAKE_SECRET);
 };
 
-describe.only("JWTAdapter", () => {
+describe("JWTAdapter", () => {
     let signStub: sinon.SinonStub<[payload: Record<string, unknown>, secret: string], string>;
 
     beforeEach(() => {

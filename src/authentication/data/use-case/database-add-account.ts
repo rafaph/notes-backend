@@ -11,7 +11,7 @@ export class DatabaseAddAccount implements AddAccount {
 
     public async execute(input: AddAccount.Input): Promise<AddAccount.Output> {
         const hashedPassword = await this.hasher.hash(input.password);
-        return this.addAccountRepository.execute({
+        return this.addAccountRepository.add({
             ...input,
             password: hashedPassword,
         });
