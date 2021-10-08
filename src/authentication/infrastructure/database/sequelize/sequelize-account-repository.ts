@@ -14,7 +14,7 @@ export class SequelizeAccountRepository implements AddAccountRepository, LoadAcc
         return this.account.create(input);
     }
 
-    public async loadByEmail({ email }: LoadAccountByEmailRepository.Input): Promise<LoadAccountByEmailRepository.Output> {
+    public async loadByEmail(email: LoadAccountByEmailRepository.Input): Promise<LoadAccountByEmailRepository.Output> {
         const account = await this.account.findOne({
             where: {
                 email,

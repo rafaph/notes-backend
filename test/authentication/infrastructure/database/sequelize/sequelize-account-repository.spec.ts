@@ -8,7 +8,7 @@ const makeSut = (sequelize: Sequelize): SequelizeAccountRepository => (
     new SequelizeAccountRepository(sequelize)
 );
 
-describe.only("SequelizeAccountRepository", () => {
+describe("SequelizeAccountRepository", () => {
     let sequelize: Sequelize;
     let sequelizeAccount: SequelizeAccount;
 
@@ -42,9 +42,7 @@ describe.only("SequelizeAccountRepository", () => {
 
         const sut = makeSut(sequelize);
 
-        const account = await sut.loadByEmail({
-            email: createdAccount.email,
-        });
+        const account = await sut.loadByEmail(createdAccount.email);
 
         expect(account).to.not.be.undefined;
         expect(account?.id).to.be.equal(createdAccount.id);
@@ -56,9 +54,7 @@ describe.only("SequelizeAccountRepository", () => {
     it("Should return undefined if loadByEmail fails", async () => {
         const sut = makeSut(sequelize);
 
-        const account = await sut.loadByEmail({
-            email: faker.internet.email(),
-        });
+        const account = await sut.loadByEmail(faker.internet.email());
 
         expect(account).to.be.undefined;
     });

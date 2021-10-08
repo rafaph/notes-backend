@@ -12,9 +12,9 @@ const FAKE_ID = faker.datatype.uuid();
 
 const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
     class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
-        public async loadByEmail(input: LoadAccountByEmailRepository.Input): Promise<LoadAccountByEmailRepository.Output> {
+        public async loadByEmail(email: LoadAccountByEmailRepository.Input): Promise<LoadAccountByEmailRepository.Output> {
             return {
-                email: input.email,
+                email,
                 password: FAKE_PASSWORD,
                 name: faker.name.findName(),
                 id: FAKE_ID,
@@ -94,7 +94,7 @@ describe("DatabaseAuthenticate", () => {
         const email = faker.internet.email();
         await sut.execute(makeSutInput({ email }));
 
-        sinon.assert.calledOnceWithExactly(executeSpy, { email });
+        sinon.assert.calledOnceWithExactly(executeSpy, email);
     });
 
     it("Should throw if LoadAccountByEmailRepository throws", async () => {
