@@ -52,4 +52,14 @@ describe.only("SequelizeAccountRepository", () => {
         expect(account?.email).to.be.equal(createdAccount.email);
         expect(account?.password).to.be.equal(createdAccount.password);
     });
+
+    it("Should return undefined if loadByEmail fails", async () => {
+        const sut = makeSut(sequelize);
+
+        const account = await sut.loadByEmail({
+            email: faker.internet.email(),
+        });
+
+        expect(account).to.be.undefined;
+    });
 });
