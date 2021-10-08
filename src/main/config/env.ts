@@ -5,4 +5,5 @@ export const env = {
     DATABASE_URL: process.env.DATABASE_URL as string,
     PORT: parseInt(process.env.PORT as string, 10),
     BASE_DIR: path.resolve(__dirname, "..", "..", ".."),
+    JWT_SECRET: process.env.JWT_SECRET as string,
 };
