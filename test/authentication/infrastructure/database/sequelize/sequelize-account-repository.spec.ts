@@ -2,13 +2,17 @@ import { Sequelize } from "sequelize";
 import faker from "faker";
 import { SequelizeAccountRepository } from "@app/authentication/infrastructure/database/sequelize/sequelize-account-repository";
 import { SequelizeClient } from "@app/shared/infrastructure/sequelize-client";
-import { AccountFactory, SequelizeAccount } from "@app/authentication/infrastructure/database/sequelize/model/account";
+import {
+    AccountFactory,
+    SequelizeAccount,
+} from "@app/authentication/infrastructure/database/sequelize/model/account";
+import { expect } from "chai";
 
 const makeSut = (sequelize: Sequelize): SequelizeAccountRepository => (
     new SequelizeAccountRepository(sequelize)
 );
 
-describe("SequelizeAccountRepository", () => {
+describe("@integration SequelizeAccountRepository", () => {
     let sequelize: Sequelize;
     let sequelizeAccount: SequelizeAccount;
 
@@ -34,7 +38,7 @@ describe("SequelizeAccountRepository", () => {
     });
 
     it("Should return a account on loadByEmail success", async () => {
-        const createdAccount = await sequelizeAccount.create({
+        const fakeAccount = await sequelizeAccount.create({
             name: faker.name.firstName(),
             email: faker.internet.email(),
             password: faker.internet.password(),
@@ -42,13 +46,13 @@ describe("SequelizeAccountRepository", () => {
 
         const sut = makeSut(sequelize);
 
-        const account = await sut.loadByEmail(createdAccount.email);
+        const account = await sut.loadByEmail(fakeAccount.email);
 
         expect(account).to.not.be.undefined;
-        expect(account?.id).to.be.equal(createdAccount.id);
-        expect(account?.name).to.be.equal(createdAccount.name);
-        expect(account?.email).to.be.equal(createdAccount.email);
-        expect(account?.password).to.be.equal(createdAccount.password);
+        expect(account?.id).to.be.equal(fakeAccount.id);
+        expect(account?.name).to.be.equal(fakeAccount.name);
+        expect(account?.email).to.be.equal(fakeAccount.email);
+        expect(account?.password).to.be.equal(fakeAccount.password);
     });
 
     it("Should return undefined if loadByEmail fails", async () => {
@@ -57,5 +61,26 @@ describe("SequelizeAccountRepository", () => {
         const account = await sut.loadByEmail(faker.internet.email());
 
         expect(account).to.be.undefined;
+    });
+
+    it("Should update the account accessToken on updateAccessToken success", async () => {
+        const sut = makeSut(sequelize);
+        const fakeAccount = await sequelizeAccount.create({
+            name: faker.name.firstName(),
+            email: faker.internet.email(),
+            password: faker.internet.password(),
+        });
+        const accessToken = faker.datatype.uuid();
+
+        expect(fakeAccount.accessToken).to.be.null;
+
+        await sut.updateAccessToken({
+            id: fakeAccount.id,
+            accessToken,
+        });
+
+        const account = await sequelizeAccount.findByPk(fakeAccount.id);
+        expect(account).to.not.be.null;
+        expect(account?.accessToken).to.be.equal(accessToken);
     });
 });
