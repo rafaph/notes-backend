@@ -68,6 +68,7 @@
         "lodash": "^4.17.21",
         "pg": "^8.7.1",
         "pg-hstore": "^2.3.4",
+        "reflect-metadata": "^0.1.13",
         "sequelize": "^6.6.5",
         "sequelize-cli": "^6.2.0",
         "typeorm": "^0.2.38",
