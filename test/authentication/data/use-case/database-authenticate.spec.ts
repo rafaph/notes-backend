@@ -53,7 +53,7 @@ const makeEncrypter = (): Encrypter => {
 
 const makeUpdateAccessTokenRepository = (): UpdateAccessTokenRepository => {
     class UpdateAccessTokenRepositoryStub implements UpdateAccessTokenRepository {
-        public async execute(): Promise<void> {
+        public async updateToken(): Promise<void> {
             return undefined;
         }
     }
@@ -163,7 +163,7 @@ describe("DatabaseAuthenticate", () => {
 
     it("Should call UpdateAccessTokenRepository with correct values", async () => {
         const { sut, updateAccessTokenRepositoryStub } = makeSut();
-        const updateSpy = sinon.spy(updateAccessTokenRepositoryStub, "execute");
+        const updateSpy = sinon.spy(updateAccessTokenRepositoryStub, "updateToken");
 
         await sut.execute(makeSutInput());
 
@@ -172,7 +172,7 @@ describe("DatabaseAuthenticate", () => {
 
     it("Should throw if UpdateAccessTokenRepository throws", async () => {
         const { sut, updateAccessTokenRepositoryStub } = makeSut();
-        sinon.stub(updateAccessTokenRepositoryStub, "execute").rejects();
+        sinon.stub(updateAccessTokenRepositoryStub, "updateToken").rejects();
 
         await expect(sut.execute(makeSutInput())).to.eventually.be.rejected;
     });

@@ -22,7 +22,7 @@ export class DatabaseAuthenticate implements Authenticate {
             if (isValidPassword) {
                 const token = await this.encrypter.encrypt(account.id);
 
-                await this.updateAccessTokenRepository.execute(account.id, token);
+                await this.updateAccessTokenRepository.updateToken(account.id, token);
                 return token;
             }
         }
