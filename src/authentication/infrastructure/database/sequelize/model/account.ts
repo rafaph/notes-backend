@@ -5,17 +5,18 @@ export interface AccountAttributes {
     name: string;
     email: string;
     password: string;
+    accessToken: string | null;
 }
 
-export type AccountCreationAttributes = Optional<AccountAttributes, "id">;
+export type AccountCreationAttributes = Optional<AccountAttributes, "accessToken" | "id">;
 
-export interface UserInstance extends Model<AccountAttributes, AccountCreationAttributes>, AccountAttributes {
+export interface AccountInstance extends Model<AccountAttributes, AccountCreationAttributes>, AccountAttributes {
 }
 
-export type SequelizeAccount = ModelCtor<UserInstance>;
+export type SequelizeAccount = ModelCtor<AccountInstance>;
 
 export const AccountFactory = (sequelize: Sequelize): SequelizeAccount => {
-    return sequelize.define<UserInstance>("Account", {
+    return sequelize.define<AccountInstance>("Account", {
         id: {
             allowNull: false,
             primaryKey: true,
@@ -30,6 +31,11 @@ export const AccountFactory = (sequelize: Sequelize): SequelizeAccount => {
         },
         password: {
             type: DataTypes.STRING,
+        },
+        accessToken: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: null,
         },
     });
 };
