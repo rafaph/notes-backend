@@ -1,9 +1,9 @@
 import { Sequelize } from "sequelize";
-import { AddAccountRepository } from "@app/authentication/data/protocol/persistence/add-account-repository";
-import { AccountFactory, SequelizeAccount } from "@app/authentication/infrastructure/database/sequelize/model/account";
-import { LoadAccountByEmailRepository } from "@app/authentication/data/protocol/persistence/load-account-by-email-repository";
-import { fromDatabase } from "@app/authentication/infrastructure/database/sequelize/mappers/account";
-import { UpdateAccessTokenRepository } from "@app/authentication/data/protocol/persistence/update-access-token-repository";
+import { AddAccountRepository } from "@app/authentication/data/protocol/persistence/account/add-account-repository";
+import { AccountFactory, SequelizeAccount } from "@app/authentication/infrastructure/database/sequelize/account/model/account";
+import { LoadAccountByEmailRepository } from "@app/authentication/data/protocol/persistence/account/load-account-by-email-repository";
+import { fromDatabase } from "@app/authentication/infrastructure/database/sequelize/account/mappers/account";
+import { UpdateAccessTokenRepository } from "@app/authentication/data/protocol/persistence/account/update-access-token-repository";
 
 export class SequelizeAccountRepository implements AddAccountRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository {
     private readonly account: SequelizeAccount;

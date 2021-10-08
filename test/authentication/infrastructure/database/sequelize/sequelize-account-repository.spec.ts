@@ -1,11 +1,11 @@
 import { Sequelize } from "sequelize";
 import faker from "faker";
-import { SequelizeAccountRepository } from "@app/authentication/infrastructure/database/sequelize/sequelize-account-repository";
+import { SequelizeAccountRepository } from "@app/authentication/infrastructure/database/sequelize/account/sequelize-account-repository";
 import { SequelizeClient } from "@app/shared/infrastructure/sequelize-client";
 import {
     AccountFactory,
     SequelizeAccount,
-} from "@app/authentication/infrastructure/database/sequelize/model/account";
+} from "@app/authentication/infrastructure/database/sequelize/account/model/account";
 import { expect } from "chai";
 
 const makeSut = (sequelize: Sequelize): SequelizeAccountRepository => (

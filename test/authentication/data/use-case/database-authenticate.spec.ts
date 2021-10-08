@@ -1,10 +1,10 @@
 import faker from "faker";
 import sinon from "sinon";
 import { DatabaseAuthenticate } from "@app/authentication/data/use-case/database-authenticate";
-import { LoadAccountByEmailRepository } from "@app/authentication/data/protocol/persistence/load-account-by-email-repository";
+import { LoadAccountByEmailRepository } from "@app/authentication/data/protocol/persistence/account/load-account-by-email-repository";
 import { Authenticate } from "@app/authentication/domain/use-case/authenticate";
 import { Encrypter } from "@app/authentication/data/protocol/cryptography/encrypter";
-import { UpdateAccessTokenRepository } from "@app/authentication/data/protocol/persistence/update-access-token-repository";
+import { UpdateAccessTokenRepository } from "@app/authentication/data/protocol/persistence/account/update-access-token-repository";
 import { HashVerifier } from "@app/authentication/data/protocol/cryptography/hash-verifier";
 
 const FAKE_PASSWORD = faker.internet.password();

@@ -1,6 +1,6 @@
 import { AddAccount } from "@app/authentication/domain/use-case/add-account";
 import { Hasher } from "@app/authentication/data/protocol/cryptography/hasher";
-import { AddAccountRepository } from "@app/authentication/data/protocol/persistence/add-account-repository";
+import { AddAccountRepository } from "@app/authentication/data/protocol/persistence/account/add-account-repository";
 
 export class DatabaseAddAccount implements AddAccount {
     public constructor(
