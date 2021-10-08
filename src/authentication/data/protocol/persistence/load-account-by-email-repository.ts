@@ -1,7 +1,7 @@
 import { AccountModel } from "@app/authentication/domain/model/account-model";
 
 export interface LoadAccountByEmailRepository {
-    execute(input: LoadAccountByEmailRepository.Input): Promise<LoadAccountByEmailRepository.Output>;
+    loadByEmail(input: LoadAccountByEmailRepository.Input): Promise<LoadAccountByEmailRepository.Output>;
 }
 
 export namespace LoadAccountByEmailRepository {

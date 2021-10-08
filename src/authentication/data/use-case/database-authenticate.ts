@@ -14,7 +14,7 @@ export class DatabaseAuthenticate implements Authenticate {
     }
 
     public async execute({ email, password }: Authenticate.Input): Promise<Authenticate.Output> {
-        const account = await this.loadAccountByEmailRepository.execute({ email });
+        const account = await this.loadAccountByEmailRepository.loadByEmail({ email });
 
         if (account) {
             const isValidPassword = await this.hashVerifier.verify(account.password, password);
