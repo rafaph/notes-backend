@@ -1,11 +1,11 @@
 import { Sequelize } from "sequelize";
 import faker from "faker";
-import { SequelizeAddAccountRepository } from "@app/authentication/infrastructure/database/sequelize/sequelize-add-account-repository";
+import { SequelizeAccountRepository } from "@app/authentication/infrastructure/database/sequelize/sequelize-account-repository";
 import { AddAccountRepository } from "@app/authentication/data/protocol/persistence/add-account-repository";
 import { SequelizeClient } from "@app/shared/infrastructure/sequelize-client";
 
-const makeSut = (sequelize: Sequelize): SequelizeAddAccountRepository => (
-    new SequelizeAddAccountRepository(sequelize)
+const makeSut = (sequelize: Sequelize): SequelizeAccountRepository => (
+    new SequelizeAccountRepository(sequelize)
 );
 
 const makeInput = (input: Partial<AddAccountRepository.Input> = {}): AddAccountRepository.Input => ({
@@ -26,7 +26,7 @@ describe("SequelizeAddAccountRepository", () => {
         const sut = makeSut(sequelize);
         const input = makeInput();
 
-        const account = await sut.execute(input);
+        const account = await sut.add(input);
 
         expect(account.id).to.not.be.undefined;
         expect(account.name).to.be.equal(input.name);

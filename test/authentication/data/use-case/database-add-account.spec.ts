@@ -24,7 +24,7 @@ const makeHasher = (): Hasher => {
 
 const makeAddAccountRepository = (): AddAccountRepository => {
     class AddAccountRepositoryStub implements AddAccountRepository {
-        public async execute(input: AddAccountRepository.Input): Promise<AddAccountRepository.Output> {
+        public async add(input: AddAccountRepository.Input): Promise<AddAccountRepository.Output> {
             return {
                 ...input,
                 id: FAKE_ACCOUNT_MODEL_ID,
@@ -79,7 +79,7 @@ describe("DatabaseAddAccount", () => {
         const { sut, addAccountRepositoryStub } = makeSut();
         const input = makeInput();
 
-        const addSpy = sinon.spy(addAccountRepositoryStub, "execute");
+        const addSpy = sinon.spy(addAccountRepositoryStub, "add");
 
         await sut.execute(input);
 
@@ -93,7 +93,7 @@ describe("DatabaseAddAccount", () => {
     it("Should throw if AddAccountRepository throws", async () => {
         const { sut, addAccountRepositoryStub } = makeSut();
         const input = makeInput();
-        sinon.stub(addAccountRepositoryStub, "execute").rejects();
+        sinon.stub(addAccountRepositoryStub, "add").rejects();
 
         await expect(sut.execute(input)).to.eventually.be.rejected;
     });
