@@ -36,4 +36,13 @@ describe.only("JWTAdapter", () => {
             sut.encrypt(faker.random.word()),
         ).to.eventually.be.equals(FAKE_SIGNED_VALUE);
     });
+
+    it("Should throw if jwt sign throws", async () => {
+        const sut = makeSut();
+        signStub.throwsException();
+
+        await expect(
+            sut.encrypt(faker.random.word()),
+        ).to.eventually.be.rejected;
+    });
 });
