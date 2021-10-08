@@ -28,4 +28,12 @@ describe.only("JWTAdapter", () => {
 
         sinon.assert.calledOnceWithExactly(signStub, { id: value }, FAKE_SECRET);
     });
+
+    it("Should return a token on sign success", async () => {
+        const sut = makeSut();
+
+        await expect(
+            sut.encrypt(faker.random.word()),
+        ).to.eventually.be.equals(FAKE_SIGNED_VALUE);
+    });
 });
