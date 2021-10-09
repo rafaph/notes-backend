@@ -2,16 +2,17 @@ import request from "supertest";
 import faker from "faker";
 import { Express } from "express";
 import { TestApplication } from "@test/helper/test-application";
+import { HttpStatusCodes } from "@app/shared/utils/http-status-codes";
 
 
-describe("@integration SignUp Routes", () => {
+describe("@integration /POST /api/sign-up", () => {
     let app: Express;
 
     before(() => {
         app = TestApplication.app;
     });
 
-    it("Should return an account on success", async () => {
+    it("Should return a ok response with an account on success", async () => {
         const route = "/api/sign-up";
         const password = faker.internet.password();
 
@@ -23,6 +24,6 @@ describe("@integration SignUp Routes", () => {
                 password,
                 passwordConfirmation: password,
             })
-            .expect(200);
+            .expect(HttpStatusCodes.OK);
     });
 });
