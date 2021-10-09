@@ -1,5 +1,6 @@
 {
     "name": "notes-backend",
+    "version": "1.1.0",
     "private": true,
     "scripts": {
         "start": "ts-node -r tsconfig-paths/register src/main/server.ts",
