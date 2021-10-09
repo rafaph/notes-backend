@@ -34,4 +34,14 @@ describe("@integration POST /api/login", () => {
             .send({ email, password })
             .expect(HttpStatusCodes.OK);
     });
+
+    it("Should returns a unauthorized response on login fails", async () => {
+        const email = faker.internet.email();
+        const password = faker.internet.password();
+
+        await request(app)
+            .post(route)
+            .send({ email, password })
+            .expect(HttpStatusCodes.UNAUTHORIZED);
+    });
 });
