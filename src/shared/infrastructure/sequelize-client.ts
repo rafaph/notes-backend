@@ -12,8 +12,9 @@ export class SequelizeClient {
                 options = {
                     ssl: true,
                     dialectOptions: {
-                        ssl: true
-                    }
+                        ssl: true,
+                        rejectUnauthorized: false,
+                    },
                 };
             }
             this.sequelize = new Sequelize(connectionString, { logging: false, ...options });

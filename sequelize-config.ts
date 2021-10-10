@@ -5,7 +5,8 @@ if (env === "production") {
     options = {
         ssl: true,
         dialectOptions: {
-            ssl: true
+            ssl: true,
+            rejectUnauthorized: false,
         }
     };
 }
