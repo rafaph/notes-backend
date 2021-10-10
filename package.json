@@ -71,5 +71,8 @@
         "tsconfig-paths": "^3.11.0",
         "validator": "^13.6.0",
         "winston": "^3.3.3"
+    },
+    "engines": {
+        "node": "^14"
     }
 }

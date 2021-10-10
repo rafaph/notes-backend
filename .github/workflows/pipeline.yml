@@ -2,9 +2,9 @@ name: CI
 
 on:
     push:
-        branches: [master]
+        branches: [ master ]
     pull_request:
-        branches: [master]
+        branches: [ master ]
 
 defaults:
     run:
@@ -17,6 +17,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v2
+
             -   name: Cache node modules
                 uses: actions/cache@v2
                 env:
@@ -24,14 +25,17 @@ jobs:
                 with:
                     path: node_modules/
                     key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+
             -   name: Install NPM dependencies
                 run: |
                     if [ ! -d node_modules ]; then
                       npm ci
                     fi
                     npx patch-package
+
             -   name: Lint
                 run: npm run lint
+
             -   name: Cleanup
                 if: ${{ always() }}
                 run: |
@@ -54,6 +58,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v2
+
             -   name: Cache node modules
                 uses: actions/cache@v2
                 env:
@@ -61,16 +66,32 @@ jobs:
                 with:
                     path: node_modules/
                     key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+
             -   name: Install Dependencies
                 run: |
                     if [ ! -d node_modules ]; then
                       npm ci
                     fi
                     npx patch-package
+
             -   name: Test
                 run: npm run test:ci
+
             -   name: Cleanup
                 if: ${{ always() }}
                 run: |
                     shopt -s dotglob
                     rm -rf *
+
+    deploy:
+        needs: [ lint, test ]
+        runs-on: ubuntu-latest
+        if: github.ref == 'refs/heads/master'
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   uses: akhileshns/heroku-deploy@v3.12.12
+                with:
+                    heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+                    heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+                    heroku_email: ${{secrets.HEROKU_EMAIL}}
