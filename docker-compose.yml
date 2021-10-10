@@ -5,7 +5,7 @@ services:
         build: docker/node
         image: notes-backend
         container_name: notes-backend-server
-        command: [ "npm", "start" ]
+        command: [ "npm", "run", "dev" ]
         tty: true
         user: "1000:1000"
         ports:
