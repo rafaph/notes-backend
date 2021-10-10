@@ -3,11 +3,12 @@ let options = {};
 
 if (env === "production") {
     options = {
-        ssl: true,
         dialectOptions: {
-            ssl: true,
-            rejectUnauthorized: false,
-        }
+            ssl: {
+                require: true,
+                rejectUnauthorized: false,
+            },
+        },
     };
 }
 

@@ -10,10 +10,11 @@ export class SequelizeClient {
 
             if (env.NODE_ENV === "production") {
                 options = {
-                    ssl: true,
                     dialectOptions: {
-                        ssl: true,
-                        rejectUnauthorized: false,
+                        ssl: {
+                            require: true,
+                            rejectUnauthorized: false,
+                        },
                     },
                 };
             }
