@@ -17,6 +17,7 @@
         "lint:fix": "npm run lint -- --fix",
         "prebuild": "rm -rf dist",
         "build": "tsc --project tsconfig-build.json",
+        "postbuild": "npm run db:migrate",
         "db:migrate": "sequelize db:migrate"
     },
     "devDependencies": {
