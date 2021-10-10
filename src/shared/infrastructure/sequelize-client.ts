@@ -6,7 +6,17 @@ export class SequelizeClient {
 
     public static getClient(connectionString: string = env.DATABASE_URL): Sequelize {
         if (this.sequelize === undefined) {
-            this.sequelize = new Sequelize(connectionString, { logging: false });
+            let options = {};
+
+            if (env.NODE_ENV === "production") {
+                options = {
+                    ssl: true,
+                    dialectOptions: {
+                        ssl: true
+                    }
+                };
+            }
+            this.sequelize = new Sequelize(connectionString, { logging: false, ...options });
         }
         return this.sequelize;
     }
