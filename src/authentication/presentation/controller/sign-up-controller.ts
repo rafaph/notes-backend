@@ -22,21 +22,19 @@ export class SignUpController implements Controller {
 
             const { name, email, password } = request.body as SignUpController.RequestBody;
 
-            const account = await this.addAccount.execute({
+            await this.addAccount.execute({
                 name: name as string,
                 email: email as string,
                 password: password as string,
             });
 
-            await this.authenticate.execute({
+            const token = await this.authenticate.execute({
                 email: email as string,
                 password: password as string,
             });
 
             return ok({
-                id: account.id,
-                name: account.name,
-                email: account.email,
+                token: token as string,
             });
         } catch (error) {
             return serverError(error as Error);
@@ -52,5 +50,5 @@ export namespace SignUpController {
         passwordConfirmation?: string;
     }
 
-    export type ResponseBody = Error | Omit<AddAccount.Output, "password">;
+    export type ResponseBody = Error | { token: string };
 }
