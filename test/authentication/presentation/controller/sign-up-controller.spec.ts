@@ -106,9 +106,7 @@ describe("SignUpController", () => {
 
         expect(response.statusCode).to.be.equal(HttpStatusCodes.OK);
         expect(response.body).to.be.deep.equal({
-            id: "valid_id",
-            name: body.name,
-            email: body.email,
+            token: FAKE_TOKEN,
         });
     });
 
