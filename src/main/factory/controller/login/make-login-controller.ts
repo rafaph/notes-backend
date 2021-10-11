@@ -1,7 +1,7 @@
 import { Controller } from "@app/shared/presentation/protocol/controller";
 import { LoginController } from "@app/authentication/presentation/controller/login-controller";
 import { LogControllerDecorator } from "@app/main/decorator/log-controller-decorator";
-import { makeLoginValidator } from "@app/main/factory/login/make-login-validator";
+import { makeLoginValidator } from "@app/main/factory/controller/login/make-login-validator";
 import { DatabaseAuthenticate } from "@app/authentication/data/use-case/database-authenticate";
 import { SequelizeAccountRepository } from "@app/authentication/infrastructure/database/sequelize/account/sequelize-account-repository";
 import { SequelizeClient } from "@app/shared/infrastructure/sequelize-client";
