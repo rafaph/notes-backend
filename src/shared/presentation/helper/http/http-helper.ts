@@ -26,3 +26,10 @@ export function unauthorized(): HttpResponse<Error> {
         body: new UnauthorizedError(),
     };
 }
+
+export function forbidden(error: Error): HttpResponse<Error> {
+    return {
+        statusCode: HttpStatusCodes.FORBIDDEN,
+        body: error,
+    };
+}
