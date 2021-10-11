@@ -11,5 +11,5 @@ export namespace AddAccount {
         password: string;
     }
 
-    export type Output = AccountModel;
+    export type Output = AccountModel | undefined;
 }
