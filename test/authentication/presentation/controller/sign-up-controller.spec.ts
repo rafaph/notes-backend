@@ -7,6 +7,7 @@ import { Validator } from "@app/shared/presentation/protocol/validator";
 import { badRequest, serverError } from "@app/shared/presentation/helper/http/http-helper";
 import { Authenticate } from "@app/authentication/domain/use-case/authenticate";
 import { ServerError } from "@app/shared/presentation/error/server-error";
+import { EmailInUseError } from "@app/shared/presentation/error/email-in-use-error";
 
 const makeAddAccount = (): AddAccount => {
     class AddAccountStub implements AddAccount {
@@ -36,8 +37,7 @@ const makeAuthenticate = (): Authenticate => {
 
 const makeValidator = (): Validator => {
     class ValidatorStub implements Validator {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        public async validate(_input: unknown): Promise<Error | undefined> {
+        public async validate(): Promise<Error | undefined> {
             return undefined;
         }
     }
@@ -108,6 +108,16 @@ describe("SignUpController", () => {
         expect(response.body).to.be.deep.equal({
             token: FAKE_TOKEN,
         });
+    });
+
+    it("Should return a forbidden response if email already exists", async () => {
+        const { sut, addAccountStub } = makeSut();
+        sinon.stub(addAccountStub, "execute").resolves(undefined);
+        const body = makeBody();
+        const response = await sut.handle({ body });
+
+        expect(response.statusCode).to.be.equal(HttpStatusCodes.FORBIDDEN);
+        expect(response.body).to.be.instanceOf(EmailInUseError);
     });
 
     it("Should call Validation with correct value", async () => {
