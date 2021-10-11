@@ -1,5 +1,5 @@
 import sinon from "sinon";
-import { makeSignUpValidator } from "@app/main/factory/sign-up/make-sign-up-validator";
+import { makeSignUpValidator } from "@app/main/factory/controller/sign-up/make-sign-up-validator";
 import * as compositeModule from "@app/shared/presentation/validator/composite-validator";
 import { RequiredFieldValidator } from "@app/shared/presentation/validator/required-field-validator";
 import { FieldsDifferentValidator } from "@app/shared/presentation/validator/fields-different-validator";

@@ -5,7 +5,7 @@ import { Argon2Adapter } from "@app/authentication/infrastructure/cryptography/a
 import { SequelizeAccountRepository } from "@app/authentication/infrastructure/database/sequelize/account/sequelize-account-repository";
 import { SequelizeClient } from "@app/shared/infrastructure/sequelize-client";
 import { LogControllerDecorator } from "@app/main/decorator/log-controller-decorator";
-import { makeSignUpValidator } from "@app/main/factory/sign-up/make-sign-up-validator";
+import { makeSignUpValidator } from "@app/main/factory/controller/sign-up/make-sign-up-validator";
 import { JWTAdapter } from "@app/authentication/infrastructure/cryptography/jwt-adapter";
 import { DatabaseAuthenticate } from "@app/authentication/data/use-case/database-authenticate";
 
