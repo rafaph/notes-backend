@@ -9,7 +9,6 @@ import { Argon2Adapter } from "@app/authentication/infrastructure/cryptography/a
 import { JWTAdapter } from "@app/authentication/infrastructure/cryptography/jwt-adapter";
 
 export function makeLoginController(): Controller {
-    const validator = makeLoginValidator();
     const sequelize = SequelizeClient.getClient();
     const accountRepository = new SequelizeAccountRepository(sequelize);
     const argon2Adapter = new Argon2Adapter();
@@ -20,7 +19,8 @@ export function makeLoginController(): Controller {
         jwtAdapter,
         accountRepository,
     );
-    const controller = new LoginController(validator, databaseAuthenticate);
+    const validator = makeLoginValidator();
 
+    const controller = new LoginController(validator, databaseAuthenticate);
     return new LogControllerDecorator(controller);
 }
