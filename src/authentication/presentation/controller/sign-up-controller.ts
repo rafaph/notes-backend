@@ -3,9 +3,11 @@ import { badRequest, ok, serverError } from "@app/shared/presentation/helper/htt
 import { Controller } from "@app/shared/presentation/protocol/controller";
 import { AddAccount } from "@app/authentication/domain/use-case/add-account";
 import { Validator } from "@app/shared/presentation/protocol/validator";
+import { Authenticate } from "@app/authentication/domain/use-case/authenticate";
 
 export class SignUpController implements Controller {
     public constructor(
+        private readonly authenticate: Authenticate,
         private readonly addAccount: AddAccount,
         private readonly validator: Validator,
     ) {
@@ -22,6 +24,11 @@ export class SignUpController implements Controller {
 
             const account = await this.addAccount.execute({
                 name: name as string,
+                email: email as string,
+                password: password as string,
+            });
+
+            await this.authenticate.execute({
                 email: email as string,
                 password: password as string,
             });

@@ -6,13 +6,27 @@ import { SequelizeAccountRepository } from "@app/authentication/infrastructure/d
 import { SequelizeClient } from "@app/shared/infrastructure/sequelize-client";
 import { LogControllerDecorator } from "@app/main/decorator/log-controller-decorator";
 import { makeSignUpValidator } from "@app/main/factory/sign-up/make-sign-up-validator";
+import { JWTAdapter } from "@app/authentication/infrastructure/cryptography/jwt-adapter";
+import { DatabaseAuthenticate } from "@app/authentication/data/use-case/database-authenticate";
 
 export function makeSignUpController(): Controller {
     const argon2Adapter = new Argon2Adapter();
     const sequelize = SequelizeClient.getClient();
     const sequelizeAccountRepository = new SequelizeAccountRepository(sequelize);
-    const databaseAddAccount = new DatabaseAddAccount(argon2Adapter, sequelizeAccountRepository);
+    const jwtAdapter = new JWTAdapter();
+
+    const databaseAuthenticate = new DatabaseAuthenticate(
+        sequelizeAccountRepository,
+        argon2Adapter,
+        jwtAdapter,
+        sequelizeAccountRepository,
+    );
+    const databaseAddAccount = new DatabaseAddAccount(
+        argon2Adapter,
+        sequelizeAccountRepository,
+    );
     const validator = makeSignUpValidator();
-    const controller = new SignUpController(databaseAddAccount, validator);
+
+    const controller = new SignUpController(databaseAuthenticate, databaseAddAccount, validator);
     return new LogControllerDecorator(controller);
 }
