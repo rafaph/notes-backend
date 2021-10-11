@@ -4,8 +4,9 @@ import { SignUpController } from "@app/authentication/presentation/controller/si
 import { AddAccount } from "@app/authentication/domain/use-case/add-account";
 import { HttpStatusCodes } from "@app/shared/utils/http-status-codes";
 import { Validator } from "@app/shared/presentation/protocol/validator";
-import { badRequest } from "@app/shared/presentation/helper/http/http-helper";
+import { badRequest, serverError } from "@app/shared/presentation/helper/http/http-helper";
 import { Authenticate } from "@app/authentication/domain/use-case/authenticate";
+import { ServerError } from "@app/shared/presentation/error/server-error";
 
 const makeAddAccount = (): AddAccount => {
     class AddAccountStub implements AddAccount {
@@ -144,5 +145,18 @@ describe("SignUpController", () => {
             email: body.email,
             password: body.password,
         });
+    });
+
+    it("Should return a server error response if Authenticate throws", async () => {
+        const { sut, authenticateStub } = makeSut();
+        sinon.stub(authenticateStub, "execute").rejects();
+        const body = makeBody();
+        const request = { body };
+
+        const response = await sut.handle(request);
+        const expectedResponse = serverError();
+
+        expect(response.statusCode).to.be.deep.equal(expectedResponse.statusCode);
+        expect(response.body).to.be.instanceOf(ServerError);
     });
 });
