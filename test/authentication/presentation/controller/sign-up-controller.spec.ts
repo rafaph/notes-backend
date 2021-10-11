@@ -5,6 +5,7 @@ import { AddAccount } from "@app/authentication/domain/use-case/add-account";
 import { HttpStatusCodes } from "@app/shared/utils/http-status-codes";
 import { Validator } from "@app/shared/presentation/protocol/validator";
 import { badRequest } from "@app/shared/presentation/helper/http/http-helper";
+import { Authenticate } from "@app/authentication/domain/use-case/authenticate";
 
 const makeAddAccount = (): AddAccount => {
     class AddAccountStub implements AddAccount {
@@ -19,6 +20,17 @@ const makeAddAccount = (): AddAccount => {
     }
 
     return new AddAccountStub();
+};
+
+const FAKE_TOKEN = faker.datatype.uuid();
+const makeAuthenticate = (): Authenticate => {
+    class AuthenticateStub implements Authenticate {
+        public async execute(): Promise<Authenticate.Output> {
+            return FAKE_TOKEN;
+        }
+    }
+
+    return new AuthenticateStub();
 };
 
 const makeValidator = (): Validator => {
@@ -36,18 +48,21 @@ const makeSut = (): {
     sut: SignUpController,
     addAccountStub: AddAccount,
     validatorStub: Validator,
+    authenticateStub: Authenticate,
 } => {
+    const authenticateStub = makeAuthenticate();
     const addAccountStub = makeAddAccount();
     const validatorStub = makeValidator();
-    const sut = new SignUpController(addAccountStub, validatorStub);
+    const sut = new SignUpController(authenticateStub, addAccountStub, validatorStub);
     return {
         sut,
         addAccountStub,
         validatorStub,
+        authenticateStub,
     };
 };
 
-const makeBody = (overrides: Partial<SignUpController.RequestBody> = {}): SignUpController.RequestBody => {
+const makeBody = (overrides: Partial<SignUpController.RequestBody> = {}): Required<SignUpController.RequestBody> => {
     const password = faker.internet.password();
     return {
         name: faker.name.firstName(),
@@ -115,5 +130,19 @@ describe("SignUpController", () => {
         const response = await sut.handle({ body });
 
         expect(response).to.be.deep.equal(badRequest(error));
+    });
+
+    it("Should call Authenticate with correct values", async () => {
+        const { sut, authenticateStub } = makeSut();
+        const executeSpy = sinon.spy(authenticateStub, "execute");
+        const body = makeBody();
+        const request = { body };
+
+        await sut.handle(request);
+
+        sinon.assert.calledOnceWithExactly(executeSpy, {
+            email: body.email,
+            password: body.password,
+        });
     });
 });
