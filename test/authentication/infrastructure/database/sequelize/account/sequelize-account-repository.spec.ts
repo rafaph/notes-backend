@@ -31,10 +31,10 @@ describe("@integration SequelizeAccountRepository", () => {
 
         const account = await sut.add(input);
 
-        expect(account.id).to.not.be.undefined;
-        expect(account.name).to.be.equal(input.name);
-        expect(account.email).to.be.equal(input.email);
-        expect(account.password).to.be.equal(input.password);
+        expect(account?.id).to.not.be.undefined;
+        expect(account?.name).to.be.equal(input.name);
+        expect(account?.email).to.be.equal(input.email);
+        expect(account?.password).to.be.equal(input.password);
     });
 
     it("Should return a account on loadByEmail success", async () => {
