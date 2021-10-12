@@ -12,5 +12,6 @@ export function makeDatabaseAddAccount(): AddAccount {
     return new DatabaseAddAccount(
         argon2Adapter,
         sequelizeAccountRepository,
+        sequelizeAccountRepository,
     );
 }
