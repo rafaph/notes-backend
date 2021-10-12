@@ -12,11 +12,14 @@ export class DatabaseAddAccount implements AddAccount {
     }
 
     public async execute(input: AddAccount.Input): Promise<AddAccount.Output> {
-        await this.loadAccountByEmailRepository.loadByEmail(input.email);
-        const hashedPassword = await this.hasher.hash(input.password);
+        const account = await this.loadAccountByEmailRepository.loadByEmail(input.email);
+        if (account) {
+            return undefined;
+        }
+
         return this.addAccountRepository.add({
             ...input,
-            password: hashedPassword,
+            password: await this.hasher.hash(input.password),
         });
     }
 }
