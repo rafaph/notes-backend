@@ -4,7 +4,7 @@ import { Sequelize } from "sequelize";
 import Umzug from "umzug";
 import path from "path";
 import { env } from "@app/main/config/env";
-import { SequelizeClient } from "@app/shared/infrastructure/sequelize-client";
+import { SequelizeClient } from "@app/infrastructure/authentication/persistence/sequelize/sequelize-client";
 
 export class TestDatabase {
     private readonly database: {
@@ -55,12 +55,12 @@ export class TestDatabase {
     }
 
     public async tearDown(): Promise<void> {
-        await SequelizeClient.getClient().close();
+        await SequelizeClient.getInstance().close();
         await this.query(`DROP DATABASE ${this.database.name};`);
     }
 
     public async truncate(): Promise<void> {
-        await SequelizeClient.getClient().truncate();
+        await SequelizeClient.getInstance().truncate();
     }
 
     private async query(query: string): Promise<void> {

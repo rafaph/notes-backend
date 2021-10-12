@@ -1,6 +1,6 @@
-import { Controller } from "@app/shared/presentation/protocol/controller";
 import { Request, Response } from "express";
-import { HttpRequest } from "@app/shared/presentation/protocol/http";
+import { Controller } from "@app/presentation/shared/protocol/controller";
+import { HttpRequest } from "@app/presentation/shared/protocol/http";
 
 export class ExpressRouteAdapter {
     public static adapt(controller: Controller) {
@@ -11,7 +11,7 @@ export class ExpressRouteAdapter {
 
             const httpResponse = await controller.handle(httpRequest);
 
-            if (httpResponse.statusCode >= 200 && httpResponse.statusCode < 300) {
+            if (httpResponse.statusCode > 199 && httpResponse.statusCode < 300) {
                 response.status(httpResponse.statusCode).json(httpResponse.body);
             } else {
                 response.status(httpResponse.statusCode).json({

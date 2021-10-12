@@ -1,9 +1,9 @@
-import { SequelizeClient } from "@app/shared/infrastructure/sequelize-client";
+import { SequelizeClient } from "@app/infrastructure/authentication/persistence/sequelize/sequelize-client";
 import { createApp } from "@app/main/config/create-app";
 import { env } from "@app/main/config/env";
 
 async function onExit(): Promise<void> {
-    const sequelize = SequelizeClient.getClient();
+    const sequelize = SequelizeClient.getInstance();
     await sequelize.close();
 }
 

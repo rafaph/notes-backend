@@ -1,7 +1,7 @@
-import { Controller } from "@app/shared/presentation/protocol/controller";
-import { HttpRequest, HttpResponse } from "@app/shared/presentation/protocol/http";
-import { HttpStatusCodes } from "@app/shared/utils/http-status-codes";
-import { Logger } from "@app/shared/utils/logger";
+import { Controller } from "@app/presentation/shared/protocol/controller";
+import { HttpRequest, HttpResponse } from "@app/presentation/shared/protocol/http";
+import { HttpStatusCodes } from "@app/utils/http-status-codes";
+import { Logger } from "@app/utils/logger";
 
 export class LogControllerDecorator implements Controller {
     public constructor(private readonly controller: Controller) {
