@@ -1,10 +1,10 @@
 import sinon from "sinon";
 import { makeSignUpValidator } from "@app/main/factory/controller/authentication/sign-up/make-sign-up-validator";
-import * as compositeModule from "@app/shared/presentation/validator/composite-validator";
-import { RequiredFieldValidator } from "@app/shared/presentation/validator/required-field-validator";
-import { FieldsDifferentValidator } from "@app/shared/presentation/validator/fields-different-validator";
-import { EmailValidator } from "@app/shared/presentation/validator/email-validator";
-import { IsEmailValidatorAdapter } from "@app/main/adapter/validator/is-email-validator-adapter";
+import * as compositeModule from "@app/presentation/shared/validator/composite-validator";
+import { RequiredFieldValidator } from "@app/presentation/shared/validator/required-field-validator";
+import { FieldsDifferentValidator } from "@app/presentation/shared/validator/fields-different-validator";
+import { IsEmailValidatorAdapter } from "@app/utils/validator/is-email-validator-adapter";
+import { EmailValidator } from "@app/presentation/shared/validator/email-validator";
 
 
 describe("makeSignUpValidator", () => {

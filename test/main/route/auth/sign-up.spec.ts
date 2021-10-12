@@ -2,7 +2,7 @@ import request from "supertest";
 import faker from "faker";
 import { Express } from "express";
 import { TestApplication } from "@test/helper/test-application";
-import { HttpStatusCodes } from "@app/shared/utils/http-status-codes";
+import { HttpStatusCodes } from "@app/utils/http-status-codes";
 
 
 describe("@integration /POST /api/sign-up", () => {

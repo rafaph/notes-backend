@@ -1,9 +1,9 @@
 import sinon from "sinon";
-import * as compositeModule from "@app/shared/presentation/validator/composite-validator";
-import { RequiredFieldValidator } from "@app/shared/presentation/validator/required-field-validator";
-import { EmailValidator } from "@app/shared/presentation/validator/email-validator";
-import { IsEmailValidatorAdapter } from "@app/main/adapter/validator/is-email-validator-adapter";
+import * as compositeModule from "@app/presentation/shared/validator/composite-validator";
 import { makeLoginValidator } from "@app/main/factory/controller/authentication/login/make-login-validator";
+import { RequiredFieldValidator } from "@app/presentation/shared/validator/required-field-validator";
+import { IsEmailValidatorAdapter } from "@app/utils/validator/is-email-validator-adapter";
+import { EmailValidator } from "@app/presentation/shared/validator/email-validator";
 
 describe("makeLoginValidator", () => {
     afterEach(() => {

@@ -1,11 +1,10 @@
-import { LogControllerDecorator } from "@app/main/decorator/log-controller-decorator";
-import { Controller } from "@app/shared/presentation/protocol/controller";
-import { HttpResponse } from "@app/shared/presentation/protocol/http";
-import { HttpStatusCodes } from "@app/shared/utils/http-status-codes";
 import sinon from "sinon";
-import { Logger } from "@app/shared/utils/logger";
 import faker from "faker";
-import { expect } from "chai";
+import { LogControllerDecorator } from "@app/main/decorator/log-controller-decorator";
+import { Controller } from "@app/presentation/shared/protocol/controller";
+import { HttpResponse } from "@app/presentation/shared/protocol/http";
+import { HttpStatusCodes } from "@app/utils/http-status-codes";
+import { Logger } from "@app/utils/logger";
 
 const CONTROLLER_RESPONSE_BODY = new Error();
 

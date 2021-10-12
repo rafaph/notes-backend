@@ -4,9 +4,9 @@ import { Express } from "express";
 import argon2 from "argon2";
 import { Sequelize } from "sequelize";
 import { TestApplication } from "@test/helper/test-application";
-import { SequelizeAccountRepository } from "@app/authentication/infrastructure/database/sequelize/account/sequelize-account-repository";
-import { SequelizeClient } from "@app/shared/infrastructure/sequelize-client";
-import { HttpStatusCodes } from "@app/shared/utils/http-status-codes";
+import { SequelizeClient } from "@app/infrastructure/authentication/persistence/sequelize/sequelize-client";
+import { SequelizeAccountRepository } from "@app/infrastructure/authentication/persistence/sequelize/sequelize-account-repository";
+import { HttpStatusCodes } from "@app/utils/http-status-codes";
 
 describe("@integration POST /api/login", () => {
     const route = "/api/login";
@@ -15,7 +15,7 @@ describe("@integration POST /api/login", () => {
 
     before(() => {
         app = TestApplication.app;
-        sequelize = SequelizeClient.getClient();
+        sequelize = SequelizeClient.getInstance();
     });
 
     it("Should returns a ok response on login success", async () => {
