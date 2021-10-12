@@ -4,6 +4,7 @@ import { Hasher } from "@app/data/authentication/protocol/cryptography/hasher";
 import { AddAccountRepository } from "@app/data/authentication/protocol/persistence/add-account-repository";
 import { AddAccount } from "@app/domain/authentication/use-case/add-account";
 import { DatabaseAddAccount } from "@app/data/authentication/use-case/database-add-account";
+import { LoadAccountByEmailRepository } from "@app/data/authentication/protocol/persistence/load-account-by-email-repository";
 
 const FAKE_HASHED_PASSWORD = faker.internet.password();
 const FAKE_ACCOUNT_MODEL_ID = faker.datatype.uuid();
@@ -31,6 +32,16 @@ const makeAddAccountRepository = (): AddAccountRepository => {
     return new AddAccountRepositoryStub();
 };
 
+const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
+    class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
+        public async loadByEmail(): Promise<LoadAccountByEmailRepository.Output> {
+            return undefined;
+        }
+    }
+
+    return new LoadAccountByEmailRepositoryStub();
+};
+
 const makeInput = (input: Partial<AddAccount.Input> = {}): AddAccount.Input => ({
     name: faker.name.firstName(),
     email: faker.internet.email(),
@@ -39,16 +50,19 @@ const makeInput = (input: Partial<AddAccount.Input> = {}): AddAccount.Input => (
 });
 
 const makeSut = (): {
-    hasherStub: Hasher,
-    sut: DatabaseAddAccount
-    addAccountRepositoryStub: AddAccountRepository,
+    hasherStub: Hasher;
+    sut: DatabaseAddAccount;
+    addAccountRepositoryStub: AddAccountRepository;
+    loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository;
 } => {
+    const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository();
     const hasherStub = makeHasher();
     const addAccountRepositoryStub = makeAddAccountRepository();
     return {
         hasherStub,
         addAccountRepositoryStub,
-        sut: new DatabaseAddAccount(hasherStub, addAccountRepositoryStub),
+        loadAccountByEmailRepositoryStub,
+        sut: new DatabaseAddAccount(hasherStub, addAccountRepositoryStub, loadAccountByEmailRepositoryStub),
     };
 };
 
@@ -103,5 +117,15 @@ describe("DatabaseAddAccount", () => {
             id: FAKE_ACCOUNT_MODEL_ID,
             password: FAKE_HASHED_PASSWORD,
         });
+    });
+
+    it("Should call LoadAccountByEmailRepository with correct email", async () => {
+        const { sut, loadAccountByEmailRepositoryStub } = makeSut();
+        const loadByEmailSpy = sinon.spy(loadAccountByEmailRepositoryStub, "loadByEmail");
+        const email = faker.internet.email();
+
+        await sut.execute(makeInput({ email }));
+
+        sinon.assert.calledOnceWithExactly(loadByEmailSpy, email);
     });
 });
