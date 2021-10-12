@@ -128,4 +128,18 @@ describe("DatabaseAddAccount", () => {
 
         sinon.assert.calledOnceWithExactly(loadByEmailSpy, email);
     });
+
+    it("Should return undefined if LoadAccountByEmailRepository returns an account", async () => {
+        const { sut, loadAccountByEmailRepositoryStub } = makeSut();
+        sinon.stub(loadAccountByEmailRepositoryStub, "loadByEmail").resolves({
+            id: faker.datatype.uuid(),
+            email: faker.internet.email(),
+            name: faker.name.firstName(),
+            password: faker.internet.password(),
+        });
+
+        const account = await sut.execute(makeInput());
+
+        expect(account).to.be.undefined;
+    });
 });
