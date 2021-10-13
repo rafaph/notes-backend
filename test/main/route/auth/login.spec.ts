@@ -4,7 +4,7 @@ import { Express } from "express";
 import argon2 from "argon2";
 import { Sequelize } from "sequelize";
 import { TestApplication } from "@test/helper/test-application";
-import { SequelizeClient } from "@app/infrastructure/authentication/persistence/sequelize/sequelize-client";
+import { SequelizeClient } from "@app/infrastructure/shared/persistence/sequelize-client";
 import { SequelizeAccountRepository } from "@app/infrastructure/authentication/persistence/sequelize/sequelize-account-repository";
 import { HttpStatusCodes } from "@app/utils/http-status-codes";
 

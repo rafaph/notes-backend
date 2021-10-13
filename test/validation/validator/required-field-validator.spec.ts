@@ -1,6 +1,6 @@
 import faker from "faker";
 import { MissingParameterError } from "@app/presentation/shared/error/missing-parameter-error";
-import { RequiredFieldValidator } from "@app/presentation/shared/validator/required-field-validator";
+import { RequiredFieldValidator } from "@app/validation/validator/required-field-validator";
 
 const makeSut = (field = faker.random.word()): RequiredFieldValidator => new RequiredFieldValidator(field);
 

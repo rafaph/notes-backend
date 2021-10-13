@@ -1,6 +1,6 @@
 import faker from "faker";
 import { InvalidParameterError } from "@app/presentation/shared/error/invalid-parameter-error";
-import { FieldsDifferentValidator } from "@app/presentation/shared/validator/fields-different-validator";
+import { FieldsDifferentValidator } from "@app/validation/validator/fields-different-validator";
 
 const makeSut = (
     field = faker.random.word(),

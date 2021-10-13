@@ -4,7 +4,7 @@ import { Sequelize } from "sequelize";
 import Umzug from "umzug";
 import path from "path";
 import { env } from "@app/main/config/env";
-import { SequelizeClient } from "@app/infrastructure/authentication/persistence/sequelize/sequelize-client";
+import { SequelizeClient } from "@app/infrastructure/shared/persistence/sequelize-client";
 
 export class TestDatabase {
     private readonly database: {

@@ -1,6 +1,6 @@
 import sinon from "sinon";
 import { Validator } from "@app/presentation/shared/protocol/validator";
-import { CompositeValidator } from "@app/presentation/shared/validator/composite-validator";
+import { CompositeValidator } from "@app/validation/validator/composite-validator";
 
 const makeValidator = (): Validator => {
     class ValidatorStub implements Validator {

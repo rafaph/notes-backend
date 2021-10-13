@@ -1,8 +1,8 @@
 import { Validator } from "@app/presentation/shared/protocol/validator";
-import { RequiredFieldValidator } from "@app/presentation/shared/validator/required-field-validator";
-import { EmailValidator } from "@app/presentation/shared/validator/email-validator";
-import { CompositeValidator } from "@app/presentation/shared/validator/composite-validator";
-import { IsEmailValidatorAdapter } from "@app/utils/validator/is-email-validator-adapter";
+import { RequiredFieldValidator } from "@app/validation/validator/required-field-validator";
+import { EmailValidator } from "@app/validation/validator/email-validator";
+import { CompositeValidator } from "@app/validation/validator/composite-validator";
+import { IsEmailValidatorAdapter } from "@app/infrastructure/validator/is-email-validator-adapter";
 
 export function makeLoginValidator(): Validator {
     const validators = [];

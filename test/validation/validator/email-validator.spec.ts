@@ -1,8 +1,8 @@
 import faker from "faker";
 import sinon from "sinon";
 import { InvalidParameterError } from "@app/presentation/shared/error/invalid-parameter-error";
-import { IsEmailValidator } from "@app/presentation/authentication/protocol/is-email-validator";
-import { EmailValidator } from "@app/presentation/shared/validator/email-validator";
+import { IsEmailValidator } from "@app/validation/protocol/is-email-validator";
+import { EmailValidator } from "@app/validation/validator/email-validator";
 
 
 const makeIsEmailValidator = (): IsEmailValidator => {

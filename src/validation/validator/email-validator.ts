@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { InvalidParameterError } from "@app/presentation/shared/error/invalid-parameter-error";
 import { Validator } from "@app/presentation/shared/protocol/validator";
-import { IsEmailValidator } from "@app/presentation/authentication/protocol/is-email-validator";
+import { IsEmailValidator } from "@app/validation/protocol/is-email-validator";
 
 export class EmailValidator implements Validator {
     public constructor(

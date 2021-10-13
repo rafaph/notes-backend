@@ -1,6 +1,6 @@
 import { AddAccount } from "@app/domain/authentication/use-case/add-account";
 import { Argon2Adapter } from "@app/infrastructure/authentication/cryptography/argon2-adapter";
-import { SequelizeClient } from "@app/infrastructure/authentication/persistence/sequelize/sequelize-client";
+import { SequelizeClient } from "@app/infrastructure/shared/persistence/sequelize-client";
 import { SequelizeAccountRepository } from "@app/infrastructure/authentication/persistence/sequelize/sequelize-account-repository";
 import { DatabaseAddAccount } from "@app/data/authentication/use-case/database-add-account";
 
