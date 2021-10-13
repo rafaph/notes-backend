@@ -6,7 +6,7 @@ import {
     AccountFactory,
     SequelizeAccount,
 } from "@app/infrastructure/authentication/persistence/sequelize/model/account";
-import { SequelizeClient } from "@app/infrastructure/authentication/persistence/sequelize/sequelize-client";
+import { SequelizeClient } from "@app/infrastructure/shared/persistence/sequelize-client";
 
 
 const makeSut = (sequelize: Sequelize): SequelizeAccountRepository => (

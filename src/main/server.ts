@@ -1,4 +1,4 @@
-import { SequelizeClient } from "@app/infrastructure/authentication/persistence/sequelize/sequelize-client";
+import { SequelizeClient } from "@app/infrastructure/shared/persistence/sequelize-client";
 import { createApp } from "@app/main/config/create-app";
 import { env } from "@app/main/config/env";
 
