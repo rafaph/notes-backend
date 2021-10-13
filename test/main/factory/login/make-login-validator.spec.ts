@@ -3,7 +3,7 @@ import * as compositeModule from "@app/validation/validator/composite-validator"
 import { makeLoginValidator } from "@app/main/factory/controller/authentication/login/make-login-validator";
 import { RequiredFieldValidator } from "@app/validation/validator/required-field-validator";
 import { EmailValidator } from "@app/validation/validator/email-validator";
-import { IsEmailValidatorAdapter } from "@app/infrastructure/validator/is-email-validator-adapter";
+import { IsEmailValidatorAdapter } from "@app/infrastructure/validation/validator/is-email-validator-adapter";
 
 describe("makeLoginValidator", () => {
     afterEach(() => {
