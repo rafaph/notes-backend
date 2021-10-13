@@ -3,7 +3,7 @@ import { RequiredFieldValidator } from "@app/validation/validator/required-field
 import { FieldsDifferentValidator } from "@app/validation/validator/fields-different-validator";
 import { EmailValidator } from "@app/validation/validator/email-validator";
 import { CompositeValidator } from "@app/validation/validator/composite-validator";
-import { IsEmailValidatorAdapter } from "@app/infrastructure/validator/is-email-validator-adapter";
+import { IsEmailValidatorAdapter } from "@app/infrastructure/validation/validator/is-email-validator-adapter";
 
 export function makeSignUpValidator(): Validator {
     const validators = [];
