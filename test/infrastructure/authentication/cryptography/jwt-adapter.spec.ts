@@ -5,6 +5,9 @@ import { JWTAdapter } from "@app/infrastructure/authentication/cryptography/jwt-
 
 const FAKE_SECRET = faker.random.word();
 const FAKE_SIGNED_VALUE = faker.random.word();
+const FAKE_UNSIGNED_VALUE = {
+    id: faker.datatype.uuid(),
+};
 
 const makeSut = (): JWTAdapter => {
     return new JWTAdapter(FAKE_SECRET);
@@ -12,13 +15,16 @@ const makeSut = (): JWTAdapter => {
 
 describe("JWTAdapter", () => {
     let signStub: sinon.SinonStub<[payload: Record<string, unknown>, secret: string], string>;
+    let verifyStub: sinon.SinonStub<[token: string, secret: string], Record<string, unknown>>;
 
     beforeEach(() => {
         signStub = sinon.stub(jwt, "sign").returns(FAKE_SIGNED_VALUE);
+        verifyStub = sinon.stub(jwt, "verify").returns(FAKE_UNSIGNED_VALUE);
     });
 
     afterEach(() => {
         signStub.restore();
+        verifyStub.restore();
     });
 
     it("Should call sign with correct values", async () => {
@@ -46,7 +52,14 @@ describe("JWTAdapter", () => {
         ).to.eventually.be.rejected;
     });
 
-    it("Should call verify with correct values");
+    it("Should call verify with correct values", async () => {
+        const sut = makeSut();
+        const value = faker.random.word();
+        await sut.decrypt(value);
+
+        sinon.assert.calledOnceWithExactly(verifyStub, value, FAKE_SECRET);
+    });
+
     it("Should return decrypted payload on success");
     it("Should throw if jwt verify throws");
 });
