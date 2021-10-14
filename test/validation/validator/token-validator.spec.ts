@@ -37,4 +37,14 @@ describe("TokenValidator", () => {
         expect(error).to.be.instanceOf(InvalidHeaderError);
         expect((error as InvalidHeaderError).headerName).to.be.equals(field);
     });
+
+    it("Should return InvalidHeaderError if token is not a filled", async () => {
+        const { sut, field } = makeSut();
+        const error = await sut.validate({
+            [field]: "Bearer ",
+        });
+
+        expect(error).to.be.instanceOf(InvalidHeaderError);
+        expect((error as InvalidHeaderError).headerName).to.be.equals(field);
+    });
 });
