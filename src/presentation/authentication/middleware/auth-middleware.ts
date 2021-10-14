@@ -1,13 +1,9 @@
 import { Middleware } from "@app/presentation/shared/protocol/middleware";
 import { HttpRequest, HttpResponse } from "@app/presentation/shared/protocol/http";
-import { badRequest, forbidden, noContent, serverError } from "@app/presentation/shared/helper/http/http-helper";
+import { badRequest, forbidden, ok, serverError } from "@app/presentation/shared/helper/http/http-helper";
 import { AccessDeniedError } from "@app/presentation/shared/error/access-denied-error";
 import { Validator } from "@app/presentation/shared/protocol/validator";
 import { LoadAccountByToken } from "@app/domain/authentication/use-case/load-account-by-token";
-
-interface AuthorizationHeader {
-    Authorization?: string;
-}
 
 export class AuthMiddleware implements Middleware {
     public constructor(
@@ -16,7 +12,7 @@ export class AuthMiddleware implements Middleware {
     ) {
     }
 
-    public async handle(request: HttpRequest<unknown, AuthorizationHeader>): Promise<HttpResponse> {
+    public async handle(request: HttpRequest<unknown, AuthMiddleware.AuthorizationHeader>): Promise<HttpResponse<AuthMiddleware.ResponseBody>> {
         try {
             const error = await this.validator.validate(request.headers);
             if (error) {
@@ -33,7 +29,9 @@ export class AuthMiddleware implements Middleware {
                 return forbidden(new AccessDeniedError());
             }
 
-            return noContent();
+            return ok({
+                accountId: account.id
+            });
         } catch (error) {
             return serverError(error as Error);
         }
@@ -45,5 +43,5 @@ export namespace AuthMiddleware {
         Authorization?: string;
     }
 
-    export type ResponseBody = Error | undefined;
+    export type ResponseBody = Error | { accountId: string };
 }
