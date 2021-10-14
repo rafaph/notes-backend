@@ -6,5 +6,5 @@ export interface LoadAccountByEmailRepository {
 
 export namespace LoadAccountByEmailRepository {
     export type Input = string;
-    export type Output = AccountModel | undefined;
+    export type Output = AccountModel | null;
 }

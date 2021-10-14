@@ -12,13 +12,13 @@ describe("RequiredFieldValidator", () => {
         expect(result).to.be.an.instanceOf(MissingParameterError);
     });
 
-    it("Should return undefined if is valid", async () => {
+    it("Should return null if is valid", async () => {
         const field = faker.random.word();
         const sut = makeSut(field);
         const result = await sut.validate({
             [field]: faker.random.word(),
         });
 
-        expect(result).to.be.undefined;
+        expect(result).to.be.null;
     });
 });

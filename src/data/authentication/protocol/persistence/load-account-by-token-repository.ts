@@ -6,5 +6,5 @@ export interface LoadAccountByTokenRepository {
 
 export namespace LoadAccountByTokenRepository {
     export type Input = string;
-    export type Output = AccountModel | undefined;
+    export type Output = AccountModel | null;
 }

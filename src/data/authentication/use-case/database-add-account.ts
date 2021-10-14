@@ -14,7 +14,7 @@ export class DatabaseAddAccount implements AddAccount {
     public async execute(input: AddAccount.Input): Promise<AddAccount.Output> {
         const account = await this.loadAccountByEmailRepository.loadByEmail(input.email);
         if (account) {
-            return undefined;
+            return null;
         }
 
         return this.addAccountRepository.add({

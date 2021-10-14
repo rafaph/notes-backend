@@ -14,7 +14,7 @@ const logger = winston.createLogger({
 
 const wrapper = (original: winston.LeveledLogMethod) => {
     return (message: string, meta?: unknown): void => {
-        original(message, meta ? { logData: meta } : undefined);
+        original(message, meta ? { logData: meta } : null);
     };
 };
 

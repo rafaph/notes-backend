@@ -6,11 +6,11 @@ export class RequiredFieldValidator implements Validator {
     public constructor(private readonly fieldName: string) {
     }
 
-    public async validate(input: unknown): Promise<Error | undefined> {
+    public async validate(input: unknown): Promise<Error | null> {
         if (!_.has(input, this.fieldName)) {
             return new MissingParameterError(this.fieldName);
         }
 
-        return undefined;
+        return null;
     }
 }

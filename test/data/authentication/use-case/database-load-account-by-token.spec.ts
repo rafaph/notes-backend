@@ -74,12 +74,12 @@ describe("DatabaseLoadAccountByToken", () => {
         await expect(sut.execute(input)).to.eventually.be.rejected;
     });
 
-    it("Should returns undefined if Decrypter returns undefined", async () => {
+    it("Should returns null if Decrypter returns null", async () => {
         const { sut, decrypterStub } = makeSut();
-        sinon.stub(decrypterStub, "decrypt").resolves(undefined);
+        sinon.stub(decrypterStub, "decrypt").resolves(null);
 
         const input = makeInput();
-        await expect(sut.execute(input)).to.eventually.be.undefined;
+        await expect(sut.execute(input)).to.eventually.be.null;
     });
 
     it("Should call LoadAccountByTokenRepository with correct value", async () => {
@@ -100,12 +100,12 @@ describe("DatabaseLoadAccountByToken", () => {
         await expect(sut.execute(input)).to.eventually.be.rejected;
     });
 
-    it("Should return undefined if LoadAccountByTokenRepository returns undefined", async () => {
+    it("Should return null if LoadAccountByTokenRepository returns null", async () => {
         const { sut, loadAccountByTokenRepositoryStub } = makeSut();
-        sinon.stub(loadAccountByTokenRepositoryStub, "loadByToken").resolves(undefined);
+        sinon.stub(loadAccountByTokenRepositoryStub, "loadByToken").resolves(null);
 
         const input = makeInput();
-        await expect(sut.execute(input)).to.eventually.be.undefined;
+        await expect(sut.execute(input)).to.eventually.be.null;
     });
 
     it("Should return an account on success", async () => {

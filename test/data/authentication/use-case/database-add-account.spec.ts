@@ -35,7 +35,7 @@ const makeAddAccountRepository = (): AddAccountRepository => {
 const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
     class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
         public async loadByEmail(): Promise<LoadAccountByEmailRepository.Output> {
-            return undefined;
+            return null;
         }
     }
 
@@ -129,7 +129,7 @@ describe("DatabaseAddAccount", () => {
         sinon.assert.calledOnceWithExactly(loadByEmailSpy, email);
     });
 
-    it("Should return undefined if LoadAccountByEmailRepository returns an account", async () => {
+    it("Should return null if LoadAccountByEmailRepository returns an account", async () => {
         const { sut, loadAccountByEmailRepositoryStub } = makeSut();
         sinon.stub(loadAccountByEmailRepositoryStub, "loadByEmail").resolves({
             id: faker.datatype.uuid(),
@@ -140,6 +140,6 @@ describe("DatabaseAddAccount", () => {
 
         const account = await sut.execute(makeInput());
 
-        expect(account).to.be.undefined;
+        expect(account).to.be.null;
     });
 });

@@ -57,12 +57,12 @@ describe("EmailValidator", () => {
         expect(result.message).to.be.equal(expectedError.message);
     });
 
-    it("Should return undefined if isValid returns true", async () => {
+    it("Should return null if isValid returns true", async () => {
         const { sut } = makeSut();
         const result = await sut.validate({
             email: faker.internet.email(),
         });
 
-        expect(result).to.be.undefined;
+        expect(result).to.be.null;
     });
 });

@@ -10,11 +10,11 @@ export class EmailValidator implements Validator {
     ) {
     }
 
-    public async validate(input: unknown): Promise<Error | undefined> {
+    public async validate(input: unknown): Promise<Error | null> {
         if (!this.emailValidator.isValid(_.get(input, this.fieldName))) {
             return new InvalidParameterError(this.fieldName);
         }
 
-        return undefined;
+        return null;
     }
 }

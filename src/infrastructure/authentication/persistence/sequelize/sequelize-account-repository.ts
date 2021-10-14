@@ -28,7 +28,7 @@ export class SequelizeAccountRepository implements AddAccountRepository, LoadAcc
             return account;
         }
 
-        return undefined;
+        return null;
     }
 
     public async updateAccessToken({ id, accessToken }: UpdateAccessTokenRepository.Input): Promise<UpdateAccessTokenRepository.Output> {

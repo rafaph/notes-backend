@@ -22,7 +22,7 @@ describe("AreFieldsDifferentValidator", () => {
         expect(result).to.be.an.instanceOf(InvalidParameterError);
     });
 
-    it("Should return undefined if is valid", async () => {
+    it("Should return null if is valid", async () => {
         const field = faker.random.word();
         const fieldToCompare = faker.random.word();
         const sut = makeSut(field, fieldToCompare);
@@ -32,6 +32,6 @@ describe("AreFieldsDifferentValidator", () => {
             [fieldToCompare]: value,
         });
 
-        expect(result).to.be.undefined;
+        expect(result).to.be.null;
     });
 });

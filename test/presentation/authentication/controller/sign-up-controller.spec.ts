@@ -37,8 +37,8 @@ const makeAuthenticate = (): Authenticate => {
 
 const makeValidator = (): Validator => {
     class ValidatorStub implements Validator {
-        public async validate(): Promise<Error | undefined> {
-            return undefined;
+        public async validate(): Promise<Error | null> {
+            return null;
         }
     }
 
@@ -112,7 +112,7 @@ describe("SignUpController", () => {
 
     it("Should return a forbidden response if email already exists", async () => {
         const { sut, addAccountStub } = makeSut();
-        sinon.stub(addAccountStub, "execute").resolves(undefined);
+        sinon.stub(addAccountStub, "execute").resolves(null);
         const body = makeBody();
         const response = await sut.handle({ body });
 

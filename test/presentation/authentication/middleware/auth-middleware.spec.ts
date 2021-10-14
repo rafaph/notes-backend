@@ -8,8 +8,8 @@ import { AccessDeniedError } from "@app/presentation/shared/error/access-denied-
 
 const makeValidator = (): Validator => {
     class ValidatorStub implements Validator {
-        public async validate(): Promise<Error | undefined> {
-            return undefined;
+        public async validate(): Promise<Error | null> {
+            return null;
         }
     }
 
@@ -108,7 +108,7 @@ describe("AuthMiddleware", () => {
 
     it("Should return a forbidden response if LoadAccountByToken returns no account", async () => {
         const { sut, loadAccountByTokenStub } = makeSut();
-        sinon.stub(loadAccountByTokenStub, "execute").resolves(undefined);
+        sinon.stub(loadAccountByTokenStub, "execute").resolves(null);
 
         const response = await sut.handle({ headers: makeHeaders() });
         const expectedResponse = forbidden(new AccessDeniedError());
