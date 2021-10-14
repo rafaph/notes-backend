@@ -20,6 +20,12 @@ export function ok<Body>(body: Body): HttpResponse<Body> {
     };
 }
 
+export function noContent(): HttpResponse {
+    return {
+        statusCode: HttpStatusCodes.NO_CONTENT
+    };
+}
+
 export function unauthorized(): HttpResponse<Error> {
     return {
         statusCode: HttpStatusCodes.UNAUTHORIZED,

@@ -1,9 +1,10 @@
-export interface HttpRequest<Body = unknown, QueryParams = unknown> {
-    body?: Body,
-    query?: QueryParams
+export interface HttpRequest<Body = unknown, Header = unknown, QueryParams = unknown> {
+    headers?: Header;
+    query?: QueryParams;
+    body?: Body;
 }
 
 export interface HttpResponse<Body = unknown> {
-    statusCode: number,
-    body?: Body
+    statusCode: number;
+    body?: Body;
 }
