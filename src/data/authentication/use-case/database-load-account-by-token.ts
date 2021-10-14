@@ -18,6 +18,6 @@ export class DatabaseLoadAccountByToken implements LoadAccountByToken {
                 return account;
             }
         }
-        return undefined;
+        return null;
     }
 }

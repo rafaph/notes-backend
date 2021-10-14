@@ -8,5 +8,5 @@ export namespace Authenticate {
         password: string;
     }
 
-    export type Output = string | undefined;
+    export type Output = string | null;
 }

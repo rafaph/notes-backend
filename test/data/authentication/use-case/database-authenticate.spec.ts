@@ -100,13 +100,13 @@ describe("DatabaseAuthenticate", () => {
         await expect(sut.execute(makeSutInput())).to.eventually.be.rejected;
     });
 
-    it("Should return undefined if LoadAccountByEmailRepository returns undefined", async () => {
+    it("Should return null if LoadAccountByEmailRepository returns null", async () => {
         const { sut, loadAccountByEmailRepositoryStub } = makeSut();
         sinon.stub(loadAccountByEmailRepositoryStub, "loadByEmail").resolves();
 
         const token = await sut.execute(makeSutInput());
 
-        expect(token).to.be.undefined;
+        expect(token).to.be.null;
     });
 
     it("Should call HasherVerifier with correct password", async () => {
@@ -126,13 +126,13 @@ describe("DatabaseAuthenticate", () => {
         await expect(sut.execute(makeSutInput())).to.eventually.be.rejected;
     });
 
-    it("Should return undefined if HasherVerifier returns false", async () => {
+    it("Should return null if HasherVerifier returns false", async () => {
         const { sut, hashVerifierStub } = makeSut();
         sinon.stub(hashVerifierStub, "verify").resolves(false);
 
         const token = await sut.execute(makeSutInput());
 
-        expect(token).to.be.undefined;
+        expect(token).to.be.null;
     });
 
     it("Should call Encrypter with correct id", async () => {

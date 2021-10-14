@@ -31,6 +31,6 @@ export class DatabaseAuthenticate implements Authenticate {
             }
         }
 
-        return undefined;
+        return null;
     }
 }

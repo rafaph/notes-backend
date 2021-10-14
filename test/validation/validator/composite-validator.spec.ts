@@ -4,8 +4,8 @@ import { CompositeValidator } from "@app/validation/validator/composite-validato
 
 const makeValidator = (): Validator => {
     class ValidatorStub implements Validator {
-        public async validate(): Promise<Error | undefined> {
-            return undefined;
+        public async validate(): Promise<Error | null> {
+            return null;
         }
     }
 
@@ -46,10 +46,10 @@ describe("CompositeValidator", () => {
         expect(result).to.be.deep.equal(error1);
     });
 
-    it("Should return undefined if validator succeed", async () => {
+    it("Should return null if validator succeed", async () => {
         const { sut } = makeSut();
         const result = await sut.validate({});
 
-        expect(result).to.be.undefined;
+        expect(result).to.be.null;
     });
 });

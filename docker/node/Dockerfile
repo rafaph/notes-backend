@@ -1,4 +1,4 @@
-FROM node:lts
+FROM node:14
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 

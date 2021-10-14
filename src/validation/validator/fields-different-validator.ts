@@ -9,11 +9,11 @@ export class FieldsDifferentValidator implements Validator {
     ) {
     }
 
-    public async validate(input: unknown): Promise<Error | undefined> {
+    public async validate(input: unknown): Promise<Error | null> {
         if (_.get(input, this.fieldName) !== _.get(input, this.fieldNameToCompare)) {
             return new InvalidParameterError(this.fieldNameToCompare);
         }
 
-        return undefined;
+        return null;
     }
 }

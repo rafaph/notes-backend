@@ -1,3 +1,3 @@
 export interface Validator<T = unknown> {
-    validate(input: T): Promise<Error | undefined>;
+    validate(input: T): Promise<Error | null>;
 }

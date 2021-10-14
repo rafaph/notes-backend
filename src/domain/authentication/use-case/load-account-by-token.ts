@@ -9,5 +9,5 @@ export namespace LoadAccountByToken {
         accessToken: string;
     }
 
-    export type Output = AccountModel | undefined;
+    export type Output = AccountModel | null;
 }

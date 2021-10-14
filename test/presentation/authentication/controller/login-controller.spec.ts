@@ -10,8 +10,8 @@ import { UnauthorizedError } from "@app/presentation/shared/error/unauthorized-e
 
 const makeValidator = (): Validator => {
     class ValidatorStub implements Validator {
-        public async validate(): Promise<Error | undefined> {
-            return undefined;
+        public async validate(): Promise<Error | null> {
+            return null;
         }
     }
 
@@ -117,7 +117,7 @@ describe("LoginController", () => {
 
     it("Should return a unauthorized response if invalid credentials are provided", async () => {
         const { sut, authenticateStub } = makeSut();
-        sinon.stub(authenticateStub, "execute").resolves(undefined);
+        sinon.stub(authenticateStub, "execute").resolves(null);
         const request = makeRequest();
         const response = await sut.handle(request);
         const expectedResponse = unauthorized();

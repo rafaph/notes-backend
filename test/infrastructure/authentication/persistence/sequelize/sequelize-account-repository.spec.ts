@@ -32,7 +32,7 @@ describe("@integration SequelizeAccountRepository", () => {
 
         const account = await sut.add(input);
 
-        expect(account?.id).to.not.be.undefined;
+        expect(account?.id).to.not.be.null;
         expect(account?.name).to.be.equal(input.name);
         expect(account?.email).to.be.equal(input.email);
         expect(account?.password).to.be.equal(input.password);
@@ -49,19 +49,19 @@ describe("@integration SequelizeAccountRepository", () => {
 
         const account = await sut.loadByEmail(fakeAccount.email);
 
-        expect(account).to.not.be.undefined;
+        expect(account).to.not.be.null;
         expect(account?.id).to.be.equal(fakeAccount.id);
         expect(account?.name).to.be.equal(fakeAccount.name);
         expect(account?.email).to.be.equal(fakeAccount.email);
         expect(account?.password).to.be.equal(fakeAccount.password);
     });
 
-    it("Should return undefined if loadByEmail fails", async () => {
+    it("Should return null if loadByEmail fails", async () => {
         const sut = makeSut(sequelize);
 
         const account = await sut.loadByEmail(faker.internet.email());
 
-        expect(account).to.be.undefined;
+        expect(account).to.be.null;
     });
 
     it("Should update the account accessToken on updateAccessToken success", async () => {
