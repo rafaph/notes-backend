@@ -27,4 +27,14 @@ describe("TokenValidator", () => {
         expect(error).to.be.instanceOf(InvalidHeaderError);
         expect((error as InvalidHeaderError).headerName).to.be.equals(field);
     });
+
+    it("Should return InvalidHeaderError if token is not a Bearer type", async () => {
+        const { sut, field } = makeSut();
+        const error = await sut.validate({
+            [field]: faker.random.word(),
+        });
+
+        expect(error).to.be.instanceOf(InvalidHeaderError);
+        expect((error as InvalidHeaderError).headerName).to.be.equals(field);
+    });
 });
