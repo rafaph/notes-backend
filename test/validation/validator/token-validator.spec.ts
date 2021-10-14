@@ -47,4 +47,11 @@ describe("TokenValidator", () => {
         expect(error).to.be.instanceOf(InvalidHeaderError);
         expect((error as InvalidHeaderError).headerName).to.be.equals(field);
     });
+
+    it("Should return null if token is valid", async () => {
+        const { sut, input } = makeSut();
+        const error = await sut.validate(input);
+
+        expect(error).to.be.null;
+    });
 });
