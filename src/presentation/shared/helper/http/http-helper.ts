@@ -20,9 +20,9 @@ export function ok<Body>(body: Body): HttpResponse<Body> {
     };
 }
 
-export function noContent(): HttpResponse {
+export function noContent(): HttpResponse<undefined> {
     return {
-        statusCode: HttpStatusCodes.NO_CONTENT
+        statusCode: HttpStatusCodes.NO_CONTENT,
     };
 }
 

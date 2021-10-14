@@ -1,6 +1,6 @@
 import faker from "faker";
 import sinon from "sinon";
-import { badRequest, forbidden, noContent, serverError } from "@app/presentation/shared/helper/http/http-helper";
+import { badRequest, forbidden, ok, serverError } from "@app/presentation/shared/helper/http/http-helper";
 import { AuthMiddleware } from "@app/presentation/authentication/middleware/auth-middleware";
 import { LoadAccountByToken } from "@app/domain/authentication/use-case/load-account-by-token";
 import { Validator } from "@app/presentation/shared/protocol/validator";
@@ -16,6 +16,7 @@ const makeValidator = (): Validator => {
     return new ValidatorStub();
 };
 
+const FAKE_ACCOUNT_ID = faker.datatype.uuid();
 const makeLoadAccountByToken = (): LoadAccountByToken => {
     class LoadAccountByTokenStub implements LoadAccountByToken {
         public async execute(): Promise<LoadAccountByToken.Output> {
@@ -23,7 +24,7 @@ const makeLoadAccountByToken = (): LoadAccountByToken => {
                 name: faker.name.firstName(),
                 password: faker.internet.password(),
                 email: faker.internet.email(),
-                id: faker.datatype.uuid(),
+                id: FAKE_ACCOUNT_ID,
             };
         }
     }
@@ -116,12 +117,14 @@ describe("AuthMiddleware", () => {
         expect(response.body).to.be.instanceOf(expectedResponse.body?.constructor);
     });
 
-    it("Should return noContent if Authorization header has a valid token", async () => {
+    it("Should return ok response with accountId if Authorization header has a valid token", async () => {
         const { sut } = makeSut();
 
         const response = await sut.handle({ headers: makeHeaders() });
-        const expectedResponse = noContent();
+        const expectedResponse = ok({
+            accountId: FAKE_ACCOUNT_ID,
+        });
 
-        expect(response.statusCode).to.be.equals(expectedResponse.statusCode);
+        expect(response).to.be.deep.equals(expectedResponse);
     });
 });
