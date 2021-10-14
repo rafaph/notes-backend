@@ -15,7 +15,7 @@ export class TokenValidator implements Validator {
 
         if (
             typeof token !== "string" ||
-            !token.startsWith("Bearer") ||
+            !token.startsWith("Bearer ") ||
             token.substring(7).length === 0
         ) {
             return new this.errorClass(this.fieldName);
