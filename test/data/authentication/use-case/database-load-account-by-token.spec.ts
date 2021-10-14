@@ -6,9 +6,9 @@ import { Decrypter } from "@app/data/authentication/protocol/cryptography/decryp
 import { LoadAccountByTokenRepository } from "@app/data/authentication/protocol/persistence/load-account-by-token-repository";
 
 const FAKE_ACCOUNT_ID = faker.datatype.uuid();
-const makeDecrypterStub = (): Decrypter => {
+const makeDecrypterStub = (): Decrypter<{id: string}> => {
     class DecrypterStub implements Decrypter {
-        public async decrypt(): Promise<unknown> {
+        public async decrypt(): Promise<{id: string}> {
             return {
                 id: FAKE_ACCOUNT_ID,
             };
@@ -96,5 +96,13 @@ describe("DatabaseLoadAccountByToken", () => {
 
         const input = makeInput();
         await expect(sut.execute(input)).to.eventually.be.rejected;
+    });
+
+    it("Should return undefined if LoadAccountByTokenRepository returns undefined", async () => {
+        const { sut, loadAccountByTokenRepositoryStub } = makeSut();
+        sinon.stub(loadAccountByTokenRepositoryStub, "loadByToken").resolves(undefined);
+
+        const input = makeInput();
+        await expect(sut.execute(input)).to.eventually.be.undefined;
     });
 });

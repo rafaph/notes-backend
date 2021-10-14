@@ -1,3 +1,3 @@
-export interface Decrypter {
-    decrypt(value: string): Promise<unknown | undefined>;
+export interface Decrypter<T = unknown> {
+    decrypt(value: string): Promise<T | undefined>;
 }
