@@ -60,7 +60,14 @@ describe("JWTAdapter", () => {
         sinon.assert.calledOnceWithExactly(verifyStub, value, FAKE_SECRET);
     });
 
-    it("Should throw if jwt verify throws");
+    it("Should throw if jwt verify throws", async () => {
+        const sut = makeSut();
+        verifyStub.throwsException();
+
+        await expect(
+            sut.decrypt(faker.random.word()),
+        ).to.eventually.be.rejected;
+    });
 
     it("Should return decrypted payload on success", async () => {
         const sut = makeSut();
