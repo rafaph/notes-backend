@@ -45,4 +45,8 @@ describe("JWTAdapter", () => {
             sut.encrypt(faker.random.word()),
         ).to.eventually.be.rejected;
     });
+
+    it("Should call verify with correct values");
+    it("Should return decrypted payload on success");
+    it("Should throw if jwt verify throws");
 });
