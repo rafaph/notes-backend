@@ -89,4 +89,12 @@ describe("DatabaseLoadAccountByToken", () => {
 
         sinon.assert.calledOnceWithExactly(loadByTokenSpy, input.accessToken);
     });
+
+    it("Should throw if LoadAccountByTokenRepository throws", async () => {
+        const { sut, loadAccountByTokenRepositoryStub } = makeSut();
+        sinon.stub(loadAccountByTokenRepositoryStub, "loadByToken").rejects();
+
+        const input = makeInput();
+        await expect(sut.execute(input)).to.eventually.be.rejected;
+    });
 });
