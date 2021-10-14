@@ -44,4 +44,12 @@ describe("DatabaseLoadAccountByToken", () => {
 
         sinon.assert.calledOnceWithExactly(decryptSpy, input.accessToken);
     });
+
+    it("Should throw if Decrypter throws", async () => {
+        const { sut, decrypterStub } = makeSut();
+        sinon.stub(decrypterStub, "decrypt").rejects();
+
+        const input = makeInput();
+        await expect(sut.execute(input)).to.eventually.be.rejected;
+    });
 });
