@@ -1,4 +1,3 @@
 export interface Decrypter {
-    decrypt(value: string): Promise<Record<string, unknown>>;
+    decrypt(value: string): Promise<unknown | undefined>;
 }
-
