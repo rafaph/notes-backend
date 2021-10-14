@@ -6,9 +6,9 @@ import { Decrypter } from "@app/data/authentication/protocol/cryptography/decryp
 import { LoadAccountByTokenRepository } from "@app/data/authentication/protocol/persistence/load-account-by-token-repository";
 
 const FAKE_ACCOUNT_ID = faker.datatype.uuid();
-const makeDecrypterStub = (): Decrypter<{id: string}> => {
+const makeDecrypterStub = (): Decrypter => {
     class DecrypterStub implements Decrypter {
-        public async decrypt(): Promise<{id: string}> {
+        public async decrypt(): Promise<{ id: string }> {
             return {
                 id: FAKE_ACCOUNT_ID,
             };
@@ -18,15 +18,17 @@ const makeDecrypterStub = (): Decrypter<{id: string}> => {
     return new DecrypterStub();
 };
 
+const FAKE_ACCOUNT = {
+    id: FAKE_ACCOUNT_ID,
+    name: faker.name.firstName(),
+    email: faker.internet.email(),
+    password: faker.internet.password(),
+};
+
 const makeLoadAccountByTokenRepository = (): LoadAccountByTokenRepository => {
     class LoadAccountByTokenRepositoryStub implements LoadAccountByTokenRepository {
         public async loadByToken(): Promise<LoadAccountByTokenRepository.Output> {
-            return {
-                id: FAKE_ACCOUNT_ID,
-                name: faker.name.firstName(),
-                email: faker.internet.email(),
-                password: faker.internet.password(),
-            };
+            return FAKE_ACCOUNT;
         }
     }
 
@@ -49,7 +51,7 @@ const makeSut = (): {
     return {
         sut: new DatabaseLoadAccountByToken(decrypterStub, loadAccountByTokenRepositoryStub),
         decrypterStub,
-        loadAccountByTokenRepositoryStub
+        loadAccountByTokenRepositoryStub,
     };
 };
 
@@ -104,5 +106,13 @@ describe("DatabaseLoadAccountByToken", () => {
 
         const input = makeInput();
         await expect(sut.execute(input)).to.eventually.be.undefined;
+    });
+
+    it("Should return an account on success", async () => {
+        const { sut } = makeSut();
+
+        const input = makeInput();
+        const account = await sut.execute(input);
+        expect(account).to.be.deep.equals(FAKE_ACCOUNT);
     });
 });
