@@ -4,7 +4,7 @@ import { LoadAccountByTokenRepository } from "@app/data/authentication/protocol/
 
 export class DatabaseLoadAccountByToken implements LoadAccountByToken {
     public constructor(
-        private readonly decrypter: Decrypter<{id: string}>,
+        private readonly decrypter: Decrypter,
         private readonly loadAccountByTokenRepository: LoadAccountByTokenRepository,
     ) {
     }
@@ -14,7 +14,7 @@ export class DatabaseLoadAccountByToken implements LoadAccountByToken {
         if (payload) {
             const account = await this.loadAccountByTokenRepository.loadByToken(input.accessToken);
 
-            if (account && account.id === payload.id) {
+            if (account) {
                 return account;
             }
         }

@@ -3,7 +3,7 @@ import { Encrypter } from "@app/data/authentication/protocol/cryptography/encryp
 import { env } from "@app/main/config/env";
 import { Decrypter } from "@app/data/authentication/protocol/cryptography/decrypter";
 
-export class JWTAdapter implements Encrypter, Decrypter<{ id: string }> {
+export class JWTAdapter implements Encrypter, Decrypter {
     public constructor(
         private readonly secret: string = env.JWT_SECRET,
     ) {
