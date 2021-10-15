@@ -4,8 +4,9 @@ import { AccountFactory, SequelizeAccount } from "@app/infrastructure/authentica
 import { LoadAccountByEmailRepository } from "@app/data/authentication/protocol/persistence/load-account-by-email-repository";
 import { fromDatabase } from "@app/infrastructure/authentication/persistence/sequelize/mappers/account";
 import { UpdateAccessTokenRepository } from "@app/data/authentication/protocol/persistence/update-access-token-repository";
+import { LoadAccountByTokenRepository } from "@app/data/authentication/protocol/persistence/load-account-by-token-repository";
 
-export class SequelizeAccountRepository implements AddAccountRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository {
+export class SequelizeAccountRepository implements AddAccountRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository, LoadAccountByTokenRepository {
     private readonly account: SequelizeAccount;
 
     public constructor(sequelize: Sequelize) {
@@ -39,5 +40,19 @@ export class SequelizeAccountRepository implements AddAccountRepository, LoadAcc
                 id,
             }
         });
+    }
+
+    public async loadByToken(accessToken: LoadAccountByTokenRepository.Input): Promise<LoadAccountByTokenRepository.Output> {
+        const account = await this.account.findOne({
+            where: {
+                accessToken,
+            },
+        });
+
+        if (account) {
+            return account;
+        }
+
+        return null;
     }
 }
