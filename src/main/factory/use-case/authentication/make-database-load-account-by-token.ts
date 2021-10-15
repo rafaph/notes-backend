@@ -1,23 +1,13 @@
 import { LoadAccountByToken } from "@app/domain/authentication/use-case/load-account-by-token";
-import { Decrypter } from "@app/data/authentication/protocol/cryptography/decrypter";
-import { LoadAccountByTokenRepository } from "@app/data/authentication/protocol/persistence/load-account-by-token-repository";
+import { DatabaseLoadAccountByToken } from "@app/data/authentication/use-case/database-load-account-by-token";
+import { JWTAdapter } from "@app/infrastructure/authentication/cryptography/jwt-adapter";
+import { SequelizeClient } from "@app/infrastructure/shared/persistence/sequelize-client";
+import { SequelizeAccountRepository } from "@app/infrastructure/authentication/persistence/sequelize/sequelize-account-repository";
 
-export class DatabaseLoadAccountByToken implements LoadAccountByToken {
-    public constructor(
-        private readonly decrypter: Decrypter,
-        private readonly loadAccountByTokenRepository: LoadAccountByTokenRepository,
-    ) {
-    }
+export function makeDatabaseLoadAccountByToken(): LoadAccountByToken {
+    const decrypter = new JWTAdapter();
+    const sequelize = SequelizeClient.getInstance();
+    const sequelizeAccountRepository = new SequelizeAccountRepository(sequelize);
 
-    public async execute(input: LoadAccountByToken.Input): Promise<LoadAccountByToken.Output> {
-        const payload = await this.decrypter.decrypt(input.accessToken);
-        if (payload) {
-            const account = await this.loadAccountByTokenRepository.loadByToken(input.accessToken);
-
-            if (account) {
-                return account;
-            }
-        }
-        return null;
-    }
+    return new DatabaseLoadAccountByToken(decrypter, sequelizeAccountRepository);
 }
