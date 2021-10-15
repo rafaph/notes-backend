@@ -22,7 +22,7 @@ describe("@integration SequelizeAccountRepository", () => {
         sequelizeAccount = AccountFactory(sequelize);
     });
 
-    it("Should return an account on success", async () => {
+    it("Should return an account add on success", async () => {
         const sut = makeSut(sequelize);
         const input = {
             name: faker.name.firstName(),
@@ -83,5 +83,25 @@ describe("@integration SequelizeAccountRepository", () => {
         const account = await sequelizeAccount.findByPk(fakeAccount.id);
         expect(account).to.not.be.null;
         expect(account?.accessToken).to.be.equal(accessToken);
+    });
+
+    it("Should return a account on loadByToken success", async () => {
+        const accessToken = faker.datatype.uuid();
+        const fakeAccount = await sequelizeAccount.create({
+            name: faker.name.firstName(),
+            email: faker.internet.email(),
+            password: faker.internet.password(),
+            accessToken,
+        });
+
+        const sut = makeSut(sequelize);
+
+        const account = await sut.loadByToken(accessToken);
+
+        expect(account).to.not.be.null;
+        expect(account?.id).to.be.equal(fakeAccount.id);
+        expect(account?.name).to.be.equal(fakeAccount.name);
+        expect(account?.email).to.be.equal(fakeAccount.email);
+        expect(account?.password).to.be.equal(fakeAccount.password);
     });
 });
