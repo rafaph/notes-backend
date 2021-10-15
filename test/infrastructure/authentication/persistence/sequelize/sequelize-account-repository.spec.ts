@@ -104,4 +104,12 @@ describe("@integration SequelizeAccountRepository", () => {
         expect(account?.email).to.be.equal(fakeAccount.email);
         expect(account?.password).to.be.equal(fakeAccount.password);
     });
+
+    it("Should return null if loadByToken fails", async () => {
+        const sut = makeSut(sequelize);
+
+        const account = await sut.loadByEmail(faker.internet.email());
+
+        expect(account).to.be.null;
+    });
 });
