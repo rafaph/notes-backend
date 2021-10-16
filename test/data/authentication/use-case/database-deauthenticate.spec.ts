@@ -94,4 +94,11 @@ describe("DatabaseDeauthenticate", () => {
         });
     });
 
+    it("Should throw if UpdateAccessTokenRepository throws", async () => {
+        const { sut, updateAccessTokenRepositoryStub } = makeSut();
+        sinon.stub(updateAccessTokenRepositoryStub, "updateAccessToken").rejects();
+        const input = makeInput();
+
+        await expect(sut.execute(input)).to.eventually.be.rejected;
+    });
 });
