@@ -1,10 +1,14 @@
-import { AddAccount } from "@app/domain/authentication/use-case/add-account";
+import { AccountModel } from "@app/domain/authentication/model/account-model";
 
 export interface AddAccountRepository {
     add(input: AddAccountRepository.Input): Promise<AddAccountRepository.Output>;
 }
 
 export namespace AddAccountRepository {
-    export type Input = AddAccount.Input;
-    export type Output = AddAccount.Output;
+    export interface Input {
+        name: string;
+        email: string;
+        password: string;
+    }
+    export type Output = AccountModel;
 }
