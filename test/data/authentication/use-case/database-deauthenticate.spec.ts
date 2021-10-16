@@ -101,4 +101,13 @@ describe("DatabaseDeauthenticate", () => {
 
         await expect(sut.execute(input)).to.eventually.be.rejected;
     });
+
+    it("Should return true on success", async () => {
+        const { sut } = makeSut();
+        const input = makeInput();
+
+        const deauthenticated = await sut.execute(input);
+
+        expect(deauthenticated).to.be.true;
+    });
 });
