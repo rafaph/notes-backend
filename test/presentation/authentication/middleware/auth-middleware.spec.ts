@@ -34,7 +34,7 @@ const makeLoadAccountByToken = (): LoadAccountByToken => {
 
 const makeHeaders = (token: string = faker.datatype.uuid()): Record<string, string> => {
     return {
-        Authorization: `Bearer ${token}`,
+        authorization: `Bearer ${token}`,
     };
 };
 

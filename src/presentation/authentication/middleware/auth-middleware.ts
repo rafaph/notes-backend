@@ -12,17 +12,16 @@ export class AuthMiddleware implements Middleware {
     ) {
     }
 
-    public async handle(request: HttpRequest<unknown, AuthMiddleware.AuthorizationHeader>): Promise<HttpResponse<AuthMiddleware.ResponseBody>> {
+    public async handle(request: AuthMiddleware.Request): Promise<AuthMiddleware.Response> {
         try {
             const error = await this.validator.validate(request.headers);
             if (error) {
                 return badRequest(error);
             }
 
-            const headers = request.headers as Required<AuthMiddleware.AuthorizationHeader>;
-
+            const headers = request.headers as Required<AuthMiddleware.Headers>;
             const account = await this.loadAccountByToken.execute({
-                accessToken: headers.Authorization.substring(7)
+                accessToken: headers.authorization.substring(7)
             });
 
             if(!account) {
@@ -39,9 +38,11 @@ export class AuthMiddleware implements Middleware {
 }
 
 export namespace AuthMiddleware {
-    export interface AuthorizationHeader {
-        Authorization?: string;
+    export interface Headers {
+        authorization?: string;
     }
 
-    export type ResponseBody = Error | { accountId: string };
+    export type Request = HttpRequest<unknown, Headers>;
+
+    export type Response = HttpResponse<Error | { accountId: string }>;
 }
