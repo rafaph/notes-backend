@@ -57,4 +57,12 @@ describe("DatabaseDeauthenticate", () => {
 
         expect(deauthenticated).to.be.false;
     });
+
+    it("Should throw if LoadAccountByIdRepository throws", async () => {
+        const { sut, loadAccountByIdRepositoryStub } = makeSut();
+        sinon.stub(loadAccountByIdRepositoryStub, "loadById").rejects();
+        const input = makeInput();
+
+        await expect(sut.execute(input)).to.eventually.be.rejected;
+    });
 });
