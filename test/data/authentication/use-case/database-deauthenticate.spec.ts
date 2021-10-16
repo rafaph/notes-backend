@@ -1,6 +1,6 @@
 import sinon from "sinon";
-import { LoadAccountByIdRepository } from "@app/data/authentication/protocol/persistence/load-account-by-id-repository";
 import faker from "faker";
+import { LoadAccountByIdRepository } from "@app/data/authentication/protocol/persistence/load-account-by-id-repository";
 import { DatabaseDeauthenticate } from "@app/data/authentication/use-case/database-deauthenticate";
 import { Deauthenticate } from "@app/domain/authentication/use-case/deauthenticate";
 
@@ -37,7 +37,7 @@ const makeInput = (input: Partial<Deauthenticate.Input> = {}): Deauthenticate.In
     };
 };
 
-describe.only("DatabaseDeauthenticate", () => {
+describe("DatabaseDeauthenticate", () => {
     it("Should call LoadAccountByIdRepository with correct value", async () => {
         const { sut, loadAccountByIdRepositoryStub } = makeSut();
         const loadByIdSpy = sinon.spy(loadAccountByIdRepositoryStub, "loadById");
@@ -46,5 +46,15 @@ describe.only("DatabaseDeauthenticate", () => {
         await sut.execute(input);
 
         sinon.assert.calledOnceWithExactly(loadByIdSpy, input.id);
+    });
+
+    it("Should return false if LoadAccountByIdRepository returns null", async () => {
+        const { sut, loadAccountByIdRepositoryStub } = makeSut();
+        sinon.stub(loadAccountByIdRepositoryStub, "loadById").resolves(null);
+        const input = makeInput();
+
+        const deauthenticated = await sut.execute(input);
+
+        expect(deauthenticated).to.be.false;
     });
 });
