@@ -5,8 +5,9 @@ import { LoadAccountByEmailRepository } from "@app/data/authentication/protocol/
 import { fromDatabase } from "@app/infrastructure/authentication/persistence/sequelize/mappers/account";
 import { UpdateAccessTokenRepository } from "@app/data/authentication/protocol/persistence/update-access-token-repository";
 import { LoadAccountByTokenRepository } from "@app/data/authentication/protocol/persistence/load-account-by-token-repository";
+import { LoadAccountByIdRepository } from "@app/data/authentication/protocol/persistence/load-account-by-id-repository";
 
-export class SequelizeAccountRepository implements AddAccountRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository, LoadAccountByTokenRepository {
+export class SequelizeAccountRepository implements AddAccountRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository, LoadAccountByTokenRepository, LoadAccountByIdRepository {
     private readonly account: SequelizeAccount;
 
     public constructor(sequelize: Sequelize) {
@@ -14,8 +15,8 @@ export class SequelizeAccountRepository implements AddAccountRepository, LoadAcc
     }
 
     public async add(input: AddAccountRepository.Input): Promise<AddAccountRepository.Output> {
-        const databaseAccount = await this.account.create(input);
-        return fromDatabase(databaseAccount);
+        const account = await this.account.create(input);
+        return fromDatabase(account);
     }
 
     public async loadByEmail(email: LoadAccountByEmailRepository.Input): Promise<LoadAccountByEmailRepository.Output> {
@@ -26,7 +27,7 @@ export class SequelizeAccountRepository implements AddAccountRepository, LoadAcc
         });
 
         if (account) {
-            return account;
+            return fromDatabase(account);
         }
 
         return null;
@@ -50,7 +51,21 @@ export class SequelizeAccountRepository implements AddAccountRepository, LoadAcc
         });
 
         if (account) {
-            return account;
+            return fromDatabase(account);
+        }
+
+        return null;
+    }
+
+    public async loadById(id: LoadAccountByIdRepository.Input): Promise<LoadAccountByIdRepository.Output> {
+        const account = await this.account.findOne({
+            where: {
+                id,
+            },
+        });
+
+        if (account) {
+            return fromDatabase(account);
         }
 
         return null;
