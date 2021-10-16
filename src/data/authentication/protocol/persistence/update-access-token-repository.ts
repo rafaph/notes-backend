@@ -5,7 +5,7 @@ export interface UpdateAccessTokenRepository {
 export namespace UpdateAccessTokenRepository {
     export interface Input {
         id: string;
-        accessToken: string;
+        accessToken: string | null;
     }
 
     export type Output = void;
