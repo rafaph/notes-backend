@@ -1,39 +1,34 @@
 import sinon from "sinon";
 import faker from "faker";
 import { LogoutController } from "@app/presentation/authentication/controller/logout-controller";
-import { LoadAccountById } from "@app/domain/authentication/use-case/load-account-by-id";
+import { Deauthenticate } from "@app/domain/authentication/use-case/deauthenticate";
 
-const makeLoadAccountById = (): LoadAccountById => {
-    class LoadAccountByIdStub implements LoadAccountById {
-        public async execute(): Promise<LoadAccountById.Output> {
-            return {
-                id: faker.datatype.uuid(),
-                name: faker.name.firstName(),
-                password: faker.internet.password(),
-                email: faker.internet.email(),
-            };
+const makeDeauthenticate = (): Deauthenticate => {
+    class DeauthenticateStub implements Deauthenticate {
+        public async execute(): Promise<Deauthenticate.Output> {
+            return undefined;
         }
     }
 
-    return new LoadAccountByIdStub();
+    return new DeauthenticateStub();
 };
 
 
 const makeSut = (): {
     sut: LogoutController
-    loadAccountByIdStub: LoadAccountById
+    deauthenticateStub: Deauthenticate
 } => {
-    const loadAccountByIdStub = makeLoadAccountById();
+    const deauthenticateStub = makeDeauthenticate();
     return {
-        sut: new LogoutController(loadAccountByIdStub),
-        loadAccountByIdStub,
+        sut: new LogoutController(deauthenticateStub),
+        deauthenticateStub,
     };
 };
 
 describe.only("LogoutController", () => {
     it("Should call LoadAccountById with correct value", async () => {
-        const { sut, loadAccountByIdStub } = makeSut();
-        const executeSpy = sinon.spy(loadAccountByIdStub, "execute");
+        const { sut, deauthenticateStub } = makeSut();
+        const executeSpy = sinon.spy(deauthenticateStub, "execute");
         const accountId = faker.datatype.uuid();
 
         await sut.handle({
