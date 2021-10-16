@@ -2,7 +2,7 @@ import sinon from "sinon";
 import faker from "faker";
 import { LogoutController } from "@app/presentation/authentication/controller/logout-controller";
 import { Deauthenticate } from "@app/domain/authentication/use-case/deauthenticate";
-import { serverError } from "@app/presentation/shared/helper/http/http-helper";
+import { noContent, serverError } from "@app/presentation/shared/helper/http/http-helper";
 
 const makeDeauthenticate = (): Deauthenticate => {
     class DeauthenticateStub implements Deauthenticate {
@@ -13,7 +13,6 @@ const makeDeauthenticate = (): Deauthenticate => {
 
     return new DeauthenticateStub();
 };
-
 
 const makeSut = (): {
     sut: LogoutController
@@ -26,7 +25,7 @@ const makeSut = (): {
     };
 };
 
-describe.only("LogoutController", () => {
+describe("LogoutController", () => {
     it("Should call Deauthenticate with correct value", async () => {
         const { sut, deauthenticateStub } = makeSut();
         const executeSpy = sinon.spy(deauthenticateStub, "execute");
@@ -49,5 +48,14 @@ describe.only("LogoutController", () => {
 
         expect(response.statusCode).to.be.equal(expectedResponse.statusCode);
         expect(response.body).to.be.instanceOf(expectedResponse.body?.constructor);
+    });
+
+    it("Should return a no content response on success", async () => {
+        const { sut } = makeSut();
+
+        const response = await sut.handle({});
+        const expectedResponse = noContent();
+
+        expect(response).to.be.deep.equal(expectedResponse);
     });
 });
