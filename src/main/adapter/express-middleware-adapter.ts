@@ -6,7 +6,9 @@ export class ExpressMiddlewareAdapter {
     public static adapt(middleware: Middleware) {
         return async (request: Request, response: Response, next: NextFunction): Promise<void> => {
             const httpRequest: HttpRequest = {
+                body: request.body,
                 headers: request.headers,
+                query: request.query,
             };
 
             const httpResponse = await middleware.handle(httpRequest);

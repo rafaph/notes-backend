@@ -18,12 +18,12 @@ describe("makeAuthValidator", () => {
 
         const validators = [];
 
-        const requiredFields = ["Authorization"];
+        const requiredFields = ["authorization"];
         for (const field of requiredFields) {
             validators.push(new RequiredFieldValidator(field, MissingHeaderError));
         }
 
-        validators.push(new TokenValidator("Authorization"));
+        validators.push(new TokenValidator("authorization"));
 
         sinon.assert.calledOnceWithExactly(constructorStub, validators);
     });

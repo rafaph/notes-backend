@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { Request, Response } from "express";
 import { Controller } from "@app/presentation/shared/protocol/controller";
 import { HttpRequest } from "@app/presentation/shared/protocol/http";
@@ -7,6 +8,8 @@ export class ExpressRouteAdapter {
         return async (request: Request, response: Response): Promise<void> => {
             const httpRequest: HttpRequest = {
                 body: request.body,
+                headers: request.headers,
+                data: _.get(request, "data"),
             };
 
             const httpResponse = await controller.handle(httpRequest);

@@ -7,11 +7,11 @@ import { TokenValidator } from "@app/validation/validator/token-validator";
 export function makeAuthValidator(): Validator {
     const validators = [];
 
-    const requiredFields = ["Authorization"];
+    const requiredFields = ["authorization"];
     for (const field of requiredFields) {
         validators.push(new RequiredFieldValidator(field, MissingHeaderError));
     }
-    validators.push(new TokenValidator("Authorization"));
+    validators.push(new TokenValidator("authorization"));
 
     return new CompositeValidator(validators);
 }
