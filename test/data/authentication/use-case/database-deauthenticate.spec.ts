@@ -3,12 +3,14 @@ import faker from "faker";
 import { LoadAccountByIdRepository } from "@app/data/authentication/protocol/persistence/load-account-by-id-repository";
 import { DatabaseDeauthenticate } from "@app/data/authentication/use-case/database-deauthenticate";
 import { Deauthenticate } from "@app/domain/authentication/use-case/deauthenticate";
+import { UpdateAccessTokenRepository } from "@app/data/authentication/protocol/persistence/update-access-token-repository";
 
+const FAKE_ACCOUNT_ID = faker.datatype.uuid();
 const makeLoadAccountByIdRepository = (): LoadAccountByIdRepository => {
     class LoadAccountByIdRepositoryStub implements LoadAccountByIdRepository {
         public async loadById(): Promise<LoadAccountByIdRepository.Output> {
             return {
-                id: faker.datatype.uuid(),
+                id: FAKE_ACCOUNT_ID,
                 name: faker.name.firstName(),
                 password: faker.internet.password(),
                 email: faker.internet.email(),
@@ -19,14 +21,27 @@ const makeLoadAccountByIdRepository = (): LoadAccountByIdRepository => {
     return new LoadAccountByIdRepositoryStub();
 };
 
+const makeUpdateAccessTokenRepository = (): UpdateAccessTokenRepository => {
+    class UpdateAccessTokenRepositoryStub implements UpdateAccessTokenRepository {
+        public async updateAccessToken(): Promise<UpdateAccessTokenRepository.Output> {
+            return undefined;
+        }
+    }
+
+    return new UpdateAccessTokenRepositoryStub();
+};
+
 const makeSut = (): {
-    sut: DatabaseDeauthenticate,
+    sut: DatabaseDeauthenticate
     loadAccountByIdRepositoryStub: LoadAccountByIdRepository
+    updateAccessTokenRepositoryStub: UpdateAccessTokenRepository
 } => {
     const loadAccountByIdRepositoryStub = makeLoadAccountByIdRepository();
+    const updateAccessTokenRepositoryStub = makeUpdateAccessTokenRepository();
     return {
-        sut: new DatabaseDeauthenticate(loadAccountByIdRepositoryStub),
+        sut: new DatabaseDeauthenticate(loadAccountByIdRepositoryStub, updateAccessTokenRepositoryStub),
         loadAccountByIdRepositoryStub,
+        updateAccessTokenRepositoryStub,
     };
 };
 
@@ -65,4 +80,18 @@ describe("DatabaseDeauthenticate", () => {
 
         await expect(sut.execute(input)).to.eventually.be.rejected;
     });
+
+    it("Should call UpdateAccessTokenRepository with correct values", async () => {
+        const { sut, updateAccessTokenRepositoryStub } = makeSut();
+        const updateAccessTokenSpy = sinon.spy(updateAccessTokenRepositoryStub, "updateAccessToken");
+        const input = makeInput();
+
+        await sut.execute(input);
+
+        sinon.assert.calledOnceWithExactly(updateAccessTokenSpy, {
+            id: FAKE_ACCOUNT_ID,
+            accessToken: null,
+        });
+    });
+
 });
