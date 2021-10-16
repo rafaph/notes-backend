@@ -20,7 +20,7 @@ export function ok<Body>(body: Body): HttpResponse<Body> {
     };
 }
 
-export function noContent(): HttpResponse<null> {
+export function noContent(): HttpResponse<undefined> {
     return {
         statusCode: HttpStatusCodes.NO_CONTENT,
     };

@@ -9,7 +9,7 @@ export class LogoutController implements Controller {
     ) {
     }
 
-    public async handle(request: HttpRequest<unknown, unknown, unknown, { accountId: string }>): Promise<HttpResponse> {
+    public async handle(request: LogoutController.Request): Promise<LogoutController.Response> {
         try {
             const id = request.data?.accountId as string;
             await this.deauthenticate.execute({ id });
@@ -19,4 +19,14 @@ export class LogoutController implements Controller {
             return serverError(error as Error);
         }
     }
+}
+
+export namespace LogoutController {
+    interface Data {
+        accountId: string;
+    }
+
+    export type Request = HttpRequest<unknown, unknown, unknown, Data>;
+
+    export type Response = HttpResponse<Error | undefined>;
 }
