@@ -1,7 +1,7 @@
 import { Controller } from "@app/presentation/shared/protocol/controller";
 import { HttpRequest, HttpResponse } from "@app/presentation/shared/protocol/http";
 import { Deauthenticate } from "@app/domain/authentication/use-case/deauthenticate";
-import { serverError } from "@app/presentation/shared/helper/http/http-helper";
+import { noContent, serverError } from "@app/presentation/shared/helper/http/http-helper";
 
 export class LogoutController implements Controller {
     public constructor(
@@ -14,9 +14,7 @@ export class LogoutController implements Controller {
             const id = request.data?.accountId as string;
             await this.deauthenticate.execute({ id });
 
-            return {
-                statusCode: 200
-            };
+            return noContent();
         } catch (error) {
             return serverError(error as Error);
         }
