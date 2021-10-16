@@ -8,6 +8,10 @@ export class DatabaseDeauthenticate implements Deauthenticate {
     }
 
     public async execute(input: Deauthenticate.Input): Promise<Deauthenticate.Output> {
-        await this.loadAccountByIdRepository.loadById(input.id);
+        const account = await this.loadAccountByIdRepository.loadById(input.id);
+        if (account) {
+            return false;
+        }
+        return false;
     }
 }
