@@ -130,4 +130,12 @@ describe("@integration SequelizeAccountRepository", () => {
         expect(account?.email).to.be.equal(fakeAccount.email);
         expect(account?.password).to.be.equal(fakeAccount.password);
     });
+
+    it("Should return null if loadById fails", async () => {
+        const sut = makeSut(sequelize);
+
+        const account = await sut.loadById(faker.datatype.uuid());
+
+        expect(account).to.be.null;
+    });
 });
