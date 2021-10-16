@@ -13,7 +13,7 @@ export class ExpressMiddlewareAdapter {
 
             if (httpResponse.statusCode > 199 && httpResponse.statusCode < 300) {
                 if (httpResponse.body) {
-                    Object.assign(request, httpResponse.body);
+                    Object.assign(request, { data: httpResponse.body });
                 }
                 next();
             } else {
