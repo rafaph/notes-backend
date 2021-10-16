@@ -14,19 +14,19 @@ export class SignUpController implements Controller {
     ) {
     }
 
-    public async handle(request: HttpRequest<SignUpController.RequestBody>): Promise<HttpResponse<SignUpController.ResponseBody>> {
+    public async handle(request: SignUpController.Request): Promise<SignUpController.Response> {
         try {
             const error = await this.validator.validate(request.body);
             if (error) {
                 return badRequest(error);
             }
 
-            const { name, email, password } = request.body as SignUpController.RequestBody;
+            const { name, email, password } = request.body as Required<SignUpController.Body>;
 
             const account = await this.addAccount.execute({
-                name: name as string,
-                email: email as string,
-                password: password as string,
+                name,
+                email,
+                password,
             });
 
             if(!account) {
@@ -48,12 +48,14 @@ export class SignUpController implements Controller {
 }
 
 export namespace SignUpController {
-    export interface RequestBody {
+    export interface Body {
         name?: string;
         email?: string;
         password?: string;
         passwordConfirmation?: string;
     }
 
-    export type ResponseBody = Error | { token: string };
+    export type Request = HttpRequest<Body>;
+
+    export type Response = HttpResponse<Error | { token: string }>;
 }

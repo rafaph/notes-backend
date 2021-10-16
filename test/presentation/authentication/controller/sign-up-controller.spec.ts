@@ -63,14 +63,14 @@ const makeSut = (): {
     };
 };
 
-const makeBody = (overrides: Partial<SignUpController.RequestBody> = {}): Required<SignUpController.RequestBody> => {
+const makeBody = (body: Partial<SignUpController.Body> = {}): Required<SignUpController.Body> => {
     const password = faker.internet.password();
     return {
         name: faker.name.firstName(),
         email: faker.internet.email(),
         password,
         passwordConfirmation: password,
-        ...overrides,
+        ...body,
     };
 };
 
