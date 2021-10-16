@@ -45,7 +45,7 @@ const makeSut = (): {
     };
 };
 
-const makeRequest = (body: LoginController.RequestBody = {}): HttpRequest<LoginController.RequestBody> => ({
+const makeRequest = (body: LoginController.Body = {}): HttpRequest<Required<LoginController.Body>> => ({
     body: {
         email: faker.internet.email(),
         password: faker.internet.password(),

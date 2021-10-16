@@ -11,19 +11,16 @@ export class LoginController implements Controller {
     ) {
     }
 
-    public async handle(request: HttpRequest<LoginController.RequestBody>): Promise<HttpResponse<LoginController.ResponseBody>> {
+    public async handle(request: LoginController.Request): Promise<LoginController.Response> {
         try {
             const error = await this.validator.validate(request.body);
             if (error) {
                 return badRequest(error);
             }
 
-            const { email, password } = request.body as LoginController.RequestBody;
+            const { email, password } = request.body as Required<LoginController.Body>;
 
-            const token = await this.authenticate.execute({
-                email: email as string,
-                password: password as string,
-            });
+            const token = await this.authenticate.execute({ email, password });
 
             if (!token) {
                 return unauthorized();
@@ -37,10 +34,12 @@ export class LoginController implements Controller {
 }
 
 export namespace LoginController {
-    export interface RequestBody {
+    export interface Body {
         email?: string;
         password?: string;
     }
 
-    export type ResponseBody = Error | { token: string };
+    export type Request = HttpRequest<Body>;
+
+    export type Response = HttpResponse<Error | { token: string }>;
 }
