@@ -1,50 +1,37 @@
 import _ from "lodash";
 import { expect } from "chai";
 import sinon from "sinon";
-import faker from "faker";
-import { UserService } from "@app/domains/user/services/user-service";
-import { userServiceFactory } from "@test/helpers/user-factories";
-import { ICreateUserService } from "@app/domains/user/interfaces/in/user-service";
 import { FORBIDDEN } from "http-status";
+import { UserService } from "@app/domains/user/services/user-service";
+import { makeUserPayloadWithoutAccessToken, makeUserService, makeUserWithID } from "@test/helpers/user-factories";
 
 describe("UserService @unit", () => {
-    afterEach(() => {
-        sinon.restore();
-    });
-
     describe("Sanity tests", () => {
-        it("should exists #sanity", () => {
+        it("should exists", () => {
             expect(UserService).to.be.not.null;
             expect(UserService).to.be.not.undefined;
         });
 
-        it("should be a class #sanity", () => {
-            expect(userServiceFactory()).to.be.instanceOf(UserService);
+        it("should be a class", () => {
+            expect(makeUserService()).to.be.instanceOf(UserService);
         });
 
-        it("should implements IUserService #sanity", () => {
-            const instance = userServiceFactory();
+        it("should implements IUserService", () => {
+            const instance = makeUserService();
             expect(instance.create).to.be.instanceOf(Function);
         });
     });
 
     describe("Unit tests", () => {
         context("create method", () => {
-            const makeInput = (): ICreateUserService.Input => ({
-                name: faker.name.firstName(),
-                email: faker.internet.email(),
-                password: faker.internet.password(),
-            });
-
             it("should create an user", async () => {
-                const input = makeInput();
+                const input = makeUserPayloadWithoutAccessToken();
+                const output = makeUserWithID();
                 const findByEmail = sinon.stub().resolves();
-                const create = sinon.stub().resolves({
-                    name: input.name,
-                    email: input.email,
-                });
+                const create = sinon.stub().resolves(output);
                 const hash = sinon.stub().resolves(input.password);
-                const sut = userServiceFactory(
+
+                const sut = makeUserService(
                     {
                         findByEmail,
                         create,
@@ -56,7 +43,7 @@ describe("UserService @unit", () => {
 
                 const result = await sut.create(input);
 
-                expect(result).to.be.deep.equal(_.pick(input, ["name", "email"]));
+                expect(result).to.be.deep.equal(_.pick(output, "name", "email"));
                 expect(findByEmail).to.have.been.calledOnceWithExactly(input.email, ["id"]);
                 expect(hash).to.have.been.calledOnceWithExactly(input.password);
                 expect(create).to.have.been.calledOnceWithExactly({
@@ -66,9 +53,10 @@ describe("UserService @unit", () => {
             });
 
             it("should throw if userRepository.findByEmail returns a user", async () => {
-                const input = makeInput();
+                const input = makeUserPayloadWithoutAccessToken();
                 const findByEmail = sinon.stub().resolves(true);
-                const sut = userServiceFactory({
+
+                const sut = makeUserService({
                     findByEmail,
                 });
 
@@ -77,9 +65,10 @@ describe("UserService @unit", () => {
             });
 
             it("should throw if userRepository.findByEmail throws", async () => {
-                const input = makeInput();
+                const input = makeUserPayloadWithoutAccessToken();
                 const findByEmail = sinon.stub().rejects();
-                const sut = userServiceFactory({
+
+                const sut = makeUserService({
                     findByEmail,
                 });
 
@@ -88,9 +77,10 @@ describe("UserService @unit", () => {
             });
 
             it("should throw if userRepository.create throws", async () => {
-                const input = makeInput();
+                const input = makeUserPayloadWithoutAccessToken();
                 const create = sinon.stub().rejects();
-                const sut = userServiceFactory({
+
+                const sut = makeUserService({
                     create,
                 });
 
@@ -99,9 +89,10 @@ describe("UserService @unit", () => {
             });
 
             it("should throw if hashing.create hash", async () => {
-                const input = makeInput();
+                const input = makeUserPayloadWithoutAccessToken();
                 const hash = sinon.stub().rejects();
-                const sut = userServiceFactory(undefined, {
+
+                const sut = makeUserService(undefined, {
                     hash,
                 });
 

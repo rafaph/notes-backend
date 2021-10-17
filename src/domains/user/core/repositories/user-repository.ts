@@ -11,9 +11,9 @@ import { INTERNAL_SERVER_ERROR } from "http-status";
 export class UserRepository implements IUserRepository {
     public constructor(@inject("UserDAO") private readonly userDAO: IUserDAO) {}
 
-    public findByEmail(email: string): Promise<UserWithID | void> {
+    public async findByEmail(email: string): Promise<UserWithID | void> {
         try {
-            return this.userDAO.findOne({
+            return await this.userDAO.findOne({
                 where: {
                     email,
                 },
@@ -24,9 +24,9 @@ export class UserRepository implements IUserRepository {
         }
     }
 
-    public create(user: UserPayload): Promise<UserWithID> {
+    public async create(user: UserPayload): Promise<UserWithID> {
         try {
-            return this.userDAO.save(user);
+            return await this.userDAO.save(user);
         } catch (error) {
             Logger.error("Unable to create user", error);
             throw new ResponseError(INTERNAL_SERVER_ERROR, "Error to create user.");
