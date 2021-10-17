@@ -3,7 +3,7 @@ import { INTERNAL_SERVER_ERROR, UNAUTHORIZED } from 'http-status';
 import { Logger } from "@app/domains/common/utils/logger";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const errorHandler: ErrorRequestHandler = (error, req, res, _next) => {
+export const errorHandler: ErrorRequestHandler = (error, req, res, _next) => {
     Logger.error(`Request to ${req.method} ${req.path} responded with an error`, error);
 
     if (error.name === 'ResponseError') {
@@ -14,5 +14,3 @@ const errorHandler: ErrorRequestHandler = (error, req, res, _next) => {
         res.status(INTERNAL_SERVER_ERROR).json({ message: error.message });
     }
 };
-
-export default errorHandler;
