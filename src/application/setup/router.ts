@@ -1,7 +1,7 @@
 import { Router as ExpressRouter, RequestHandler } from "express";
 import { container, injectable, Lifecycle, scoped, injectAll } from "tsyringe";
 import { NOT_FOUND } from "http-status";
-import Controller from "@app/domains/common/interfaces/controller";
+import { Controller } from "@app/domains/common/interfaces/controller";
 import { ResponseError } from "@app/domains/common/utils/response-error";
 import { Logger } from "@app/domains/common/utils/logger";
 

@@ -3,7 +3,7 @@
     "version": "1.4.0",
     "private": true,
     "scripts": {
-        "start": "node -r ./boot-paths.js dist/main/server.js",
+        "start": "node -r ./boot-paths.js dist/index.js",
         "dev": "ts-node-dev --watch=src/**/*.ts --inspect=0.0.0.0:9229 --exit-child --respawn --transpile-only -r tsconfig-paths/register src/index.ts",
         "test": "mocha",
         "test:watch": "npm test -- --watch",
