@@ -2,7 +2,7 @@ timeout: 15000
 extension:
     - ts
 spec:
-    - test/**/*.spec.ts
+    - test/**/*.test.ts
 require:
     - ts-node/register
     - tsconfig-paths/register
