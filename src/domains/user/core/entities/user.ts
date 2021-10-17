@@ -21,7 +21,7 @@ export class User extends BaseEntity {
         nullable: true,
         default: null,
     })
-    public access_token!: string | null;
+    public access_token: string | null = null;
 
     @CreateDateColumn()
     public created_at!: Date;

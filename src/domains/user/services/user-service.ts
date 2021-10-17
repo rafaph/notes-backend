@@ -1,10 +1,11 @@
 import _ from "lodash";
 import { inject, Lifecycle, registry, scoped } from "tsyringe";
 import { FORBIDDEN } from "http-status";
-import { ICreateUserService, IUserService } from "@app/domains/user/interfaces/in/user-service";
+import { IUserService } from "@app/domains/user/interfaces/in/user-service";
 import { IUserRepository } from "@app/domains/user/interfaces/in/user-repository";
 import { ResponseError } from "@app/domains/common/utils/response-error";
 import { IHasher } from "@app/domains/common/interfaces/hashing";
+import { UserBasicFields, UserPayloadWithoutAccessToken } from "@app/domains/user/types/user";
 
 @scoped(Lifecycle.ResolutionScoped)
 @registry([{ token: "UserService", useClass: UserService }])
@@ -14,7 +15,7 @@ export class UserService implements IUserService {
         @inject("Hashing") private readonly hashing: IHasher,
     ) {}
 
-    public async create(input: ICreateUserService.Input): Promise<ICreateUserService.Output> {
+    public async create(input: UserPayloadWithoutAccessToken): Promise<UserBasicFields> {
         const foundUser = await this.userRepository.findByEmail(input.email, ["id"]);
 
         if (foundUser) {
