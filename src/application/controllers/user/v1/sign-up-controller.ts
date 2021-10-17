@@ -1,7 +1,8 @@
 import { Lifecycle, registry, scoped } from "tsyringe";
+import { CREATED } from "http-status";
 import Joi from "joi";
-import Controller, { Request, Response } from "@app/domains/common/interfaces/controller";
 import { requestValidator } from "@app/application/middlewares/request-validator";
+import { Controller, Request, Response } from "@app/domains/common/interfaces/controller";
 
 namespace CreateUserController {
     export interface Request {
@@ -18,8 +19,8 @@ namespace CreateUserController {
 }
 
 @scoped(Lifecycle.ResolutionScoped)
-@registry([{ token: "Controller", useClass: CreateUserController }])
-export default class CreateUserController extends Controller<
+@registry([{ token: "Controller", useClass: SignUpController }])
+export class SignUpController extends Controller<
     CreateUserController.Request,
     CreateUserController.Response
 > {
@@ -33,16 +34,13 @@ export default class CreateUserController extends Controller<
     public middlewares = [requestValidator(this.schema, "body")];
 
     public constructor() {
-        super("post", "/signup");
+        super("post", "/api/v1/sign-up");
     }
 
-    public handle(
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        _req: Request<CreateUserController.Request, "body">,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        _res: Response<CreateUserController.Response>,
+    public async handle(
+        req: Request<CreateUserController.Request, "body">,
+        res: Response<CreateUserController.Response>,
     ): Promise<void> {
-        // TODO: implement me
-        return Promise.resolve(undefined);
+        res.status(CREATED).json(req.body);
     }
 }

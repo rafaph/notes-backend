@@ -13,7 +13,7 @@ export class ResponseError extends Error {
         this.name = "ResponseError";
         this.status = status;
         //@ts-ignore
-        this.statusText = statuses[status];
+        this.statusText = httpStatus[status];
         this.code = code;
     }
 }

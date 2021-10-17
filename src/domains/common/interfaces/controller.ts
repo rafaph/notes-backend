@@ -20,7 +20,7 @@ export type Response<T> = ExpressResponse<T>;
 
 export type RequestHandler = ExpressRequestHandler;
 
-export default abstract class Controller<T, R, F extends ParametersField = "body"> {
+export abstract class Controller<T, R, F extends ParametersField = "body"> {
     protected constructor(public readonly verb: HttpVerb, public readonly path: string) {}
 
     public abstract readonly middlewares: RequestHandler[];

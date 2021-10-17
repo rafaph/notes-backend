@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "start": "node -r ./boot-paths.js dist/main/server.js",
-        "dev": "ts-node-dev --watch=src/**/*.ts --inspect=0.0.0.0:9229 --exit-child --respawn --transpile-only -r tsconfig-paths/register src/main/server.ts",
+        "dev": "ts-node-dev --watch=src/**/*.ts --inspect=0.0.0.0:9229 --exit-child --respawn --transpile-only -r tsconfig-paths/register src/index.ts",
         "test": "mocha",
         "test:watch": "npm test -- --watch",
         "test:integration": "npm test -- --fgrep @integration",
@@ -33,6 +33,7 @@
         "@types/mocha": "^9.0.0",
         "@types/node": "^16.11.0",
         "@types/pg": "^8.6.1",
+        "@types/response-time": "^2.3.5",
         "@types/sinon": "^10.0.4",
         "@types/sinon-chai": "^3.2.5",
         "@types/supertest": "^2.0.11",
@@ -56,7 +57,6 @@
         "typescript": "~4.4.4"
     },
     "dependencies": {
-        "ts-node": "^10.3.0",
         "argon2": "^0.28.2",
         "cors": "^2.8.5",
         "express": "^4.17.1",
@@ -66,6 +66,8 @@
         "lodash": "^4.17.21",
         "pg": "^8.7.1",
         "reflect-metadata": "^0.1.13",
+        "response-time": "^2.3.2",
+        "ts-node": "^10.3.0",
         "tsconfig-paths": "^3.11.0",
         "tsyringe": "^4.6.0",
         "typeorm": "^0.2.38",
