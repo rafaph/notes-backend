@@ -9,6 +9,7 @@ export class CreateUserTable1634435024930 implements MigrationInterface {
                     {
                         name: "id",
                         type: "varchar",
+                        default: "gen_random_uuid()",
                         isPrimary: true,
                     },
                     {
@@ -28,7 +29,7 @@ export class CreateUserTable1634435024930 implements MigrationInterface {
                     },
                     {
                         name: "access_token",
-                        type: "varchar",
+                        type: "text",
                         isNullable: true,
                         default: null,
                     },
