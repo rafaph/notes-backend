@@ -1,7 +1,7 @@
 import { UserData, UserPayload } from "@app/domains/user/types/user";
 
 export interface ICreateUserService {
-    create(user: ICreateUserService.Input): Promise<ICreateUserService.Output>;
+    create(input: ICreateUserService.Input): Promise<ICreateUserService.Output>;
 }
 
 export namespace ICreateUserService {

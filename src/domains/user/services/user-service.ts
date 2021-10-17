@@ -14,20 +14,19 @@ export class UserService implements IUserService {
         @inject("Hashing") private readonly hashing: IHasher,
     ) {}
 
-    public async create(user: ICreateUserService.Input): Promise<ICreateUserService.Output> {
-        const foundUser = await this.userRepository.findByEmail(user.email, ["id"]);
+    public async create(input: ICreateUserService.Input): Promise<ICreateUserService.Output> {
+        const foundUser = await this.userRepository.findByEmail(input.email, ["id"]);
 
         if (foundUser) {
             throw new ResponseError(FORBIDDEN, "The provided email is already in use.");
         }
 
         const createdUser = await this.userRepository.create({
-            ...user,
-            password: await this.hashing.hash(user.password),
+            ...input,
+            password: await this.hashing.hash(input.password),
             access_token: null,
         });
 
         return _.pick(createdUser, ["name", "email"]);
     }
-
 }
