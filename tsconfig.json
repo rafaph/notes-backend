@@ -16,7 +16,7 @@
         "experimentalDecorators": true,
         "incremental": false,
         "lib": [
-            "ES2020"
+            "ESNext"
         ],
         "module": "commonjs",
         "noImplicitAny": true,
@@ -31,15 +31,10 @@
         "strictBindCallApply": true,
         "strictFunctionTypes": true,
         "strictNullChecks": true,
-        "target": "ES2019",
-        "typeRoots": [
-            "node_modules/@types",
-            "@types"
-        ]
+        "target": "ES2019"
     },
     "include": [
         "src",
-        "test",
-        "index.ts"
+        "test"
     ]
 }
