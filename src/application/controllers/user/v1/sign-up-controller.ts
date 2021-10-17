@@ -1,8 +1,9 @@
-import { Lifecycle, registry, scoped } from "tsyringe";
+import { inject, Lifecycle, registry, scoped } from "tsyringe";
 import { CREATED } from "http-status";
 import Joi from "joi";
 import { requestValidator } from "@app/application/middlewares/request-validator";
 import { Controller, Request, Response } from "@app/domains/common/interfaces/controller";
+import { ICreateUserService } from "@app/domains/user/interfaces/in/user-service";
 
 namespace CreateUserController {
     export interface Request {
@@ -12,18 +13,15 @@ namespace CreateUserController {
         password_confirmation: string;
     }
 
-    export interface Response {
+    export type Response = {
         name: string;
         email: string;
-    }
+    };
 }
 
 @scoped(Lifecycle.ResolutionScoped)
 @registry([{ token: "Controller", useClass: SignUpController }])
-export class SignUpController extends Controller<
-    CreateUserController.Request,
-    CreateUserController.Response
-> {
+export class SignUpController extends Controller<CreateUserController.Request, CreateUserController.Response> {
     private readonly schema = Joi.object({
         name: Joi.string().required(),
         email: Joi.string().email().required(),
@@ -33,14 +31,16 @@ export class SignUpController extends Controller<
 
     public middlewares = [requestValidator(this.schema, "body")];
 
-    public constructor() {
+    public constructor(@inject("UserService") private readonly userService: ICreateUserService) {
         super("post", "/api/v1/sign-up");
     }
 
     public async handle(
-        req: Request<CreateUserController.Request, "body">,
+        req: Request<CreateUserController.Request>,
         res: Response<CreateUserController.Response>,
     ): Promise<void> {
-        res.status(CREATED).json(req.body);
+        const data = await this.userService.create(req.body);
+
+        res.status(CREATED).json(data);
     }
 }
