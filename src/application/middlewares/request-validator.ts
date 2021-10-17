@@ -1,20 +1,20 @@
-import { Schema, ValidationOptions } from "joi";
-import { UNPROCESSABLE_ENTITY } from "http-status";
+import { AsyncValidationOptions, Schema } from "joi";
+import { BAD_REQUEST } from "http-status";
 import { ParametersField, RequestHandler } from "@app/domains/common/interfaces/controller";
 import { ResponseError } from "@app/domains/common/utils/response-error";
 
 export function requestValidator(
     schema: Schema,
     field: ParametersField,
-    options?: ValidationOptions,
+    options?: AsyncValidationOptions,
     statusCode?: number,
 ): RequestHandler {
-    return (req, _res, next): void => {
-        const result = schema.validate(req[field], options);
-        if (result.error) {
-            next(new ResponseError(statusCode ?? UNPROCESSABLE_ENTITY, `[${field}] - ${result.error.message}`));
-            return;
+    return async (req, _res, next): Promise<void> => {
+        try {
+            await schema.validateAsync(req[field], options);
+            next();
+        } catch (error: unknown) {
+            next(new ResponseError(statusCode ?? BAD_REQUEST, `[${field}] - ${(error as Error).message}`));
         }
-        next();
     };
 }
