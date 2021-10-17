@@ -3,7 +3,7 @@ ls:
     .js: kebab-case
     .json: kebab-case
     .ts: kebab-case
-    .spec.ts: kebab-case
+    .test.ts: kebab-case
     .d.ts: kebab-case
 
 ignore:
