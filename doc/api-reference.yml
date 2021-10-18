@@ -1,0 +1,78 @@
+info:
+  version: 1.4.0
+  title: Notes API
+  description: Notes REST API definitions
+paths:
+  /api/v1/sign-up:
+    post:
+      responses:
+        "201":
+          description: Created the user with success
+          content:
+            application/json; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: Chase
+                  email:
+                    type: string
+                    example: Dewayne_MacGyver@gmail.com
+          headers:
+            x-powered-by:
+              schema:
+                type: string
+              example: Express
+            vary:
+              schema:
+                type: string
+              example: Origin
+            content-type:
+              schema:
+                type: string
+              example: application/json; charset=utf-8
+            content-length:
+              schema:
+                type: string
+              example: "53"
+            etag:
+              schema:
+                type: string
+              example: W/"35-OwOCi3RJUdf1uOvqLk9+syHQSQ8"
+            x-response-time:
+              schema:
+                type: string
+              example: 37.586ms
+            date:
+              schema:
+                type: string
+              example: Mon, 18 Oct 2021 00:59:18 GMT
+            connection:
+              schema:
+                type: string
+              example: close
+      tags:
+        - user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Chase
+                email:
+                  type: string
+                  example: Dewayne_MacGyver@gmail.com
+                password:
+                  type: string
+                  example: 7Yt2ez7hWzGXuio
+                password_confirmation:
+                  type: string
+                  example: 7Yt2ez7hWzGXuio
+servers:
+  - url: ""
+    description: Notes Server
+openapi: 3.0.3

@@ -20,8 +20,8 @@ namespace CreateUserController {
 }
 
 @scoped(Lifecycle.ResolutionScoped)
-@registry([{ token: "Controller", useClass: SignUpController }])
-export class SignUpController extends Controller<CreateUserController.Request, CreateUserController.Response> {
+@registry([{ token: "Controller", useClass: CreateUserController }])
+export class CreateUserController extends Controller<CreateUserController.Request, CreateUserController.Response> {
     private readonly schema = Joi.object({
         name: Joi.string().required(),
         email: Joi.string().email().required(),
