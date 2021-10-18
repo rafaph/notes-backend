@@ -1,9 +1,8 @@
-import _ from "lodash";
 import { expect } from "chai";
 import sinon from "sinon";
 import { FORBIDDEN } from "http-status";
 import { UserService } from "@app/domains/user/services/user-service";
-import { makeUserPayloadWithoutAccessToken, makeUserService, makeUserWithID } from "@test/helpers/user-factories";
+import { makeCreateUserPayload, makeUserData, makeUserService } from "@test/helpers/user-factories";
 
 describe("UserService @unit", () => {
     describe("Sanity tests", () => {
@@ -25,8 +24,9 @@ describe("UserService @unit", () => {
     describe("Unit tests", () => {
         context("create method", () => {
             it("should create an user", async () => {
-                const input = makeUserPayloadWithoutAccessToken();
-                const output = makeUserWithID();
+                const input = makeCreateUserPayload();
+                const output = makeUserData();
+
                 const findByEmail = sinon.stub().resolves();
                 const create = sinon.stub().resolves(output);
                 const hash = sinon.stub().resolves(input.password);
@@ -43,17 +43,14 @@ describe("UserService @unit", () => {
 
                 const result = await sut.create(input);
 
-                expect(result).to.be.deep.equal(_.pick(output, "name", "email"));
+                expect(result).to.be.deep.equal(output);
                 expect(findByEmail).to.have.been.calledOnceWithExactly(input.email, ["id"]);
                 expect(hash).to.have.been.calledOnceWithExactly(input.password);
-                expect(create).to.have.been.calledOnceWithExactly({
-                    ...input,
-                    access_token: null,
-                });
+                expect(create).to.have.been.calledOnceWithExactly(input);
             });
 
             it("should throw if userRepository.findByEmail returns a user", async () => {
-                const input = makeUserPayloadWithoutAccessToken();
+                const input = makeCreateUserPayload();
                 const findByEmail = sinon.stub().resolves(true);
 
                 const sut = makeUserService({
@@ -65,7 +62,7 @@ describe("UserService @unit", () => {
             });
 
             it("should throw if userRepository.findByEmail throws", async () => {
-                const input = makeUserPayloadWithoutAccessToken();
+                const input = makeCreateUserPayload();
                 const findByEmail = sinon.stub().rejects();
 
                 const sut = makeUserService({
@@ -77,7 +74,7 @@ describe("UserService @unit", () => {
             });
 
             it("should throw if userRepository.create throws", async () => {
-                const input = makeUserPayloadWithoutAccessToken();
+                const input = makeCreateUserPayload();
                 const create = sinon.stub().rejects();
 
                 const sut = makeUserService({
@@ -89,7 +86,7 @@ describe("UserService @unit", () => {
             });
 
             it("should throw if hashing.create hash", async () => {
-                const input = makeUserPayloadWithoutAccessToken();
+                const input = makeCreateUserPayload();
                 const hash = sinon.stub().rejects();
 
                 const sut = makeUserService(undefined, {

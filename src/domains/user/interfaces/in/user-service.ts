@@ -1,7 +1,7 @@
-import { UserBasicFields, UserPayloadWithoutAccessToken } from "@app/domains/user/types/user";
+import { CreateUserPayload, UserData } from "@app/domains/user/types/user";
 
 export interface ICreateUserService {
-    create(input: UserPayloadWithoutAccessToken): Promise<UserBasicFields>;
+    create(input: CreateUserPayload): Promise<UserData>;
 }
 
 // eslint-disable-next-line
