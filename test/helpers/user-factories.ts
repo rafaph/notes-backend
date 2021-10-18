@@ -6,6 +6,8 @@ import { IHashing } from "@app/domains/common/interfaces/hashing";
 import { CreateUserPayload, UserData } from "@app/domains/user/types/user";
 import { UserRepository } from "@app/domains/user/core/repositories/user-repository";
 import { IUserDAO } from "@app/domains/user/interfaces/out/user-dao";
+import { AuthenticationService } from "@app/domains/user/services/authentication-service";
+import { ITokenManager } from "@app/domains/common/interfaces/token-manager";
 
 export function makeUserData(userData: Partial<UserData> = {}): UserData {
     return {
@@ -53,4 +55,29 @@ export function makeUserRepository(userDAO: Partial<IUserDAO> = {}): UserReposit
         findOne: sinon.stub(),
         ...userDAO,
     });
+}
+
+export function makeAuthenticationService(
+    userRepository: Partial<IUserRepository> = {},
+    hashing: Partial<IHashing> = {},
+    tokenManager: Partial<ITokenManager> = {},
+): AuthenticationService {
+    return new AuthenticationService(
+        {
+            create: sinon.stub(),
+            findByEmail: sinon.stub(),
+            updateAccessToken: sinon.stub(),
+            ...userRepository,
+        },
+        {
+            hash: sinon.stub(),
+            verify: sinon.stub(),
+            ...hashing,
+        },
+        {
+            sign: sinon.stub(),
+            verify: sinon.stub(),
+            ...tokenManager,
+        },
+    );
 }

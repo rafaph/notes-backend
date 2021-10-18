@@ -95,5 +95,45 @@ describe("UserRepository @unit", () => {
                 expect(save).to.be.calledOnce;
             });
         });
+
+        context("updateAccessToken method", () => {
+            it("should update an access token", async () => {
+                const id = faker.datatype.uuid();
+                const accessToken = faker.datatype.uuid();
+                const updateStub = sinon.stub();
+
+                const sut = makeUserRepository({
+                    update: updateStub,
+                });
+
+                await sut.updateAccessToken(id, accessToken);
+
+                expect(updateStub).to.have.been.calledOnceWithExactly(
+                    {
+                        id,
+                    },
+                    {
+                        access_token: accessToken,
+                    },
+                );
+            });
+
+            it("should throw a ResponseError if create throws", async () => {
+                const id = faker.datatype.uuid();
+                const accessToken = faker.datatype.uuid();
+                const updateStub = sinon.stub().rejects();
+
+                const sut = makeUserRepository({
+                    update: updateStub,
+                });
+
+                await expect(sut.updateAccessToken(id, accessToken)).to.eventually.be.rejected.with.property(
+                    "status",
+                    INTERNAL_SERVER_ERROR,
+                );
+
+                expect(updateStub).to.have.been.calledOnce;
+            });
+        });
     });
 });

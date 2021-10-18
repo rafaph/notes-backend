@@ -2,6 +2,8 @@ import jwt, { JwtPayload, VerifyErrors } from "jsonwebtoken";
 import { Lifecycle, registry, scoped } from "tsyringe";
 import { ITokenManager } from "@app/domains/common/interfaces/token-manager";
 import { JWT_SECRET } from "@app/domains/common/utils/environment";
+import { ResponseError } from "@app/domains/common/utils/response-error";
+import { Logger } from "@app/domains/common/utils/logger";
 
 @scoped(Lifecycle.ResolutionScoped)
 @registry([{ token: "TokenManager", useClass: TokenManager }])
@@ -10,11 +12,12 @@ export class TokenManager implements ITokenManager {
 
     public sign(value: string): Promise<string> {
         return new Promise((resolve, reject) => {
-            jwt.sign({ data: value }, this.secret, (err: Error | null, encoded: string | undefined) => {
-                if (!err) {
-                    resolve(encoded as string);
+            jwt.sign({ data: value }, this.secret, (err: Error | null, encoded?: string) => {
+                if (err) {
+                    Logger.error("Fail to sign value with jsonwebtoken", err);
+                    reject(new ResponseError(undefined, "Fail to sign value with jsonwebtoken."));
                 } else {
-                    reject(err);
+                    resolve(encoded as string);
                 }
             });
         });
@@ -22,11 +25,12 @@ export class TokenManager implements ITokenManager {
 
     public verify(token: string): Promise<string> {
         return new Promise((resolve, reject) => {
-            jwt.verify(token, this.secret, (err: VerifyErrors | null, decoded: JwtPayload | undefined) => {
-                if (!err) {
-                    resolve(decoded?.data);
+            jwt.verify(token, this.secret, (err: VerifyErrors | null, decoded?: JwtPayload) => {
+                if (err) {
+                    Logger.error("Fail to verify value with jsonwebtoken", err);
+                    reject(new ResponseError(undefined, "Fail to verify value with jsonwebtoken."));
                 } else {
-                    reject(err);
+                    resolve(decoded?.data);
                 }
             });
         });

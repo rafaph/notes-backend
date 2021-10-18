@@ -15,7 +15,7 @@ paths:
                 properties:
                   access_token:
                     type: string
-                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiNjQ0YTI5ZmMtYjExMy00MmRjLWE4NGItZmZiODBiODZmYTRjIiwiaWF0IjoxNjM0NTI3NjU1fQ.yBEiA6tqJVRRhlgbCBifcWbV-kbP0xC5Bwzn42PpKAg
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiMmJlZmY1ZWQtYTUyMS00NjEyLTg2ZGUtMjk5NzM4OTdlZDdkIiwiaWF0IjoxNjM0NTk0MDMzfQ.3awVQdonH0URnpBfaMdDD0RRWePt2ruo20d5oYKaXAc
           headers:
             x-powered-by:
               schema:
@@ -36,15 +36,15 @@ paths:
             etag:
               schema:
                 type: string
-              example: W/"ba-UzuZDn+o2SH5NdExzA4oVtBoCTI"
+              example: W/"ba-f2mzEHcqHwYUFsnfXqM+iQP5oLI"
             x-response-time:
               schema:
                 type: string
-              example: 52.107ms
+              example: 72.865ms
             date:
               schema:
                 type: string
-              example: Mon, 18 Oct 2021 03:27:35 GMT
+              example: Mon, 18 Oct 2021 21:53:53 GMT
             connection:
               schema:
                 type: string
@@ -59,16 +59,16 @@ paths:
               properties:
                 name:
                   type: string
-                  example: Dylan
+                  example: Shanon
                 email:
                   type: string
-                  example: Kiana.Streich59@hotmail.com
+                  example: Lewis.Rippin@yahoo.com
                 password:
                   type: string
-                  example: FssW31uotSB9g34
+                  example: VobJDfIdS5BN_jW
                 password_confirmation:
                   type: string
-                  example: FssW31uotSB9g34
+                  example: VobJDfIdS5BN_jW
 servers:
   - url: ""
     description: Notes Server
