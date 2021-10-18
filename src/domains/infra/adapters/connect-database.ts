@@ -22,7 +22,7 @@ const pgConnect = async (): Promise<Connection> => {
     return connection;
 };
 
-export const connectDadatabase = (): Promise<void> =>
+export const connectDatabase = (): Promise<void> =>
     pgConnect()
         .then((conn) => {
             Logger.debug("Database connection created with success.");
