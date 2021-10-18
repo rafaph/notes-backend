@@ -8,7 +8,9 @@ import faker from "faker";
 import { expect } from "chai";
 import { App } from "@app/application/setup/app";
 import { doc } from "@test/helpers/documentation";
-import { makeUserWithID } from "@test/helpers/user-factories";
+import { makeUserData } from "@test/helpers/user-factories";
+import { container } from "tsyringe";
+import { Hashing } from "@app/domains/infra/adapters/hashing";
 
 const route = "/api/v1/sign-up";
 
@@ -27,7 +29,7 @@ describe(`POST ${route} @integration`, () => {
         await doc.writeFile();
     });
 
-    it("should return 201 CREATED when create an user", (done) => {
+    it("should return 201 CREATED when create an user", async () => {
         const password = faker.internet.password();
         const body = {
             name: faker.name.firstName(),
@@ -36,40 +38,56 @@ describe(`POST ${route} @integration`, () => {
             password_confirmation: password,
         };
         const bodyWithoutPasswordConfirmation = _.omit(body, ["password_confirmation"]);
-        const user = makeUserWithID({
+        const hashing = container.resolve<Hashing>("Hashing");
+        const userData = makeUserData({
             ...bodyWithoutPasswordConfirmation,
+            password: await hashing.hash(password),
         });
-        const findOneStub = sinon.stub(Repository.prototype, "findOne").resolves(false);
-        const saveStub = sinon.stub(Repository.prototype, "save").resolves(user);
 
-        supertest(app)
-            .post(route)
-            .send(body)
-            .expect(CREATED)
-            .end((err, res) => {
-                expect(err).to.be.null;
-                expect(res.body).to.be.deep.equal(_.pick(body, ["name", "email"]));
-                expect(findOneStub).to.have.been.calledOnceWithExactly({
-                    where: {
-                        email: body.email,
-                    },
-                });
-                expect(saveStub).to.have.been.calledWithMatch({
-                    ..._.omit(bodyWithoutPasswordConfirmation, ["password"]),
-                    access_token: null,
-                });
+        const findOneStub = sinon.stub(Repository.prototype, "findOne");
+        const firstFindOneStub = findOneStub.onFirstCall().resolves(false);
+        const saveStub = sinon.stub(Repository.prototype, "save").onFirstCall().resolves(userData);
 
-                doc.path(route)
-                    .verb("post", {
-                        tags: ["user"],
-                        requestBody: {
-                            content: body,
-                            mediaType: "application/json",
-                        },
-                    })
-                    .fromSuperAgentResponse(res, "Created the user with success");
+        const secondFindOneStub = findOneStub.onSecondCall().resolves(userData);
+        const updateStub = sinon.stub(Repository.prototype, "update").resolves();
 
-                done();
-            });
+        const response = await supertest(app).post(route).send(body).expect(CREATED);
+
+        expect(response.body).to.have.all.keys("access_token");
+
+        expect(firstFindOneStub).to.have.been.calledWithExactly({
+            where: {
+                email: body.email,
+            },
+            select: ["id"],
+        });
+
+        expect(saveStub).to.have.been.calledWithMatch(_.omit(bodyWithoutPasswordConfirmation, ["password"]));
+
+        expect(secondFindOneStub).to.have.been.calledWithExactly({
+            where: {
+                email: body.email,
+            },
+            select: ["id", "password"],
+        });
+
+        expect(updateStub).to.have.been.calledOnceWithExactly(
+            {
+                id: userData.id,
+            },
+            {
+                access_token: response.body.access_token,
+            },
+        );
+
+        doc.path(route)
+            .verb("post", {
+                tags: ["user"],
+                requestBody: {
+                    content: body,
+                    mediaType: "application/json",
+                },
+            })
+            .fromSuperAgentResponse(response, "Created the user with success");
     });
 });

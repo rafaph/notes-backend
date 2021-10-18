@@ -13,12 +13,9 @@ paths:
               schema:
                 type: object
                 properties:
-                  name:
+                  access_token:
                     type: string
-                    example: Chase
-                  email:
-                    type: string
-                    example: Dewayne_MacGyver@gmail.com
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiNjQ0YTI5ZmMtYjExMy00MmRjLWE4NGItZmZiODBiODZmYTRjIiwiaWF0IjoxNjM0NTI3NjU1fQ.yBEiA6tqJVRRhlgbCBifcWbV-kbP0xC5Bwzn42PpKAg
           headers:
             x-powered-by:
               schema:
@@ -35,19 +32,19 @@ paths:
             content-length:
               schema:
                 type: string
-              example: "53"
+              example: "186"
             etag:
               schema:
                 type: string
-              example: W/"35-OwOCi3RJUdf1uOvqLk9+syHQSQ8"
+              example: W/"ba-UzuZDn+o2SH5NdExzA4oVtBoCTI"
             x-response-time:
               schema:
                 type: string
-              example: 37.586ms
+              example: 52.107ms
             date:
               schema:
                 type: string
-              example: Mon, 18 Oct 2021 00:59:18 GMT
+              example: Mon, 18 Oct 2021 03:27:35 GMT
             connection:
               schema:
                 type: string
@@ -62,16 +59,16 @@ paths:
               properties:
                 name:
                   type: string
-                  example: Chase
+                  example: Dylan
                 email:
                   type: string
-                  example: Dewayne_MacGyver@gmail.com
+                  example: Kiana.Streich59@hotmail.com
                 password:
                   type: string
-                  example: 7Yt2ez7hWzGXuio
+                  example: FssW31uotSB9g34
                 password_confirmation:
                   type: string
-                  example: 7Yt2ez7hWzGXuio
+                  example: FssW31uotSB9g34
 servers:
   - url: ""
     description: Notes Server

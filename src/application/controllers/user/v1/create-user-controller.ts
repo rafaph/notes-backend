@@ -4,6 +4,7 @@ import Joi from "joi";
 import { requestValidator } from "@app/application/middlewares/request-validator";
 import { Controller, Request, Response } from "@app/domains/common/interfaces/controller";
 import { ICreateUserService } from "@app/domains/user/interfaces/in/user-service";
+import { IAuthenticateAuthenticationService } from "@app/domains/user/interfaces/in/authentication-service";
 
 namespace CreateUserController {
     export interface Request {
@@ -14,8 +15,7 @@ namespace CreateUserController {
     }
 
     export type Response = {
-        name: string;
-        email: string;
+        access_token: string;
     };
 }
 
@@ -31,7 +31,10 @@ export class CreateUserController extends Controller<CreateUserController.Reques
 
     public middlewares = [requestValidator(this.schema, "body")];
 
-    public constructor(@inject("UserService") private readonly userService: ICreateUserService) {
+    public constructor(
+        @inject("UserService") private readonly userService: ICreateUserService,
+        @inject("AuthenticationService") private readonly authenticationService: IAuthenticateAuthenticationService,
+    ) {
         super("post", "/api/v1/sign-up");
     }
 
@@ -39,8 +42,11 @@ export class CreateUserController extends Controller<CreateUserController.Reques
         req: Request<CreateUserController.Request>,
         res: Response<CreateUserController.Response>,
     ): Promise<void> {
-        const data = await this.userService.create(req.body);
+        const userData = await this.userService.create(req.body);
+        const accessToken = await this.authenticationService.authenticate(userData.email, req.body.password);
 
-        res.status(CREATED).json(data);
+        res.status(CREATED).json({
+            access_token: accessToken,
+        });
     }
 }

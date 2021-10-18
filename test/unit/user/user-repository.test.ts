@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import sinon from "sinon";
-import { makeUserPayload, makeUserWithID, makeUserRepository } from "@test/helpers/user-factories";
+import { makeCreateUserPayload, makeUserData, makeUserRepository } from "@test/helpers/user-factories";
 import { UserRepository } from "@app/domains/user/core/repositories/user-repository";
 import faker from "faker";
 import { INTERNAL_SERVER_ERROR } from "http-status";
@@ -26,7 +26,7 @@ describe("UserRepository @unit", () => {
     describe("Unit tests", () => {
         context("findByEmail method", () => {
             it("should find a user by email", async () => {
-                const output = makeUserWithID();
+                const output = makeUserData();
                 const findOne = sinon.stub().resolves(output);
 
                 const sut = makeUserRepository({ findOne });
@@ -38,6 +38,7 @@ describe("UserRepository @unit", () => {
                     where: {
                         email: output.email,
                     },
+                    select: undefined,
                 });
             });
 
@@ -68,9 +69,9 @@ describe("UserRepository @unit", () => {
         });
 
         context("create method", () => {
-            it("should save a user", async () => {
-                const output = makeUserWithID();
-                const input = makeUserPayload();
+            it("should create a user", async () => {
+                const output = makeUserData();
+                const input = makeCreateUserPayload();
                 const save = sinon.stub().resolves(output);
 
                 const sut = makeUserRepository({ save });
@@ -82,7 +83,7 @@ describe("UserRepository @unit", () => {
             });
 
             it("should throw a ResponseError if create throws", async () => {
-                const input = makeUserPayload();
+                const input = makeCreateUserPayload();
                 const save = sinon.stub().rejects();
 
                 const sut = makeUserRepository({ save });
