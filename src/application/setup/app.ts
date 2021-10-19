@@ -1,13 +1,14 @@
-import express, { Request, Response, NextFunction, json } from "express";
+import express, { json, NextFunction, Request, Response } from "express";
 import cors from "cors";
 import responseTime from "response-time";
 import { SERVICE_UNAVAILABLE } from "http-status";
+import { container } from "tsyringe";
 import { PORT, PROD, SHUTDOWN_TIMEOUT } from "@app/domains/common/utils/environment";
 import { contentType } from "@app/application/middlewares/content-type";
 import { ResponseError } from "@app/domains/common/utils/response-error";
 import { Logger } from "@app/domains/common/utils/logger";
 import { errorHandler } from "@app/application/middlewares/error-handler";
-import { router } from "@app/application/setup/router";
+import { Router } from "@app/application/setup/router";
 
 export class App {
     public app: express.Express;
@@ -22,7 +23,10 @@ export class App {
         this.app.use(contentType);
         this.app.use(cors({ origin: true }));
         this.app.use(json());
+
+        const { router } = container.resolve(Router);
         this.app.use(router);
+
         this.app.use(errorHandler);
 
         ["SIGINT", "SIGTERM"].forEach((signal) => {

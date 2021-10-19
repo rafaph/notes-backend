@@ -1,5 +1,5 @@
-import { Router as ExpressRouter, RequestHandler } from "express";
-import { container, injectable, Lifecycle, scoped, injectAll } from "tsyringe";
+import { RequestHandler, Router as ExpressRouter } from "express";
+import { injectable, injectAll, Lifecycle, scoped } from "tsyringe";
 import { NOT_FOUND } from "http-status";
 import { Controller } from "@app/domains/common/interfaces/controller";
 import { ResponseError } from "@app/domains/common/utils/response-error";
@@ -7,7 +7,7 @@ import { Logger } from "@app/domains/common/utils/logger";
 
 @scoped(Lifecycle.ResolutionScoped)
 @injectable()
-class Router {
+export class Router {
     public readonly router: ExpressRouter;
 
     public constructor(@injectAll("Controller") private readonly controllers: Controller<unknown, unknown>[]) {
@@ -35,5 +35,3 @@ class Router {
         return [...controller.middlewares, handler];
     }
 }
-
-export const router = container.resolve(Router).router;

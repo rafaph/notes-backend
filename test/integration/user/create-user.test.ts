@@ -1,31 +1,31 @@
-import _ from "lodash";
-import sinon from "sinon";
-import { Express } from "express";
-import supertest from "supertest";
-import { CREATED } from "http-status";
-import { Repository } from "typeorm";
-import faker from "faker";
 import { expect } from "chai";
-import { App } from "@app/application/setup/app";
-import { doc } from "@test/helpers/documentation";
-import { makeUserData } from "@test/helpers/user-factories";
+import faker from "faker";
+import supertest from "supertest";
+import { Express } from "express";
+import { BAD_REQUEST, CREATED, FORBIDDEN } from "http-status";
 import { container } from "tsyringe";
-import { Hashing } from "@app/domains/infra/adapters/hashing";
+import { Repository } from "typeorm";
+import { doc } from "@test/helpers/documentation";
+import { clearTables, createDatabase, dropDatabase } from "@test/helpers/database";
+import { App } from "@app/application/setup/app";
+import { User } from "@app/domains/user/core/entities/user";
 
 const route = "/api/v1/sign-up";
 
 describe(`POST ${route} @integration`, () => {
     let app: Express;
 
-    before(() => {
+    before(async () => {
+        await createDatabase();
         app = new App().app;
     });
 
-    afterEach(() => {
-        sinon.restore();
+    beforeEach(async () => {
+        await clearTables();
     });
 
     after(async () => {
+        await dropDatabase();
         await doc.writeFile();
     });
 
@@ -37,48 +37,14 @@ describe(`POST ${route} @integration`, () => {
             password,
             password_confirmation: password,
         };
-        const bodyWithoutPasswordConfirmation = _.omit(body, ["password_confirmation"]);
-        const hashing = container.resolve<Hashing>("Hashing");
-        const userData = makeUserData({
-            ...bodyWithoutPasswordConfirmation,
-            password: await hashing.hash(password),
-        });
-
-        const findOneStub = sinon.stub(Repository.prototype, "findOne");
-        const firstFindOneStub = findOneStub.onFirstCall().resolves(false);
-        const saveStub = sinon.stub(Repository.prototype, "save").onFirstCall().resolves(userData);
-
-        const secondFindOneStub = findOneStub.onSecondCall().resolves(userData);
-        const updateStub = sinon.stub(Repository.prototype, "update").resolves();
 
         const response = await supertest(app).post(route).send(body).expect(CREATED);
+        expect(response.body).to.have.property("access_token");
 
-        expect(response.body).to.have.all.keys("access_token");
-
-        expect(firstFindOneStub).to.have.been.calledWithExactly({
-            where: {
-                email: body.email,
-            },
-            select: ["id"],
+        const userDAO = container.resolve<Repository<User>>("UserDAO");
+        await userDAO.findOneOrFail({
+            where: { email: body.email },
         });
-
-        expect(saveStub).to.have.been.calledWithMatch(_.omit(bodyWithoutPasswordConfirmation, ["password"]));
-
-        expect(secondFindOneStub).to.have.been.calledWithExactly({
-            where: {
-                email: body.email,
-            },
-            select: ["id", "password"],
-        });
-
-        expect(updateStub).to.have.been.calledOnceWithExactly(
-            {
-                id: userData.id,
-            },
-            {
-                access_token: response.body.access_token,
-            },
-        );
 
         doc.path(route)
             .verb("post", {
@@ -88,6 +54,59 @@ describe(`POST ${route} @integration`, () => {
                     mediaType: "application/json",
                 },
             })
-            .fromSuperAgentResponse(response, "Created the user with success");
+            .fromSuperAgentResponse(response, "When user is created successfully");
+    });
+
+    it("should return 400 BAD REQUEST if missing data", async () => {
+        const password = faker.internet.password();
+        const body = {
+            email: faker.internet.email(),
+            password,
+            password_confirmation: password,
+        };
+
+        const response = await supertest(app).post(route).send(body).expect(BAD_REQUEST);
+
+        doc.path(route)
+            .verb("post", {
+                tags: ["user"],
+                requestBody: {
+                    content: body,
+                    mediaType: "application/json",
+                },
+            })
+            .fromSuperAgentResponse(
+                response,
+                "When missing user data or password and password_confirmation are different",
+            );
+    });
+
+    it("should return 403 FORBIDDEN if email already taken", async () => {
+        const password = faker.internet.password();
+        const body = {
+            name: faker.name.firstName(),
+            email: faker.internet.email(),
+            password,
+            password_confirmation: password,
+        };
+
+        const userDAO = container.resolve<Repository<User>>("UserDAO");
+        await userDAO.save({
+            name: faker.name.firstName(),
+            email: body.email,
+            password: faker.internet.password(),
+        });
+
+        const response = await supertest(app).post(route).send(body).expect(FORBIDDEN);
+
+        doc.path(route)
+            .verb("post", {
+                tags: ["user"],
+                requestBody: {
+                    content: body,
+                    mediaType: "application/json",
+                },
+            })
+            .fromSuperAgentResponse(response, "When email is already taken");
     });
 });
