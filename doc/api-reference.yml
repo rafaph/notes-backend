@@ -15,12 +15,52 @@ paths:
                 properties:
                   access_token:
                     type: string
-                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiZmQ3N2VkNzItNzJjYi00OWQxLTk5MGUtN2IyZTI5OGMxYmZkIiwiaWF0IjoxNjM0NjE0ODMzfQ.mKJOYt0h-fvTxKU7tMxnPRZhAObvEoq6qBWL2uRVEWI
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiNDYwMmNkMjgtMDIzMC00ODQ2LTgxYzEtYTY0NzkxMTJjYjYyIiwiaWF0IjoxNjM0Njg5ODkwfQ.i-bceu8hOsb-nuJowLMA1O0ju7fJdRsiE6dQVsp3T3Y
           headers:
-            x-powered-by:
+            content-security-policy:
               schema:
                 type: string
-              example: Express
+              example: "default-src 'self';base-uri 'self';block-all-mixed-content;font-src
+                'self' https: data:;frame-ancestors 'self';img-src 'self'
+                data:;object-src 'none';script-src 'self';script-src-attr
+                'none';style-src 'self' https:
+                'unsafe-inline';upgrade-insecure-requests"
+            x-dns-prefetch-control:
+              schema:
+                type: string
+              example: off
+            expect-ct:
+              schema:
+                type: string
+              example: max-age=0
+            x-frame-options:
+              schema:
+                type: string
+              example: SAMEORIGIN
+            strict-transport-security:
+              schema:
+                type: string
+              example: max-age=15552000; includeSubDomains
+            x-download-options:
+              schema:
+                type: string
+              example: noopen
+            x-content-type-options:
+              schema:
+                type: string
+              example: nosniff
+            x-permitted-cross-domain-policies:
+              schema:
+                type: string
+              example: none
+            referrer-policy:
+              schema:
+                type: string
+              example: no-referrer
+            x-xss-protection:
+              schema:
+                type: string
+              example: "0"
             vary:
               schema:
                 type: string
@@ -36,15 +76,15 @@ paths:
             etag:
               schema:
                 type: string
-              example: W/"ba-I7vfITMnsZs9LJqXW9P1WAzkVIY"
+              example: W/"ba-ABTWcvLfLc7OKc53D7DyJkI5UR0"
             x-response-time:
               schema:
                 type: string
-              example: 94.414ms
+              example: 88.437ms
             date:
               schema:
                 type: string
-              example: Tue, 19 Oct 2021 03:40:33 GMT
+              example: Wed, 20 Oct 2021 00:31:30 GMT
             connection:
               schema:
                 type: string
@@ -61,10 +101,50 @@ paths:
                     type: string
                     example: '[body] - "name" is required'
           headers:
-            x-powered-by:
+            content-security-policy:
               schema:
                 type: string
-              example: Express
+              example: "default-src 'self';base-uri 'self';block-all-mixed-content;font-src
+                'self' https: data:;frame-ancestors 'self';img-src 'self'
+                data:;object-src 'none';script-src 'self';script-src-attr
+                'none';style-src 'self' https:
+                'unsafe-inline';upgrade-insecure-requests"
+            x-dns-prefetch-control:
+              schema:
+                type: string
+              example: off
+            expect-ct:
+              schema:
+                type: string
+              example: max-age=0
+            x-frame-options:
+              schema:
+                type: string
+              example: SAMEORIGIN
+            strict-transport-security:
+              schema:
+                type: string
+              example: max-age=15552000; includeSubDomains
+            x-download-options:
+              schema:
+                type: string
+              example: noopen
+            x-content-type-options:
+              schema:
+                type: string
+              example: nosniff
+            x-permitted-cross-domain-policies:
+              schema:
+                type: string
+              example: none
+            referrer-policy:
+              schema:
+                type: string
+              example: no-referrer
+            x-xss-protection:
+              schema:
+                type: string
+              example: "0"
             vary:
               schema:
                 type: string
@@ -84,11 +164,11 @@ paths:
             x-response-time:
               schema:
                 type: string
-              example: 2.808ms
+              example: 1.665ms
             date:
               schema:
                 type: string
-              example: Tue, 19 Oct 2021 03:40:33 GMT
+              example: Wed, 20 Oct 2021 00:31:30 GMT
             connection:
               schema:
                 type: string
@@ -104,10 +184,50 @@ paths:
                     type: string
                     example: The provided email is already in use.
           headers:
-            x-powered-by:
+            content-security-policy:
               schema:
                 type: string
-              example: Express
+              example: "default-src 'self';base-uri 'self';block-all-mixed-content;font-src
+                'self' https: data:;frame-ancestors 'self';img-src 'self'
+                data:;object-src 'none';script-src 'self';script-src-attr
+                'none';style-src 'self' https:
+                'unsafe-inline';upgrade-insecure-requests"
+            x-dns-prefetch-control:
+              schema:
+                type: string
+              example: off
+            expect-ct:
+              schema:
+                type: string
+              example: max-age=0
+            x-frame-options:
+              schema:
+                type: string
+              example: SAMEORIGIN
+            strict-transport-security:
+              schema:
+                type: string
+              example: max-age=15552000; includeSubDomains
+            x-download-options:
+              schema:
+                type: string
+              example: noopen
+            x-content-type-options:
+              schema:
+                type: string
+              example: nosniff
+            x-permitted-cross-domain-policies:
+              schema:
+                type: string
+              example: none
+            referrer-policy:
+              schema:
+                type: string
+              example: no-referrer
+            x-xss-protection:
+              schema:
+                type: string
+              example: "0"
             vary:
               schema:
                 type: string
@@ -127,11 +247,11 @@ paths:
             x-response-time:
               schema:
                 type: string
-              example: 3.074ms
+              example: 3.168ms
             date:
               schema:
                 type: string
-              example: Tue, 19 Oct 2021 03:40:33 GMT
+              example: Wed, 20 Oct 2021 00:31:30 GMT
             connection:
               schema:
                 type: string
@@ -146,16 +266,16 @@ paths:
               properties:
                 name:
                   type: string
-                  example: Alexzander
+                  example: Nikko
                 email:
                   type: string
-                  example: Lewis.Fay33@yahoo.com
+                  example: Amani_Kiehn@hotmail.com
                 password:
                   type: string
-                  example: KrDZh41X4k9jVv6
+                  example: hhiRrhLfRmc43z9
                 password_confirmation:
                   type: string
-                  example: KrDZh41X4k9jVv6
+                  example: hhiRrhLfRmc43z9
 servers:
   - url: ""
     description: Notes Server
