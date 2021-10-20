@@ -6,7 +6,7 @@ import { Controller, Request, Response } from "@app/domains/common/interfaces/co
 import { ICreateUserService } from "@app/domains/user/interfaces/in/user-service";
 import { IAuthenticateAuthenticationService } from "@app/domains/user/interfaces/in/authentication-service";
 
-namespace CreateUserController {
+namespace SignUpController {
     export interface Request {
         name: string;
         email: string;
@@ -20,8 +20,8 @@ namespace CreateUserController {
 }
 
 @scoped(Lifecycle.ResolutionScoped)
-@registry([{ token: "Controller", useClass: CreateUserController }])
-export class CreateUserController extends Controller<CreateUserController.Request, CreateUserController.Response> {
+@registry([{ token: "Controller", useClass: SignUpController }])
+export class SignUpController extends Controller<SignUpController.Request, SignUpController.Response> {
     private readonly schema = Joi.object({
         name: Joi.string().required(),
         email: Joi.string().email().required(),
@@ -39,8 +39,8 @@ export class CreateUserController extends Controller<CreateUserController.Reques
     }
 
     public async handle(
-        req: Request<CreateUserController.Request>,
-        res: Response<CreateUserController.Response>,
+        req: Request<SignUpController.Request>,
+        res: Response<SignUpController.Response>,
     ): Promise<void> {
         const userData = await this.userService.create(req.body);
         const accessToken = await this.authenticationService.authenticate(userData.email, req.body.password);
