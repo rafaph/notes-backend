@@ -2,9 +2,9 @@ name: CI
 
 on:
     push:
-        branches: [ master ]
+        branches: [master]
     pull_request:
-        branches: [ master ]
+        branches: [master]
 
 defaults:
     run:
@@ -13,85 +13,89 @@ defaults:
 jobs:
     lint:
         container:
-            image: node:lts
+            image: node:14
         runs-on: ubuntu-latest
         steps:
-            -   uses: actions/checkout@v2
+            - uses: actions/checkout@v2
 
-            -   name: Cache node modules
-                uses: actions/cache@v2
-                env:
-                    cache-name: node-modules
-                with:
-                    path: node_modules/
-                    key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+            - name: Cache node modules
+              uses: actions/cache@v2
+              env:
+                  cache-name: node-modules
+              with:
+                  path: node_modules/
+                  key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
 
-            -   name: Install NPM dependencies
-                run: |
-                    if [ ! -d node_modules ]; then
-                      npm ci
-                    fi
-                    npx patch-package
+            - name: Install NPM dependencies
+              run: |
+                  if [ ! -d node_modules ]; then
+                    npm ci
+                  fi
+                  npx patch-package
 
-            -   name: Lint
-                run: npm run lint
+            - name: Lint
+              run: npm run lint
 
-            -   name: Cleanup
-                if: ${{ always() }}
-                run: |
-                    shopt -s dotglob
-                    rm -rf *
+            - name: Cleanup
+              if: ${{ always() }}
+              run: |
+                  shopt -s dotglob
+                  rm -rf *
     test:
         container:
-            image: node:lts
+            image: node:14
             env:
                 npm_config_build_from_source: true
-                NODE_ENV: development
-                DATABASE_URL: "postgresql://postgres@database:5432/notes_backend"
+                NODE_ENV: test
                 JWT_SECRET: SECURE_SECRET_KEY
+                DB_HOST: database
+                DB_USERNAME: postgres
+                DB_PASSWORD: postgres
+                DB_DATABASE: notes_backend
         services:
             database:
                 env:
-                    POSTGRES_HOST_AUTH_METHOD: trust
                     POSTGRES_DB: notes_backend
+                    POSTGRES_USER: postgres
+                    POSTGRES_PASSWORD: postgres
                 image: postgres:14-alpine
         runs-on: ubuntu-latest
         steps:
-            -   uses: actions/checkout@v2
+            - uses: actions/checkout@v2
 
-            -   name: Cache node modules
-                uses: actions/cache@v2
-                env:
-                    cache-name: node-modules
-                with:
-                    path: node_modules/
-                    key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+            - name: Cache node modules
+              uses: actions/cache@v2
+              env:
+                  cache-name: node-modules
+              with:
+                  path: node_modules/
+                  key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
 
-            -   name: Install Dependencies
-                run: |
-                    if [ ! -d node_modules ]; then
-                      npm ci
-                    fi
-                    npx patch-package
+            - name: Install Dependencies
+              run: |
+                  if [ ! -d node_modules ]; then
+                    npm ci
+                  fi
+                  npx patch-package
 
-            -   name: Test
-                run: npm run test:ci
+            - name: Test
+              run: npm run test:ci
 
-            -   name: Cleanup
-                if: ${{ always() }}
-                run: |
-                    shopt -s dotglob
-                    rm -rf *
+            - name: Cleanup
+              if: ${{ always() }}
+              run: |
+                  shopt -s dotglob
+                  rm -rf *
 
     deploy:
-        needs: [ lint, test ]
+        needs: [lint, test]
         runs-on: ubuntu-latest
         if: github.ref == 'refs/heads/master'
         steps:
-            -   uses: actions/checkout@v2
+            - uses: actions/checkout@v2
 
-            -   uses: akhileshns/heroku-deploy@v3.12.12
-                with:
-                    heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-                    heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
-                    heroku_email: ${{secrets.HEROKU_EMAIL}}
+            - uses: akhileshns/heroku-deploy@v3.12.12
+              with:
+                  heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+                  heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+                  heroku_email: ${{secrets.HEROKU_EMAIL}}

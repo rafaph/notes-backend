@@ -32,10 +32,12 @@ export function makeCreateUserPayload(createUserPayload: Partial<CreateUserPaylo
 export function makeUserService(
     userRepository: Partial<IUserRepository> = {},
     hashing: Partial<IHashing> = {},
+    tokenManager: Partial<ITokenManager> = {},
 ): UserService {
     return new UserService(
         {
             create: sinon.stub(),
+            findById: sinon.stub(),
             findByEmail: sinon.stub(),
             updateAccessToken: sinon.stub(),
             ...userRepository,
@@ -44,6 +46,11 @@ export function makeUserService(
             hash: sinon.stub(),
             verify: sinon.stub(),
             ...hashing,
+        },
+        {
+            sign: sinon.stub(),
+            verify: sinon.stub(),
+            ...tokenManager,
         },
     );
 }
@@ -65,6 +72,7 @@ export function makeAuthenticationService(
     return new AuthenticationService(
         {
             create: sinon.stub(),
+            findById: sinon.stub(),
             findByEmail: sinon.stub(),
             updateAccessToken: sinon.stub(),
             ...userRepository,

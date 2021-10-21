@@ -5,7 +5,7 @@ import { ResponseError } from "@app/domains/common/utils/response-error";
 
 export function requestValidator(
     schema: Schema,
-    field: ParametersField,
+    field: ParametersField | "headers",
     options?: AsyncValidationOptions,
     statusCode?: number,
 ): RequestHandler {

@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import sinon from "sinon";
 import { FORBIDDEN } from "http-status";
+import faker from "faker";
 import { UserService } from "@app/domains/user/services/user-service";
 import { makeCreateUserPayload, makeUserData, makeUserService } from "@test/helpers/user-factories";
 
@@ -95,6 +96,71 @@ describe("UserService @unit", () => {
 
                 await expect(sut.create(input)).to.eventually.be.rejected;
                 expect(hash).to.have.been.calledOnce;
+            });
+        });
+
+        context("loadByToken method", () => {
+            it("should load an user by access token", async () => {
+                const id = faker.datatype.uuid();
+                const accessToken = faker.datatype.uuid();
+                const userData = makeUserData();
+
+                const verify = sinon.stub().resolves(id);
+                const findById = sinon.stub().resolves(userData);
+
+                const sut = makeUserService(
+                    {
+                        findById,
+                    },
+                    undefined,
+                    {
+                        verify,
+                    },
+                );
+
+                const result = await sut.loadByToken(accessToken);
+
+                expect(result).to.be.deep.equal(userData);
+                expect(verify).to.have.been.calledOnceWithExactly(accessToken);
+                expect(findById).to.have.been.calledOnceWithExactly(id);
+            });
+
+            it("should throw a ResponseError if tokenManager.verify throws", async () => {
+                const accessToken = faker.datatype.uuid();
+
+                const verify = sinon.stub().rejects();
+
+                const sut = makeUserService(undefined, undefined, {
+                    verify,
+                });
+
+                await expect(sut.loadByToken(accessToken)).to.eventually.be.rejected.with.property("status", FORBIDDEN);
+                expect(verify).to.have.been.calledOnce;
+            });
+
+            it("should throw a ResponseError if userRepository.findById returns undefined", async () => {
+                const id = faker.datatype.uuid();
+                const accessToken = faker.datatype.uuid();
+
+                const verify = sinon.stub().resolves(id);
+                const findById = sinon.stub().resolves();
+
+                const sut = makeUserService(
+                    {
+                        findById,
+                    },
+                    undefined,
+                    {
+                        verify,
+                    },
+                );
+
+                await expect(sut.loadByToken(accessToken)).to.eventually.be.rejected.with.with.property(
+                    "status",
+                    FORBIDDEN,
+                );
+                expect(verify).to.have.been.calledOnceWithExactly(accessToken);
+                expect(findById).to.have.been.calledOnceWithExactly(id);
             });
         });
     });

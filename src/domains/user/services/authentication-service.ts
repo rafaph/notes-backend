@@ -39,4 +39,8 @@ export class AuthenticationService implements IAuthenticationService {
 
         return accessToken;
     }
+
+    public async deauthenticate(id: string): Promise<void> {
+        await this.userRepository.updateAccessToken(id, null);
+    }
 }

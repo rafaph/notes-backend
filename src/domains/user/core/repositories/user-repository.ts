@@ -11,6 +11,21 @@ import { INTERNAL_SERVER_ERROR } from "http-status";
 export class UserRepository implements IUserRepository {
     public constructor(@inject("UserDAO") private readonly userDAO: IUserDAO) {}
 
+    public async findById(id: string, fields?: Array<keyof UserData>): Promise<UserData | void> {
+        try {
+            return await this.userDAO.findOne({
+                where: {
+                    id,
+                },
+                select: fields,
+            });
+        } catch (error) {
+            const message = "Error to find user by id.";
+            Logger.error(message, error);
+            throw new ResponseError(INTERNAL_SERVER_ERROR, message);
+        }
+    }
+
     public async findByEmail(email: string, fields?: Array<keyof UserData>): Promise<UserData | void> {
         try {
             return await this.userDAO.findOne({
@@ -20,8 +35,9 @@ export class UserRepository implements IUserRepository {
                 select: fields,
             });
         } catch (error) {
-            Logger.error("Unable to find user", error);
-            throw new ResponseError(INTERNAL_SERVER_ERROR, "Error to find user.");
+            const message = "Error to find user by email.";
+            Logger.error(message, error);
+            throw new ResponseError(INTERNAL_SERVER_ERROR, message);
         }
     }
 
@@ -29,8 +45,9 @@ export class UserRepository implements IUserRepository {
         try {
             return await this.userDAO.save(user);
         } catch (error) {
-            Logger.error("Unable to create user", error);
-            throw new ResponseError(INTERNAL_SERVER_ERROR, "Error to create user.");
+            const message = "Unable to create user";
+            Logger.error(message, error);
+            throw new ResponseError(INTERNAL_SERVER_ERROR, message);
         }
     }
 
@@ -45,8 +62,9 @@ export class UserRepository implements IUserRepository {
                 },
             );
         } catch (error) {
-            Logger.error("Unable to update user", error);
-            throw new ResponseError(INTERNAL_SERVER_ERROR, "Error to update user.");
+            const message = "Unable to update user access token";
+            Logger.error(message, error);
+            throw new ResponseError(INTERNAL_SERVER_ERROR, message);
         }
     }
 }

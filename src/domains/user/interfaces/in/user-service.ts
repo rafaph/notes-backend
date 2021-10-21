@@ -4,5 +4,9 @@ export interface ICreateUserService {
     create(input: CreateUserPayload): Promise<UserData>;
 }
 
+export interface ILoadUserByTokenUserService {
+    loadByToken(accessToken: string): Promise<UserData>;
+}
+
 // eslint-disable-next-line
-export interface IUserService extends ICreateUserService {}
+export interface IUserService extends ICreateUserService, ILoadUserByTokenUserService {}

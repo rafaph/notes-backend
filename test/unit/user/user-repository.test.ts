@@ -24,6 +24,47 @@ describe("UserRepository @unit", () => {
     });
 
     describe("Unit tests", () => {
+        context("findById method", () => {
+            it("should find a user by id", async () => {
+                const output = makeUserData();
+                const findOne = sinon.stub().resolves(output);
+
+                const sut = makeUserRepository({ findOne });
+
+                const result = await sut.findById(output.id);
+
+                expect(result).to.be.deep.equal(output);
+                expect(findOne).to.have.been.calledOnceWithExactly({
+                    where: {
+                        id: output.id,
+                    },
+                    select: undefined,
+                });
+            });
+
+            it("should return undefined if findById returns undefined", async () => {
+                const id = faker.datatype.uuid();
+                const findOne = sinon.stub().resolves();
+
+                const sut = makeUserRepository({ findOne });
+
+                const result = await sut.findById(id);
+
+                expect(result).to.be.undefined;
+                expect(findOne).to.be.calledOnce;
+            });
+
+            it("should throw a ResponseError if findOne throws", async () => {
+                const id = faker.datatype.uuid();
+                const findOne = sinon.stub().rejects();
+
+                const sut = makeUserRepository({ findOne });
+
+                await expect(sut.findById(id)).to.eventually.be.rejected.with.property("status", INTERNAL_SERVER_ERROR);
+                expect(findOne).to.be.calledOnce;
+            });
+        });
+
         context("findByEmail method", () => {
             it("should find a user by email", async () => {
                 const output = makeUserData();
