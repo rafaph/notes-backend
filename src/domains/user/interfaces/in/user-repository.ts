@@ -8,11 +8,16 @@ export interface IUserRetrieveByEmailRepository {
     findByEmail(email: string, fields?: Array<keyof UserData>): Promise<UserData | void>;
 }
 
+export interface IUserRetrieveByIdRepository {
+    findById(id: string, fields?: Array<keyof UserData>): Promise<UserData | void>;
+}
+
 export interface IUserUpdateAccessTokenRepository {
-    updateAccessToken(id: string, accessToken: string): Promise<void>;
+    updateAccessToken(id: string, accessToken: string | null): Promise<void>;
 }
 
 export interface IUserRepository
     extends IUserCreateRepository,
+        IUserRetrieveByIdRepository,
         IUserRetrieveByEmailRepository,
         IUserUpdateAccessTokenRepository {}

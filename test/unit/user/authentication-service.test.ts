@@ -177,5 +177,32 @@ describe("AuthenticationService @unit", () => {
                 expect(updateAccessTokenStub).to.have.been.calledOnceWithExactly(id, expectedAccessToken);
             });
         });
+
+        context("deauthenticate method", () => {
+            it("should deauthenticate a user by id", async () => {
+                const id = faker.datatype.uuid();
+                const updateAccessToken = sinon.stub().resolves();
+
+                const sut = makeAuthenticationService({
+                    updateAccessToken,
+                });
+
+                await sut.deauthenticate(id);
+
+                expect(updateAccessToken).to.have.been.calledOnceWithExactly(id, null);
+            });
+
+            it("should throw if userRepository.updateAccessToken throws", async () => {
+                const id = faker.datatype.uuid();
+                const updateAccessToken = sinon.stub().rejects();
+
+                const sut = makeAuthenticationService({
+                    updateAccessToken,
+                });
+
+                await expect(sut.deauthenticate(id)).to.eventually.be.rejected;
+                expect(updateAccessToken).to.have.been.calledOnceWithExactly(id, null);
+            });
+        });
     });
 });
