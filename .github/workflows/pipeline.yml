@@ -24,17 +24,17 @@ jobs:
                   cache-name: node-modules
               with:
                   path: node_modules/
-                  key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+                  key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
 
-            - name: Install NPM dependencies
+            - name: Install YARN dependencies
               run: |
                   if [ ! -d node_modules ]; then
-                    npm ci
+                    yarn install --frozen-lockfile
                   fi
                   npx patch-package
 
             - name: Lint
-              run: npm run lint
+              run: yarn lint
 
             - name: Cleanup
               if: ${{ always() }}
@@ -69,17 +69,17 @@ jobs:
                   cache-name: node-modules
               with:
                   path: node_modules/
-                  key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+                  key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
 
             - name: Install Dependencies
               run: |
                   if [ ! -d node_modules ]; then
-                    npm ci
+                    yarn install --frozen-lockfile
                   fi
                   npx patch-package
 
             - name: Test
-              run: npm run test:ci
+              run: yarn test:ci
 
             - name: Cleanup
               if: ${{ always() }}
