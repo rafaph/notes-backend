@@ -3,31 +3,35 @@
 1. Start container:
 
 ```
-docker-compose up -d --build
+make shell
 ```
 
 2. Install dependencies:
 
 ```
-docker-compose exec server sh
-npm i
+yarn install --frozen-lockfile
 ```
 
-3. Run a any desired npm script:
+3. Run a any desired yarn script:
 
 ```
-npm run start
-npm run test
-npm run test:watch
-npm run test:cov
-npm run lint
-npm run lint:fix
-npm run build
-npm run build:watch
+yarn start                   // starts for prod env
+yarn dev                     // starts for local env
+yarn test                    // test all
+yarn test:watch              // watch test all
+yarn test:integration        // test integration
+yarn test:integration:watch  // test integration
+yarn test:unit               // test unit
+yarn test:unit:watch         // watch test unit
+yarn test:ci                 // test all with coverage report
+yarn lint                    // lint file names, folder names and ts files
+yarn lint:fix                // lint and fix
+yarn build                   // compile project to dist folder
+yarn migration:run           // apply database migrations
 ```
 
 4. Remove container:
 
 ```
-docker-compose down --remove-orphans -t 30
+make down
 ```

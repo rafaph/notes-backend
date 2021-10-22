@@ -13,7 +13,7 @@ defaults:
 jobs:
     lint:
         container:
-            image: node:14
+            image: node:16
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
@@ -43,7 +43,7 @@ jobs:
                   rm -rf *
     test:
         container:
-            image: node:14
+            image: node:16
             env:
                 npm_config_build_from_source: true
                 NODE_ENV: test
