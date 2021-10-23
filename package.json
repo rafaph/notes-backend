@@ -1,6 +1,6 @@
 {
     "name": "notes-backend",
-    "version": "1.4.0",
+    "version": "2.0.0",
     "private": true,
     "scripts": {
         "start": "node -r ./boot-paths.js dist/index.js",
@@ -20,7 +20,8 @@
         "build": "tsc --project tsconfig-build.json",
         "typeorm": "ts-node -r tsconfig-paths/register $(yarn bin typeorm)",
         "migration:run": "yarn typeorm migration:run",
-        "migration:make": "yarn typeorm migration:create"
+        "migration:make": "yarn typeorm migration:create",
+        "heroku-cleanup": "yarn migration:run"
     },
     "devDependencies": {
         "@ls-lint/ls-lint": "^1.10.0",
@@ -84,6 +85,7 @@
         "yamljs": "^0.3.0"
     },
     "engines": {
-        "node": "^16"
+        "node": "16.x",
+        "yarn": "1.x"
     }
 }
