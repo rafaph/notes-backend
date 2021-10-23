@@ -18,7 +18,7 @@ if (process.env.DATABASE_URL) {
     const { hostname, port, user, password, path } = new ConnectionString(process.env.DATABASE_URL);
     setIfEmpty("DB_HOST", hostname);
     setIfEmpty("DB_PORT", port);
-    setIfEmpty("DB_USER", user);
+    setIfEmpty("DB_USERNAME", user);
     setIfEmpty("DB_PASSWORD", password);
     setIfEmpty("DB_DATABASE", path ? path[0] : undefined);
 }
