@@ -1,8 +1,26 @@
+import { ConnectionString } from "connection-string";
+
 function requiredEnvVar(varName: string): never {
     // eslint-disable-next-line no-console
     console.error("\x1b[31m%s\x1b[0m", `⚠️  Required environment variable "${varName}" is missing.`);
 
     process.exit(1);
+}
+
+function setIfEmpty(variable: string, value?: number | string): void {
+    if (typeof value === "number") {
+        value = value.toString(10);
+    }
+    process.env[variable] = process.env[variable] || value;
+}
+
+if (process.env.DATABASE_URL) {
+    const { hostname, port, user, password, path } = new ConnectionString(process.env.DATABASE_URL);
+    setIfEmpty("DB_HOST", hostname);
+    setIfEmpty("DB_PORT", port);
+    setIfEmpty("DB_USER", user);
+    setIfEmpty("DB_PASSWORD", password);
+    setIfEmpty("DB_DATABASE", path ? path[0] : undefined);
 }
 
 // Common Variables

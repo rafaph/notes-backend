@@ -1,5 +1,5 @@
 info:
-  version: 1.4.0
+  version: 2.0.0
   title: Notes API
   description: Notes REST API definitions
 paths:
@@ -15,7 +15,7 @@ paths:
                 properties:
                   access_token:
                     type: string
-                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiMmMzNmFhZTEtZDZmMy00ODI3LWEzMGUtMzI1ZDhmM2NmMGIzIiwiaWF0IjoxNjM1MDA2MDQ0fQ.ZLSwezo8y7WbFG5TXrE_ri32jKA2-znA8dhP663RT_8
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiZmFhMGIyMzAtNTVkNy00NDJlLWJkMzEtMWFhMDI3OTI1OTE1IiwiaWF0IjoxNjM1MDEwMjQ4fQ.NWRYk5G8FTj_wGhUVD3WlD-8DKo6pWGmplT0DM9Oc6I
           headers:
             content-security-policy:
               schema:
@@ -76,15 +76,15 @@ paths:
             etag:
               schema:
                 type: string
-              example: W/"ba-R4RbWOuh+wNeZM6+SGXkJ359UJY"
+              example: W/"ba-/oYz/FHu7yrn6gn35AV47UrT6eA"
             x-response-time:
               schema:
                 type: string
-              example: 28.907ms
+              example: 29.573ms
             date:
               schema:
                 type: string
-              example: Sat, 23 Oct 2021 16:20:44 GMT
+              example: Sat, 23 Oct 2021 17:30:48 GMT
             connection:
               schema:
                 type: string
@@ -163,11 +163,11 @@ paths:
             x-response-time:
               schema:
                 type: string
-              example: 2.485ms
+              example: 2.523ms
             date:
               schema:
                 type: string
-              example: Sat, 23 Oct 2021 16:20:44 GMT
+              example: Sat, 23 Oct 2021 17:30:48 GMT
             connection:
               schema:
                 type: string
@@ -246,11 +246,11 @@ paths:
             x-response-time:
               schema:
                 type: string
-              example: 10.811ms
+              example: 10.183ms
             date:
               schema:
                 type: string
-              example: Sat, 23 Oct 2021 16:20:44 GMT
+              example: Sat, 23 Oct 2021 17:30:48 GMT
             connection:
               schema:
                 type: string
@@ -265,10 +265,10 @@ paths:
               properties:
                 email:
                   type: string
-                  example: Cordia_Moore52@yahoo.com
+                  example: Dennis63@yahoo.com
                 password:
                   type: string
-                  example: bxl4PZhl9NwCp6n
+                  example: bEsx1feI3O6SAiW
   /api/v1/logout:
     post:
       responses:
@@ -331,11 +331,11 @@ paths:
             x-response-time:
               schema:
                 type: string
-              example: 3.985ms
+              example: 3.868ms
             date:
               schema:
                 type: string
-              example: Sat, 23 Oct 2021 16:20:44 GMT
+              example: Sat, 23 Oct 2021 17:30:48 GMT
             connection:
               schema:
                 type: string
@@ -414,11 +414,11 @@ paths:
             x-response-time:
               schema:
                 type: string
-              example: 1.595ms
+              example: 1.444ms
             date:
               schema:
                 type: string
-              example: Sat, 23 Oct 2021 16:20:44 GMT
+              example: Sat, 23 Oct 2021 17:30:48 GMT
             connection:
               schema:
                 type: string
@@ -437,7 +437,7 @@ paths:
                 properties:
                   access_token:
                     type: string
-                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiZWUzNWUxYTMtYjkwMi00YmY4LWIxMWUtYjU2YmJhNTJiZWEzIiwiaWF0IjoxNjM1MDA2MDQ0fQ.OhCW84qqJr8Q2Men3cDcKEf9bS2EQ8kvgXn5SGDGc18
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiZDJmZmUzMDQtMTJlMy00YTJkLWE1NzAtN2UwN2VmMWUzMzZhIiwiaWF0IjoxNjM1MDEwMjQ4fQ.poMfmqJ7y1JsXRqogUGi81eHIvovMQtBBGPU4MR0gLs
           headers:
             content-security-policy:
               schema:
@@ -498,15 +498,15 @@ paths:
             etag:
               schema:
                 type: string
-              example: W/"ba-BGJ/tZ0GzuFX2E6IFWJHSGMKHuc"
+              example: W/"ba-dft3Xun/uJT8ruYJLEBxtdQrbY4"
             x-response-time:
               schema:
                 type: string
-              example: 24.088ms
+              example: 21.573ms
             date:
               schema:
                 type: string
-              example: Sat, 23 Oct 2021 16:20:44 GMT
+              example: Sat, 23 Oct 2021 17:30:48 GMT
             connection:
               schema:
                 type: string
@@ -586,11 +586,11 @@ paths:
             x-response-time:
               schema:
                 type: string
-              example: 0.739ms
+              example: 0.746ms
             date:
               schema:
                 type: string
-              example: Sat, 23 Oct 2021 16:20:44 GMT
+              example: Sat, 23 Oct 2021 17:30:48 GMT
             connection:
               schema:
                 type: string
@@ -669,11 +669,11 @@ paths:
             x-response-time:
               schema:
                 type: string
-              example: 1.645ms
+              example: 1.743ms
             date:
               schema:
                 type: string
-              example: Sat, 23 Oct 2021 16:20:44 GMT
+              example: Sat, 23 Oct 2021 17:30:48 GMT
             connection:
               schema:
                 type: string
@@ -688,16 +688,16 @@ paths:
               properties:
                 name:
                   type: string
-                  example: Dixie
+                  example: Rafaela
                 email:
                   type: string
-                  example: Zachary.Kerluke@hotmail.com
+                  example: Mellie30@gmail.com
                 password:
                   type: string
-                  example: nticwqj09F6tufm
+                  example: kfWEwZCh06vyM2n
                 password_confirmation:
                   type: string
-                  example: nticwqj09F6tufm
+                  example: kfWEwZCh06vyM2n
 servers:
   - url: ""
     description: Notes Server
