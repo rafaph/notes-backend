@@ -18,8 +18,9 @@
         "lint:fix": "yarn lint --fix",
         "prebuild": "rimraf dist",
         "build": "tsc --project tsconfig-build.json",
-        "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm",
-        "migration:run": "yarn typeorm migration:run"
+        "typeorm": "ts-node -r tsconfig-paths/register $(yarn bin typeorm)",
+        "migration:run": "yarn typeorm migration:run",
+        "migration:make": "yarn typeorm migration:create"
     },
     "devDependencies": {
         "@ls-lint/ls-lint": "^1.10.0",
@@ -58,6 +59,7 @@
         "sinon-chai": "^3.7.0",
         "supertest": "^6.1.6",
         "ts-node-dev": "^1.1.8",
+        "typeorm-transactional-tests": "^1.1.5",
         "typescript": "~4.4.4"
     },
     "dependencies": {

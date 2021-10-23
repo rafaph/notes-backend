@@ -3,29 +3,31 @@ import supertest from "supertest";
 import { Express } from "express";
 import { BAD_REQUEST, OK, UNAUTHORIZED } from "http-status";
 import { container } from "tsyringe";
+import faker from "faker";
 import { doc } from "@test/helpers/documentation";
-import { clearTables, createDatabase, dropDatabase } from "@test/helpers/database";
+import * as dbHelpers from "@test/helpers/database";
 import { App } from "@app/application/setup/app";
 import { UserService } from "@app/domains/user/services/user-service";
 import { makeCreateUserPayload } from "@test/helpers/user-factories";
-import faker from "faker";
 
 const route = "/api/v1/login";
 
 describe(`POST ${route} @integration`, () => {
     let app: Express;
 
-    before(async () => {
-        await createDatabase();
+    before(() => {
         app = new App().app;
     });
 
     beforeEach(async () => {
-        await clearTables();
+        await dbHelpers.beforeEachTest();
+    });
+
+    afterEach(async () => {
+        await dbHelpers.afterEachTest();
     });
 
     after(async () => {
-        await dropDatabase();
         await doc.writeFile();
     });
 
