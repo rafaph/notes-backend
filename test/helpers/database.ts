@@ -13,7 +13,7 @@ async function query(command: string): Promise<void> {
         port: DB.PORT,
         user: DB.USERNAME,
         password: DB.PASSWORD,
-        database: process.env.OLD_DB_DATABASE,
+        database: "postgres",
     });
     await pgClient.connect();
     await pgClient.query(command);

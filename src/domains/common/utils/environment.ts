@@ -11,11 +11,13 @@ function setIfEmpty(variable: string, value?: number | string): void {
     if (typeof value === "number") {
         value = value.toString(10);
     }
+
     process.env[variable] = process.env[variable] || value;
 }
 
 if (process.env.DATABASE_URL) {
     const { hostname, port, user, password, path } = new ConnectionString(process.env.DATABASE_URL);
+
     setIfEmpty("DB_HOST", hostname);
     setIfEmpty("DB_PORT", port);
     setIfEmpty("DB_USERNAME", user);
