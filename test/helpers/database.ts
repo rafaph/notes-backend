@@ -1,8 +1,11 @@
 import { Client } from "pg";
 import { container } from "tsyringe";
 import { Connection } from "typeorm";
+import { TransactionalTestContext } from "typeorm-transactional-tests";
 import { DB } from "@app/domains/common/utils/environment";
 import { connectDatabase } from "@app/domains/infra/adapters/connect-database";
+
+let transactionalContext: TransactionalTestContext;
 
 async function query(command: string): Promise<void> {
     const pgClient = new Client({
@@ -17,8 +20,12 @@ async function query(command: string): Promise<void> {
     await pgClient.end();
 }
 
-export async function createDatabase(): Promise<void> {
+async function dropTestDatabase(): Promise<void> {
     await query(`DROP DATABASE IF EXISTS ${DB.DATABASE};`);
+}
+
+export async function beforeTests(): Promise<void> {
+    await dropTestDatabase();
     await query(`CREATE DATABASE ${DB.DATABASE};`);
     if (!container.isRegistered("DbConnection")) {
         await connectDatabase();
@@ -31,13 +38,17 @@ export async function createDatabase(): Promise<void> {
     await connection.runMigrations();
 }
 
-export async function clearTables(): Promise<void> {
-    const queryRunner = container.resolve<Connection>("DbConnection").createQueryRunner();
-    await queryRunner.clearTable("users");
+export async function beforeEachTest(): Promise<void> {
+    transactionalContext = new TransactionalTestContext(container.resolve<Connection>("DbConnection"));
+    await transactionalContext.start();
 }
 
-export async function dropDatabase(): Promise<void> {
+export async function afterEachTest(): Promise<void> {
+    await transactionalContext.finish();
+}
+
+export async function afterTests(): Promise<void> {
     const connection = container.resolve<Connection>("DbConnection");
     await connection.close();
-    await query(`DROP DATABASE ${DB.DATABASE};`);
+    await dropTestDatabase();
 }

@@ -17,9 +17,10 @@ export class IsAuthenticatedMiddleware implements Middleware {
     public constructor(@inject("UserService") private readonly userService: ILoadUserByTokenUserService) {}
 
     public readonly handle: RequestHandler = async (req, _res, next): Promise<void> => {
-        const { error, value: headers } = this.schema.validate(req.headers);
-
-        if (error) {
+        let headers: Record<string, string>;
+        try {
+            headers = await this.schema.validateAsync(req.headers);
+        } catch (error: unknown) {
             next(new ResponseError(FORBIDDEN, `[headers] - ${(error as Error).message}`));
 
             return;

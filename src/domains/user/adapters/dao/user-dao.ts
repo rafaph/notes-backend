@@ -7,7 +7,7 @@ import { User } from "@app/domains/user/core/entities/user";
     {
         token: "UserDAO",
         useFactory: (): Repository<User> => {
-            const connection = container.resolve("DbConnection") as Connection;
+            const connection = container.resolve<Connection>("DbConnection");
 
             return connection.getRepository(User);
         },
