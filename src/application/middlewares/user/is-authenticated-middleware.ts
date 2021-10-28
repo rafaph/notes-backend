@@ -1,9 +1,9 @@
-import _ from "lodash";
-import { inject, Lifecycle, registry, scoped } from "tsyringe";
 import { FORBIDDEN } from "http-status";
 import Joi from "joi";
-import { Middleware } from "@app/domains/common/interfaces/middleware";
+import _ from "lodash";
+import { inject, Lifecycle, registry, scoped } from "tsyringe";
 import { RequestHandler } from "@app/domains/common/interfaces/controller";
+import { Middleware } from "@app/domains/common/interfaces/middleware";
 import { ResponseError } from "@app/domains/common/utils/response-error";
 import { ILoadUserByTokenUserService } from "@app/domains/user/interfaces/in/user-service";
 

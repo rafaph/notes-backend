@@ -1,10 +1,10 @@
-import { inject, Lifecycle, registry, scoped } from "tsyringe";
 import { UNAUTHORIZED } from "http-status";
+import { inject, Lifecycle, registry, scoped } from "tsyringe";
+import { IHashing } from "@app/domains/common/interfaces/hashing";
+import { ITokenManager } from "@app/domains/common/interfaces/token-manager";
+import { ResponseError } from "@app/domains/common/utils/response-error";
 import { IAuthenticationService } from "@app/domains/user/interfaces/in/authentication-service";
 import { IUserRepository } from "@app/domains/user/interfaces/in/user-repository";
-import { IHashing } from "@app/domains/common/interfaces/hashing";
-import { ResponseError } from "@app/domains/common/utils/response-error";
-import { ITokenManager } from "@app/domains/common/interfaces/token-manager";
 
 @scoped(Lifecycle.ResolutionScoped)
 @registry([{ token: "AuthenticationService", useClass: AuthenticationService }])

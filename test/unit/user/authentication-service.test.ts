@@ -1,9 +1,9 @@
 import { expect } from "chai";
-import sinon from "sinon";
 import faker from "faker";
+import { UNAUTHORIZED } from "http-status";
+import sinon from "sinon";
 import { AuthenticationService } from "@app/domains/user/services/authentication-service";
 import { makeAuthenticationService } from "@test/helpers/user-factories";
-import { UNAUTHORIZED } from "http-status";
 
 describe("AuthenticationService @unit", () => {
     describe("Sanity tests", () => {

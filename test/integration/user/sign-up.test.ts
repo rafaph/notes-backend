@@ -1,14 +1,14 @@
 import { expect } from "chai";
-import faker from "faker";
-import supertest from "supertest";
 import { Express } from "express";
+import faker from "faker";
 import { BAD_REQUEST, CREATED, FORBIDDEN } from "http-status";
+import supertest from "supertest";
 import { container } from "tsyringe";
 import { Repository } from "typeorm";
-import { doc } from "@test/helpers/documentation";
-import * as dbHelpers from "@test/helpers/database";
 import { App } from "@app/application/setup/app";
 import { User } from "@app/domains/user/core/entities/user";
+import * as dbHelpers from "@test/helpers/database";
+import { doc } from "@test/helpers/documentation";
 
 const route = "/api/v1/sign-up";
 

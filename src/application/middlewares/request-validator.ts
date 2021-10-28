@@ -1,5 +1,5 @@
-import { AsyncValidationOptions, Schema } from "joi";
 import { BAD_REQUEST } from "http-status";
+import { AsyncValidationOptions, Schema } from "joi";
 import { ParametersField, RequestHandler } from "@app/domains/common/interfaces/controller";
 import { ResponseError } from "@app/domains/common/utils/response-error";
 

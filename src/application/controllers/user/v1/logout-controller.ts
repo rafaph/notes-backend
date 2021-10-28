@@ -1,6 +1,6 @@
+import { NO_CONTENT } from "http-status";
 import _ from "lodash";
 import { inject, Lifecycle, registry, scoped } from "tsyringe";
-import { NO_CONTENT } from "http-status";
 import { Controller, Request, Response } from "@app/domains/common/interfaces/controller";
 import { Middleware } from "@app/domains/common/interfaces/middleware";
 import { IDeauthenticateAuthenticationService } from "@app/domains/user/interfaces/in/authentication-service";

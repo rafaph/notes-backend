@@ -1,13 +1,13 @@
-import sinon from "sinon";
 import faker from "faker";
-import { UserService } from "@app/domains/user/services/user-service";
-import { IUserRepository } from "@app/domains/user/interfaces/in/user-repository";
+import sinon from "sinon";
 import { IHashing } from "@app/domains/common/interfaces/hashing";
-import { CreateUserPayload, UserData } from "@app/domains/user/types/user";
+import { ITokenManager } from "@app/domains/common/interfaces/token-manager";
 import { UserRepository } from "@app/domains/user/core/repositories/user-repository";
+import { IUserRepository } from "@app/domains/user/interfaces/in/user-repository";
 import { IUserDAO } from "@app/domains/user/interfaces/out/user-dao";
 import { AuthenticationService } from "@app/domains/user/services/authentication-service";
-import { ITokenManager } from "@app/domains/common/interfaces/token-manager";
+import { UserService } from "@app/domains/user/services/user-service";
+import { CreateUserPayload, UserData } from "@app/domains/user/types/user";
 
 export function makeUserData(userData: Partial<UserData> = {}): UserData {
     return {

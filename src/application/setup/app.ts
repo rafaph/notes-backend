@@ -1,18 +1,18 @@
-import express, { json, NextFunction, Request, Response } from "express";
 import cors from "cors";
+import express, { json, NextFunction, Request, Response } from "express";
 import helmet from "helmet";
-import morgan from "morgan";
-import swaggerUi from "swagger-ui-express";
-import YAML from "yamljs";
-import responseTime from "response-time";
 import { SERVICE_UNAVAILABLE } from "http-status";
+import morgan from "morgan";
+import responseTime from "response-time";
+import swaggerUi from "swagger-ui-express";
 import { container } from "tsyringe";
-import { ENV, PORT, PROD, SHUTDOWN_TIMEOUT } from "@app/domains/common/utils/environment";
+import YAML from "yamljs";
 import { contentType } from "@app/application/middlewares/content-type";
-import { ResponseError } from "@app/domains/common/utils/response-error";
-import { Logger } from "@app/domains/common/utils/logger";
 import { errorHandler } from "@app/application/middlewares/error-handler";
 import { Router } from "@app/application/setup/router";
+import { ENV, PORT, PROD, SHUTDOWN_TIMEOUT } from "@app/domains/common/utils/environment";
+import { Logger } from "@app/domains/common/utils/logger";
+import { ResponseError } from "@app/domains/common/utils/response-error";
 
 export class App {
     public app: express.Express;

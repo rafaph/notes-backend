@@ -1,9 +1,9 @@
 import { RequestHandler, Router as ExpressRouter } from "express";
-import { injectable, injectAll, Lifecycle, scoped } from "tsyringe";
 import { NOT_FOUND } from "http-status";
+import { injectable, injectAll, Lifecycle, scoped } from "tsyringe";
 import { Controller } from "@app/domains/common/interfaces/controller";
-import { ResponseError } from "@app/domains/common/utils/response-error";
 import { Logger } from "@app/domains/common/utils/logger";
+import { ResponseError } from "@app/domains/common/utils/response-error";
 
 @scoped(Lifecycle.ResolutionScoped)
 @injectable()

@@ -1,11 +1,11 @@
-import { inject, Lifecycle, registry, scoped } from "tsyringe";
 import { FORBIDDEN } from "http-status";
-import { IUserService } from "@app/domains/user/interfaces/in/user-service";
-import { IUserRepository } from "@app/domains/user/interfaces/in/user-repository";
-import { ResponseError } from "@app/domains/common/utils/response-error";
+import { inject, Lifecycle, registry, scoped } from "tsyringe";
 import { IHashing } from "@app/domains/common/interfaces/hashing";
-import { CreateUserPayload, UserData } from "@app/domains/user/types/user";
 import { ITokenManagerVerifier } from "@app/domains/common/interfaces/token-manager";
+import { ResponseError } from "@app/domains/common/utils/response-error";
+import { IUserRepository } from "@app/domains/user/interfaces/in/user-repository";
+import { IUserService } from "@app/domains/user/interfaces/in/user-service";
+import { CreateUserPayload, UserData } from "@app/domains/user/types/user";
 
 @scoped(Lifecycle.ResolutionScoped)
 @registry([{ token: "UserService", useClass: UserService }])

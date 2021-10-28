@@ -1,7 +1,7 @@
 import { expect } from "chai";
-import sinon from "sinon";
-import { FORBIDDEN } from "http-status";
 import faker from "faker";
+import { FORBIDDEN } from "http-status";
+import sinon from "sinon";
 import { UserService } from "@app/domains/user/services/user-service";
 import { makeCreateUserPayload, makeUserData, makeUserService } from "@test/helpers/user-factories";
 

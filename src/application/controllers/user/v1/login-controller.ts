@@ -1,9 +1,9 @@
-import { inject, Lifecycle, registry, scoped } from "tsyringe";
 import { OK } from "http-status";
 import Joi from "joi";
+import { inject, Lifecycle, registry, scoped } from "tsyringe";
+import { requestValidator } from "@app/application/middlewares/request-validator";
 import { Controller, Request, Response } from "@app/domains/common/interfaces/controller";
 import { IAuthenticateAuthenticationService } from "@app/domains/user/interfaces/in/authentication-service";
-import { requestValidator } from "@app/application/middlewares/request-validator";
 
 namespace LoginController {
     export interface Request {

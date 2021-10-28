@@ -1,13 +1,13 @@
 import { expect } from "chai";
-import supertest from "supertest";
 import { Express } from "express";
-import { BAD_REQUEST, OK, UNAUTHORIZED } from "http-status";
-import { container } from "tsyringe";
 import faker from "faker";
-import { doc } from "@test/helpers/documentation";
-import * as dbHelpers from "@test/helpers/database";
+import { BAD_REQUEST, OK, UNAUTHORIZED } from "http-status";
+import supertest from "supertest";
+import { container } from "tsyringe";
 import { App } from "@app/application/setup/app";
 import { UserService } from "@app/domains/user/services/user-service";
+import * as dbHelpers from "@test/helpers/database";
+import { doc } from "@test/helpers/documentation";
 import { makeCreateUserPayload } from "@test/helpers/user-factories";
 
 const route = "/api/v1/login";

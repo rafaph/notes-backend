@@ -1,10 +1,10 @@
+import { INTERNAL_SERVER_ERROR } from "http-status";
 import { inject, Lifecycle, registry, scoped } from "tsyringe";
-import { IUserRepository } from "@app/domains/user/interfaces/in/user-repository";
-import { CreateUserPayload, UserData } from "@app/domains/user/types/user";
-import { IUserDAO } from "@app/domains/user/interfaces/out/user-dao";
 import { Logger } from "@app/domains/common/utils/logger";
 import { ResponseError } from "@app/domains/common/utils/response-error";
-import { INTERNAL_SERVER_ERROR } from "http-status";
+import { IUserRepository } from "@app/domains/user/interfaces/in/user-repository";
+import { IUserDAO } from "@app/domains/user/interfaces/out/user-dao";
+import { CreateUserPayload, UserData } from "@app/domains/user/types/user";
 
 @scoped(Lifecycle.ResolutionScoped)
 @registry([{ token: "UserRepository", useClass: UserRepository }])

@@ -1,16 +1,16 @@
-import supertest from "supertest";
 import { Express } from "express";
-import { FORBIDDEN, NO_CONTENT } from "http-status";
-import { doc } from "@test/helpers/documentation";
-import * as dbHelpers from "@test/helpers/database";
-import { App } from "@app/application/setup/app";
-import { container } from "tsyringe";
-import { UserService } from "@app/domains/user/services/user-service";
-import { makeCreateUserPayload } from "@test/helpers/user-factories";
-import { AuthenticationService } from "@app/domains/user/services/authentication-service";
 import faker from "faker";
+import { FORBIDDEN, NO_CONTENT } from "http-status";
+import supertest from "supertest";
+import { container } from "tsyringe";
 import { Repository } from "typeorm";
+import { App } from "@app/application/setup/app";
 import { User } from "@app/domains/user/core/entities/user";
+import { AuthenticationService } from "@app/domains/user/services/authentication-service";
+import { UserService } from "@app/domains/user/services/user-service";
+import * as dbHelpers from "@test/helpers/database";
+import { doc } from "@test/helpers/documentation";
+import { makeCreateUserPayload } from "@test/helpers/user-factories";
 
 const route = "/api/v1/logout";
 

@@ -2,8 +2,8 @@ import jwt, { JwtPayload, VerifyErrors } from "jsonwebtoken";
 import { Lifecycle, registry, scoped } from "tsyringe";
 import { ITokenManager } from "@app/domains/common/interfaces/token-manager";
 import { JWT_SECRET } from "@app/domains/common/utils/environment";
-import { ResponseError } from "@app/domains/common/utils/response-error";
 import { Logger } from "@app/domains/common/utils/logger";
+import { ResponseError } from "@app/domains/common/utils/response-error";
 
 @scoped(Lifecycle.ResolutionScoped)
 @registry([{ token: "TokenManager", useClass: TokenManager }])

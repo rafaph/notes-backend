@@ -49,6 +49,8 @@
         "easy-api-doc": "^0.1.4",
         "eslint": "^8.0.0",
         "eslint-config-prettier": "^8.3.0",
+        "eslint-import-resolver-typescript": "^2.5.0",
+        "eslint-plugin-import": "^2.25.2",
         "faker": "^5.5.3",
         "git-commit-msg-linter": "^3.2.8",
         "husky": "^7.0.2",

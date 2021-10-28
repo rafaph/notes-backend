@@ -1,6 +1,6 @@
 import argon2 from "argon2";
-import { IHashing } from "@app/domains/common/interfaces/hashing";
 import { Lifecycle, registry, scoped } from "tsyringe";
+import { IHashing } from "@app/domains/common/interfaces/hashing";
 
 @scoped(Lifecycle.ResolutionScoped)
 @registry([{ token: "Hashing", useClass: Hashing }])

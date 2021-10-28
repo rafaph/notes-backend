@@ -1,9 +1,9 @@
 import { expect } from "chai";
-import sinon from "sinon";
-import { makeCreateUserPayload, makeUserData, makeUserRepository } from "@test/helpers/user-factories";
-import { UserRepository } from "@app/domains/user/core/repositories/user-repository";
 import faker from "faker";
 import { INTERNAL_SERVER_ERROR } from "http-status";
+import sinon from "sinon";
+import { UserRepository } from "@app/domains/user/core/repositories/user-repository";
+import { makeCreateUserPayload, makeUserData, makeUserRepository } from "@test/helpers/user-factories";
 
 describe("UserRepository @unit", () => {
     describe("Sanity tests", () => {

@@ -1,5 +1,5 @@
-import faker from "faker";
 import { ConnectionString } from "connection-string";
+import faker from "faker";
 
 process.env.NODE_ENV = "test";
 
