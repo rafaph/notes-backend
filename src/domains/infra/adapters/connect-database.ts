@@ -15,7 +15,10 @@ const pgConnect = async (): Promise<Connection> => {
             username: DB.USERNAME,
             password: DB.PASSWORD,
             database: DB.DATABASE,
-            entities: [path.resolve(__dirname, "../../user/core/entities/*.{ts,js}")],
+            entities: [
+                path.resolve(__dirname, "../../user/core/entities/*.{ts,js}"),
+                path.resolve(__dirname, "../../category/core/entities/*.{ts,js}"),
+            ],
             migrations: [path.resolve(__dirname, "../../../../migrations/*.ts")],
         });
     }

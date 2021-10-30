@@ -15,7 +15,7 @@ paths:
                 properties:
                   access_token:
                     type: string
-                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiZGQ4N2ZjOTItYWE1ZS00OGMwLTk3NTktYzY4MGU2OTM5NDM0IiwiaWF0IjoxNjM1MzkxMjAxfQ.Ck_28EsIibiRkfeGljp9QZBXSutypNs5UfRCdsxZ2po
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiYzBmMDUzMGQtOTU0ZC00OTFjLTg4YTAtMTU5YzgxNzM1M2RjIiwiaWF0IjoxNjM1NTY1MjU4fQ.IIy0AESMyFxvt2-kmi2Hw-G_LP8qgwV13yWATGVuk4U
           headers:
             content-security-policy:
               schema:
@@ -76,15 +76,15 @@ paths:
             etag:
               schema:
                 type: string
-              example: W/"ba-E8/J8fMcyftjDnEJcjsx/16clqM"
+              example: W/"ba-JacBgav71JY0c0UDuwk/HwtT8vw"
             x-response-time:
               schema:
                 type: string
-              example: 36.137ms
+              example: 44.728ms
             date:
               schema:
                 type: string
-              example: Thu, 28 Oct 2021 03:20:01 GMT
+              example: Sat, 30 Oct 2021 03:40:58 GMT
             connection:
               schema:
                 type: string
@@ -163,11 +163,11 @@ paths:
             x-response-time:
               schema:
                 type: string
-              example: 3.806ms
+              example: 2.829ms
             date:
               schema:
                 type: string
-              example: Thu, 28 Oct 2021 03:20:01 GMT
+              example: Sat, 30 Oct 2021 03:40:58 GMT
             connection:
               schema:
                 type: string
@@ -246,11 +246,11 @@ paths:
             x-response-time:
               schema:
                 type: string
-              example: 11.514ms
+              example: 21.256ms
             date:
               schema:
                 type: string
-              example: Thu, 28 Oct 2021 03:20:01 GMT
+              example: Sat, 30 Oct 2021 03:40:58 GMT
             connection:
               schema:
                 type: string
@@ -265,10 +265,10 @@ paths:
               properties:
                 email:
                   type: string
-                  example: Wilber_Keeling38@gmail.com
+                  example: Mallie86@hotmail.com
                 password:
                   type: string
-                  example: VhnpdHUT4DgNDRF
+                  example: WjVYae8_VThLoE5
   /api/v1/logout:
     post:
       responses:
@@ -331,11 +331,11 @@ paths:
             x-response-time:
               schema:
                 type: string
-              example: 7.391ms
+              example: 8.396ms
             date:
               schema:
                 type: string
-              example: Thu, 28 Oct 2021 03:20:01 GMT
+              example: Sat, 30 Oct 2021 03:40:58 GMT
             connection:
               schema:
                 type: string
@@ -414,11 +414,11 @@ paths:
             x-response-time:
               schema:
                 type: string
-              example: 2.291ms
+              example: 3.207ms
             date:
               schema:
                 type: string
-              example: Thu, 28 Oct 2021 03:20:01 GMT
+              example: Sat, 30 Oct 2021 03:40:58 GMT
             connection:
               schema:
                 type: string
@@ -437,7 +437,7 @@ paths:
                 properties:
                   access_token:
                     type: string
-                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiMzY1ZmRhYmEtZDNjOC00YWNhLTgyZjktZDYyNzU3OTlkNmE1IiwiaWF0IjoxNjM1MzkxMjAxfQ.wC-g36jxvGkU9cIpl4uJtk8VUqUg9FVw1OBbuQYHOHk
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiZWJjZjJmOTAtMDNkMS00ZTNiLWJjOWEtMjM4Yjc0OGNmYjVmIiwiaWF0IjoxNjM1NTY1MjU4fQ.50kCf8VqsbAQXduHyM1YMoLwjbmGHJro_D-BX4UEdqI
           headers:
             content-security-policy:
               schema:
@@ -498,15 +498,15 @@ paths:
             etag:
               schema:
                 type: string
-              example: W/"ba-6B6EH0SCk8GmjxVOos0dt3nh4QY"
+              example: W/"ba-QaU92mhpiI+CwNUDxw6KTSmUJ0s"
             x-response-time:
               schema:
                 type: string
-              example: 41.314ms
+              example: 31.519ms
             date:
               schema:
                 type: string
-              example: Thu, 28 Oct 2021 03:20:01 GMT
+              example: Sat, 30 Oct 2021 03:40:58 GMT
             connection:
               schema:
                 type: string
@@ -586,11 +586,11 @@ paths:
             x-response-time:
               schema:
                 type: string
-              example: 4.537ms
+              example: 1.214ms
             date:
               schema:
                 type: string
-              example: Thu, 28 Oct 2021 03:20:01 GMT
+              example: Sat, 30 Oct 2021 03:40:58 GMT
             connection:
               schema:
                 type: string
@@ -669,11 +669,11 @@ paths:
             x-response-time:
               schema:
                 type: string
-              example: 4.150ms
+              example: 2.279ms
             date:
               schema:
                 type: string
-              example: Thu, 28 Oct 2021 03:20:01 GMT
+              example: Sat, 30 Oct 2021 03:40:58 GMT
             connection:
               schema:
                 type: string
@@ -688,16 +688,16 @@ paths:
               properties:
                 name:
                   type: string
-                  example: Kyleigh
+                  example: Ola
                 email:
                   type: string
-                  example: Casey.Turner70@yahoo.com
+                  example: Joana.Corwin60@yahoo.com
                 password:
                   type: string
-                  example: C5OELQntE8gPFp5
+                  example: 1l9Byuw5eXX73t9
                 password_confirmation:
                   type: string
-                  example: C5OELQntE8gPFp5
+                  example: 1l9Byuw5eXX73t9
 servers:
   - url: ""
     description: Notes Server

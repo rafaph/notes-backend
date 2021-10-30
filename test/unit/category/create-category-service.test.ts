@@ -26,68 +26,72 @@ describe("CreateCategoryService @unit", () => {
             it("should create a category", async () => {
                 const createCategoryDto = makeCreateCategoryDto();
                 const categoryData = makeCategoryData({ name: createCategoryDto.name });
-                const findByNameStub = sinon.stub().resolves(false);
+                const findByNameAndUserIdStub = sinon.stub().resolves(false);
                 const createStub = sinon.stub().resolves(categoryData);
                 const sut = makeCreateCategoryService({
-                    findByName: findByNameStub,
+                    findByNameAndUserId: findByNameAndUserIdStub,
                     create: createStub,
                 });
 
                 const createdCategoryData = await sut.create(createCategoryDto);
 
                 expect(createdCategoryData).to.be.deep.equal(categoryData);
-                expect(findByNameStub).to.have.been.calledOnceWithExactly({
-                    ...createCategoryDto,
-                    fields: ["id"],
-                });
+                expect(findByNameAndUserIdStub).to.have.been.calledOnceWithExactly(
+                    createCategoryDto.name,
+                    createCategoryDto.user_id,
+                    ["id"],
+                );
                 expect(createStub).to.have.been.calledOnceWithExactly(createCategoryDto);
             });
 
             it("should throw if categoryRepository.findByName returns a category", async () => {
                 const createCategoryDto = makeCreateCategoryDto();
-                const findByNameStub = sinon.stub().resolves(true);
+                const findByNameAndUserIdStub = sinon.stub().resolves(true);
                 const sut = makeCreateCategoryService({
-                    findByName: findByNameStub,
+                    findByNameAndUserId: findByNameAndUserIdStub,
                 });
 
                 await expect(sut.create(createCategoryDto)).to.eventually.be.rejected.with.property(
                     "status",
                     FORBIDDEN,
                 );
-                expect(findByNameStub).to.have.been.calledOnceWithExactly({
-                    ...createCategoryDto,
-                    fields: ["id"],
-                });
+                expect(findByNameAndUserIdStub).to.have.been.calledOnceWithExactly(
+                    createCategoryDto.name,
+                    createCategoryDto.user_id,
+                    ["id"],
+                );
             });
 
             it("should throw if categoryRepository.findByName throws", async () => {
                 const createCategoryDto = makeCreateCategoryDto();
-                const findByNameStub = sinon.stub().rejects();
+                const findByNameAndUserIdStub = sinon.stub().rejects();
                 const sut = makeCreateCategoryService({
-                    findByName: findByNameStub,
+                    findByNameAndUserId: findByNameAndUserIdStub,
                 });
 
                 await expect(sut.create(createCategoryDto)).to.eventually.be.rejected;
-                expect(findByNameStub).to.have.been.calledOnceWithExactly({
-                    ...createCategoryDto,
-                    fields: ["id"],
-                });
+                expect(findByNameAndUserIdStub).to.have.been.calledOnceWithExactly(
+                    createCategoryDto.name,
+                    createCategoryDto.user_id,
+                    ["id"],
+                );
             });
 
             it("should throw if categoryRepository.create throws", async () => {
                 const createCategoryDto = makeCreateCategoryDto();
-                const findByNameStub = sinon.stub().resolves(false);
+                const findByNameAndUserIdStub = sinon.stub().resolves(false);
                 const createStub = sinon.stub().rejects();
                 const sut = makeCreateCategoryService({
-                    findByName: findByNameStub,
+                    findByNameAndUserId: findByNameAndUserIdStub,
                     create: createStub,
                 });
 
                 await expect(sut.create(createCategoryDto)).to.eventually.be.rejected;
-                expect(findByNameStub).to.have.been.calledOnceWithExactly({
-                    ...createCategoryDto,
-                    fields: ["id"],
-                });
+                expect(findByNameAndUserIdStub).to.have.been.calledOnceWithExactly(
+                    createCategoryDto.name,
+                    createCategoryDto.user_id,
+                    ["id"],
+                );
                 expect(createStub).to.have.been.calledOnceWithExactly(createCategoryDto);
             });
         });

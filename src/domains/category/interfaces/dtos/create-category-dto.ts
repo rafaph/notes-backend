@@ -1,4 +1,4 @@
 export interface CreateCategoryDto {
     name: string;
-    userId: string;
+    user_id: string;
 }

@@ -9,7 +9,7 @@ module.exports = {
     username: USERNAME,
     password: PASSWORD,
     database: DATABASE,
-    entities: ["src/domains/user/core/entities/*.ts"],
+    entities: ["src/domains/user/core/entities/*.ts", "src/domains/category/core/entities/*.ts"],
     migrations: ["migrations/*.ts"],
     cli: {
         migrationsDir: "migrations",

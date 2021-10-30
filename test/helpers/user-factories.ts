@@ -16,6 +16,7 @@ export function makeUserData(userData: Partial<UserData> = {}): UserData {
         email: faker.internet.email(),
         password: faker.internet.password(),
         access_token: null,
+        categories: [],
         ...userData,
     };
 }
