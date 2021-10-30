@@ -46,7 +46,7 @@
         "@typescript-eslint/parser": "^5.1.0",
         "chai": "^4.3.4",
         "chai-as-promised": "^7.1.1",
-        "easy-api-doc": "^0.1.4",
+        "easy-api-doc": "^0.2.0",
         "eslint": "^8.0.0",
         "eslint-config-prettier": "^8.3.0",
         "eslint-import-resolver-typescript": "^2.5.0",

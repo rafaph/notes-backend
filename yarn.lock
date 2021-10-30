@@ -1406,10 +1406,10 @@ dynamic-dedupe@^0.3.0:
   dependencies:
     xtend "^4.0.0"
 
-easy-api-doc@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/easy-api-doc/-/easy-api-doc-0.1.4.tgz#181d2478df8d129d6654a4376bdbe31e38eabe9b"
-  integrity sha512-jT/tNfNXZXPizQWbJhDWLU18tbblZWGu9NQis2CrvtVlHXDgDYaTRafg1/4llqn/nm3kTo8cSkwL/98GfXuc+g==
+easy-api-doc@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/easy-api-doc/-/easy-api-doc-0.2.0.tgz#e0964b05db0b59185a72bc6da95e3b30f15decf3"
+  integrity sha512-RZLLiuSm41D33o22MvSMEKBodEfUGPdJnhe7PEKvvmAChp6FUmiHf+yG/RXJURXEddr7tWsOKIJs6GTjnIauKA==
   dependencies:
     yaml "^1.10.2"
 

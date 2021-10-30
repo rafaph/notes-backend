@@ -6,6 +6,7 @@ import {
     ManyToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
+    JoinColumn,
 } from "typeorm";
 import { User } from "@app/domains/user/core/entities/user";
 
@@ -17,6 +18,9 @@ export class Category extends BaseEntity {
     @Column()
     public name!: string;
 
+    @Column()
+    public user_id!: string;
+
     @CreateDateColumn()
     public created_at!: Date;
 
@@ -24,5 +28,6 @@ export class Category extends BaseEntity {
     public updated_at!: Date;
 
     @ManyToOne(() => User, (user) => user.categories)
+    @JoinColumn({ name: "user_id" })
     public user!: User;
 }
